@@ -1,9 +1,10 @@
 packages:
   - front-app
   - libs/*
+autoInstallPeers: false
 onlyBuiltDependencies:
   - edgedriver
   - geckodriver
-
-autoInstallPeers: false
+patchedDependencies:
+  '@embroider/vite': patches/@embroider__vite.patch
 resolvePeersFromWorkspaceRoot: false

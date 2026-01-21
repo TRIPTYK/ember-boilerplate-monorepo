@@ -9,8 +9,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.28.1",
   "devDependencies": {
     "turbo": "^2.7.4"
+  },
+  "volta": {
+    "node": "24.13.0",
+    "pnpm": "10.28.1"
   }
 }
