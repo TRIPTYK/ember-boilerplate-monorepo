@@ -10,13 +10,25 @@ const {
   templateCompatSupport,
 } = require('@embroider/compat/babel');
 
-const macros = buildMacros();
+const macros = buildMacros({
+  setConfig: {
+    WarpDrive: {
+      env: {
+
+      }
+    }
+  },
+});
 
 // For scenario testing
 const isCompat = Boolean(process.env.ENABLE_COMPAT_BUILD);
 
 module.exports = {
   plugins: [
+    [
+      'ember-concurrency/async-arrow-task-transform',
+      {}
+    ],
     [
       '@babel/plugin-transform-typescript',
       {

@@ -3,8 +3,23 @@
  *
  * For local dev experience, see the babel.config
  */
+const { buildMacros } = require('@embroider/macros/babel');
+const { setConfig } = require('@warp-drive/core/build-config');
+
+const Macros = buildMacros({
+  configure: (config) => {
+    setConfig(config, {
+      compatWith: '5.6'
+    });
+  },
+});
+
 module.exports = {
   plugins: [
+    [
+      'ember-concurrency/async-arrow-task-transform',
+      {}
+    ],
     [
       '@babel/plugin-transform-typescript',
       {
@@ -28,6 +43,7 @@ module.exports = {
         },
       },
     ],
+    ...Macros.babelMacros,
   ],
 
   generatorOpts: {

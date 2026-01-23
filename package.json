@@ -10,6 +10,14 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.28.1",
+  "pnpm": {
+    "overrides": {
+      "zod": "^4.0.0",
+      "tracked-built-ins": "4.1.0", 
+      "@glint/template": "1.7.3",
+      "ember-source": "~6.8.0"
+    }
+  },
   "devDependencies": {
     "turbo": "^2.7.4",
     "backend-app": "workspace:^"

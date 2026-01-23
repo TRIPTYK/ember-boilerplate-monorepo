@@ -35,8 +35,12 @@ export default {
     addon.appReexports([
       'components/**/*.js',
       'helpers/**/*.js',
+      'routes/**/*.js',
       'modifiers/**/*.js',
       'services/**/*.js',
+      'handlers/**/*.js',
+      'templates/**/*.js',
+      'schemas/**/*.js',
     ]),
 
     // Follow the V2 Addon rules about dependencies. Your code can import from

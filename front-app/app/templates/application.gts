@@ -1,4 +1,3 @@
-import RouteTemplate from "ember-route-template";
 import type { TOC } from '@ember/component/template-only';
 import { pageTitle } from 'ember-page-title';
 
@@ -15,4 +14,4 @@ const template: TOC<ApplicationSignature> = <template>
   {{outlet}}
 </template>;
 
-export default RouteTemplate(template)
+export default template;

@@ -1,6 +1,6 @@
 import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
-import { UserSchema } from 'front-app/schemas/users';
+import UserSchema from '@libs/users/schemas/users';
 
 const legacyStore = useLegacyStore({
   linksMode: false,

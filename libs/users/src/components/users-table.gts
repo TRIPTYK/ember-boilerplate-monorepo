@@ -1,6 +1,7 @@
-import TpkTableGenericPrefab, { type TableParams } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
+import type { TOC } from '@ember/component/template-only';
+import { default as TableGenericPrefab, type TableParams } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
 
-let tableParams: TableParams = {
+const tableParams: TableParams = {
     entity: 'users',
     pageSizes: [10, 30, 50, 75],
     defaultSortColumn: 'firstName',
@@ -19,7 +20,7 @@ let tableParams: TableParams = {
     actionMenu: [],
   };
 
-export const UsersTable = <template>
+export const UsersTable: TOC<object> = <template>
   <h1>Users Table</h1>
-  <TpkTableGenericPrefab @tableParams={{tableParams}} />
+  <TableGenericPrefab @tableParams={{tableParams}} />
 </template>;

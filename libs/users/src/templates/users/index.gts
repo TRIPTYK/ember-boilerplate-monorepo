@@ -1,6 +1,6 @@
+import { UsersTable } from '#src/components/users-table.gts';
 import type { TOC } from '@ember/component/template-only';
 import { pageTitle } from 'ember-page-title';
-import { UsersTable } from 'front-app/components/users-table.gts';
 
 interface IndexSignature {
   Args: {
@@ -9,7 +9,8 @@ interface IndexSignature {
   };
 }
 
-<template>
+
+export default <template>
   {{pageTitle "Index"}}
   <UsersTable />
-</template> satisfies TOC<IndexSignature>;
+</template> as TOC<IndexSignature>;

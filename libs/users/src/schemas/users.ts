@@ -2,7 +2,7 @@ import { withDefaults, type WithLegacy } from '@warp-drive/legacy/model/migratio
 import { Type } from '@warp-drive/core/types/symbols';
 import type { HasMany } from '@warp-drive/legacy/model';
 
-export const UserSchema = withDefaults({
+const UserSchema = withDefaults({
   type: 'users',
   fields: [
     { name: 'name', kind: 'attribute' },
@@ -10,6 +10,8 @@ export const UserSchema = withDefaults({
     { name: 'createdAt', kind: 'attribute' },
   ],
 });
+
+export default UserSchema;
 
 export type User = WithLegacy<{
   firstName: string;
