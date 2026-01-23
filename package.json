@@ -13,14 +13,16 @@
   "pnpm": {
     "overrides": {
       "zod": "^4.0.0",
-      "tracked-built-ins": "4.1.0", 
-      "@glint/template": "1.7.3",
-      "ember-source": "~6.8.0"
+      "@embroider/util": "1.13.2"
+    },
+    "patchedDependencies": {
+      "@embroider/vite": "patches/@embroider__vite.patch",
+      "ember-power-select-with-create": "patches/ember-power-select-with-create.patch"
     }
   },
   "devDependencies": {
-    "turbo": "^2.7.4",
-    "backend-app": "workspace:^"
+    "backend-app": "workspace:^",
+    "turbo": "^2.7.4"
   },
   "volta": {
     "node": "24.13.0",
