@@ -1,6 +1,6 @@
-import { webdriverio } from "@vitest/browser-webdriverio";
+import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from "vitest/config";
-import { extensions, ember, classicEmberSupport } from '@embroider/vite';
+import { extensions, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 
 // For scenario testing
@@ -15,15 +15,16 @@ export default defineConfig({
     }),
   ],
   test: {
+    setupFiles: ['./tests/test-helper.ts'],
     include: ["tests/**/*-test.{gjs,gts}"],
     maxConcurrency: 1,
     browser: {
-      provider: webdriverio(),
+      provider: playwright(),
       enabled: true,
       headless: false,
       // at least one instance is required
       instances: [
-        { browser: "chrome" },
+        { browser: "chromium" },
         // { browser: 'firefox' },
         // { browser: 'edge' },
         // { browser: 'safari' },
