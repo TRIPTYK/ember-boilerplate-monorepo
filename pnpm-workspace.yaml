@@ -14,5 +14,3 @@ onlyBuiltDependencies:
 
 patchedDependencies:
   '@embroider/vite': patches/@embroider__vite.patch
-
-resolvePeersFromWorkspaceRoot: false

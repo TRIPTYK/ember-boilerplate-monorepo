@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 import { ImmerChangeset } from 'ember-immer-changeset';
 import { object, string, date, boolean, array, email } from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
-import type Owner from '@ember/owner';
-import { on } from '@ember/modifier';
 
 export default class UsersFormComponent extends Component {
   @tracked changeset = new ImmerChangeset({

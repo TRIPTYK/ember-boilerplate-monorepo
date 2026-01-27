@@ -87,6 +87,8 @@
     "ember-modifier": "^4.2.2",
     "ember-page-title": "^9.0.3",
     "ember-resolver": "~13.1.1",
+    "ember-simple-auth": "^8.2.0",
+    "ember-simple-auth-token": "~6.0.1",
     "ember-source": "~6.10.0",
     "ember-strict-application-resolver": "^0.1.1",
     "ember-template-lint": "^7.9.3",

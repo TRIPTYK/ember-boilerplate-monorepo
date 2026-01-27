@@ -1,22 +1,33 @@
+import EmberApp from 'ember-strict-application-resolver';
+import EmberRouter from '@ember/routing/router';
+import * as QUnit from 'qunit';
+import { setApplication } from '@ember/test-helpers';
+import { setup } from 'qunit-dom';
+import { start as qunitStart, setupEmberOnerrorValidation } from 'ember-qunit';
 
-import { resumeTest } from "@ember/test-helpers";
-import { afterEach, beforeEach } from "vitest";
+class Router extends EmberRouter {
+  location = 'none';
+  rootURL = '/';
+}
 
-const callback = (event: KeyboardEvent) => {
-  if (event.ctrlKey && event.key === 'r') {
-    event.preventDefault();
-    resumeTest();
-  }
-};
+class TestApp extends EmberApp {
+  modules = {
+    './router': Router,
+    // add any custom services here
+    // import.meta.glob('./services/*', { eager: true }),
+  };
+}
 
-beforeEach(() => {
+Router.map(function () {});
 
-
-  document.addEventListener('keydown', callback);
-});
-
-afterEach(() => {
-  document.removeEventListener('keydown', callback);
-});
-
-
+export function start() {
+  setApplication(
+    TestApp.create({
+      autoboot: false,
+      rootElement: '#ember-testing',
+    }),
+  );
+  setup(QUnit.assert);
+  setupEmberOnerrorValidation();
+  qunitStart();
+}

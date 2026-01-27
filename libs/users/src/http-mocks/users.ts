@@ -43,4 +43,9 @@ export default [
       },
     });
   }),
+  http.untyped.get('/users/profile', () => {
+    return HttpResponse.json({
+      data: mockUsers[0],
+    });
+  }),
 ];

@@ -1,27 +1,31 @@
-import { describe, expect } from 'vitest';
-import { renderingTest } from 'ember-vitest';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 import { click, fillIn, find, render } from '@ember/test-helpers';
 import { object, string} from 'zod';
 import ImmerChangeset from 'ember-immer-changeset';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
-import IntlService from 'ember-intl/services/intl';
-import TpkFormService from '@triptyk/ember-input-validation/services/tpk-form';
 
-describe('tpk-form', () => {
-  renderingTest('Should pass errors to the prefab inputs when the changeset is invalid upon submission', async (c) => {
+import TpkFormService from '@triptyk/ember-input-validation/services/tpk-form';
+import { getOwner } from '@ember/owner';
+
+module('tpk-form', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('Should pass errors to the prefab inputs when the changeset is invalid upon submission', async function(assert) {
     const changeset = new ImmerChangeset({});
     const schema = object({
       name: string().min(10, 'Too small: expected string to have >=10 characters'),
       email: string().email('Invalid email address'),
     });
 
-    c.env.owner.register('service:tpk-form', TpkFormService);
-    c.env.owner.register('service:intl', IntlService);
-    c.env.owner.lookup('service:intl').setLocale('en-us');
+
+    getOwner(this)?.register('service:tpk-form', TpkFormService);
 
     const onSubmit = () => {
       // no-op
     };
+
+
 
     await render(<template>
       <TpkForm
@@ -40,6 +44,7 @@ describe('tpk-form', () => {
           @validationField="name"
         />
         <F.TpkInput @label="test" @type="email" @validationField="email" as |I|>
+          {{log I.errors}}
           <I.Label />
           <I.Input />
         </F.TpkInput>
@@ -47,15 +52,16 @@ describe('tpk-form', () => {
       </TpkForm>
     </template>)
 
+    await new Promise((res) => setTimeout(res, 60000)); // wait for next tick
 
-    expect(changeset.isInvalid).toBe(false);
+    assert.false(changeset.isInvalid);
 
     await fillIn('[data-test-name] input', 't@g.com');
 
     await click('button[type="submit"]');
 
-    expect(changeset.isInvalid).toBe(true);
-    expect(find('[data-test-tpk-validation-errors]')).toBeTruthy();
-    expect(find('[data-test-tpk-validation-errors]')?.textContent).toContain('Too small: expected string to have >=10 characters');
+    assert.true(changeset.isInvalid);
+    assert.ok(find('[data-test-tpk-validation-errors]'));
+    assert.true(find('[data-test-tpk-validation-errors]')?.textContent?.includes('Too small: expected string to have >=10 characters'));
   });
 });

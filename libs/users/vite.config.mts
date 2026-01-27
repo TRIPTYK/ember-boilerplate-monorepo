@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     ember(),
     babel({
-      babelHelpers: 'runtime',
+      babelHelpers: 'inline',
       extensions
     }),
   ],
