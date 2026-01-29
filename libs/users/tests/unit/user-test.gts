@@ -1,4 +1,4 @@
-import { beforeEach, describe } from 'vitest';
+import { beforeAll, describe } from 'vitest';
 import { test } from 'ember-vitest';
 import { initializeTestApp, TestApp } from '../app';
 import type UserService from '#src/services/user.ts';
@@ -30,7 +30,7 @@ const handlers = [
 describe('Service | User | Unit', () => {
   test.scoped({ app: ({}, use) => use(TestApp) });
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const worker = setupWorker(...handlers);
     await worker.start();
     return () => {

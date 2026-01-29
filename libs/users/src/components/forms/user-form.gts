@@ -11,7 +11,7 @@ import {
   fillable,
   clickable,
 } from 'ember-cli-page-object';
-import { ifTesting } from '../../../tests/utils.js';
+import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -20,6 +20,7 @@ interface UsersFormArgs {
 export default class UsersForm extends Component<UsersFormArgs> {
   @service declare user: UserService;
   @service declare router: RouterService;
+  @service declare flashMessages: FlashMessageService;
 
   validationSchema = object({
     firstName: string().min(2, 'At least 2 characters'),
@@ -32,6 +33,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
     const data = await UserValidationSchema.parseAsync(this.args.changeset.data);
     await this.user.save(data);
     await this.router.transitionTo('dashboard.users');
+    this.flashMessages.success('User saved successfully.');
   }
 
   onChange = (value: unknown) => {
@@ -53,10 +55,10 @@ export default class UsersForm extends Component<UsersFormArgs> {
   </template>
 }
 
-export const pageObject = ifTesting(() => create({
+export const pageObject = create({
   scope: '[data-test-users-form]',
   firstName: fillable('[data-test-tpk-prefab-input-container="firstName"] input'),
   lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
   submit: clickable('button[type="submit"]'),
-}));
+});

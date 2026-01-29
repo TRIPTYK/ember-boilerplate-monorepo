@@ -4,9 +4,8 @@ import { ImmerChangeset } from 'ember-immer-changeset';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type SessionService from 'ember-simple-auth/services/session';
-import { ifTesting } from '../../../tests/utils.js';
 import { clickable, create, fillable } from 'ember-cli-page-object';
-import LoginValidationSchema from './login-validation.js';
+import LoginValidationSchema from './login-validation.ts';
 
 export default class LoginForm extends Component {
   @service declare session: SessionService;
@@ -40,10 +39,10 @@ export default class LoginForm extends Component {
   </template>
 }
 
-export const pageObject = ifTesting(() => create({
+export const pageObject = create({
   scope: '[data-test-login-form]',
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
   password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
   submit: clickable('button[type="submit"]'),
-}));
+});
 

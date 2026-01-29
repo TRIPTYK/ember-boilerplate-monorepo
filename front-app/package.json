@@ -81,6 +81,7 @@
     "ember-cli": "~6.10.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-deprecation-workflow": "^4.0.0",
+    "ember-cli-flash": "^6.0.0",
     "ember-concurrency": "^5.1.0",
     "ember-intl": "~8.0.3",
     "ember-load-initializers": "^3.0.1",

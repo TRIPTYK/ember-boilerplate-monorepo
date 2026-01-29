@@ -1,5 +1,9 @@
-import type { TOC } from '@ember/component/template-only';
 import { pageTitle } from 'ember-page-title';
+import FlashMessage from 'ember-cli-flash/components/flash-message';
+import Component from '@glimmer/component';
+import { service } from '@ember/service';
+import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
+import component from '@ember/component/template-only';
 
 interface ApplicationSignature {
   Args: {
@@ -8,10 +12,27 @@ interface ApplicationSignature {
   };
 }
 
-const template: TOC<ApplicationSignature> = <template>
-  {{pageTitle "Application"}}
+class ApplicationTemplate extends Component<ApplicationSignature> {
+  @service declare flashMessages: FlashMessageService;
 
-  {{outlet}}
-</template>;
+  <template>
+    {{pageTitle "Application"}}
 
-export default template;
+    {{#each this.flashMessages.queue as |flash|}}
+      <FlashMessage @flash={{flash}} as |component flash|>
+        {{#if flash.componentName}}
+          {{!-- @glint-expect-error --}}
+          {{component flash.componentName content=flash.content}}
+        {{else}}
+          {{!-- @glint-expect-error --}}
+          <h6>{{component.flashType}}</h6>
+          <p>{{flash.message}}</p>
+        {{/if}}
+      </FlashMessage>
+    {{/each}}
+
+    {{outlet}}
+  </template>;
+}
+
+export default ApplicationTemplate;
