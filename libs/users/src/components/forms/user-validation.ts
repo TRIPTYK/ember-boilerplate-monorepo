@@ -7,5 +7,6 @@ export const UserValidationSchema = object({
   email: email("Invalid email address"),
   id: string().optional().nullable(),
 });
+export default UserValidationSchema;
 
 export type ValidatedUser = z.infer<typeof UserValidationSchema>;

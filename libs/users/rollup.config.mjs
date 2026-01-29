@@ -37,13 +37,12 @@ export default {
     // "app" tree. Things in here should also be in publicEntrypoints above, but
     // not everything in publicEntrypoints necessarily needs to go here.
     addon.appReexports([
-      'components/**/*.js',
+      'components/**/*-form.js',
       'helpers/**/*.js',
       'routes/**/*.js',
       'modifiers/**/*.js',
       'services/**/*.js',
       'handlers/**/*.js',
-      'http-mocks/**/*.js',
       'templates/**/*.js',
       'schemas/**/*.js',
     ], {

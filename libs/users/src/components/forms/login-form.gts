@@ -1,11 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { ImmerChangeset } from 'ember-immer-changeset';
-import { email, object, string } from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type SessionService from 'ember-simple-auth/services/session';
+import { ifTesting } from '../../../tests/utils.js';
+import { clickable, create, fillable } from 'ember-cli-page-object';
+import LoginValidationSchema from './login-validation.js';
 
 export default class LoginForm extends Component {
   @service declare session: SessionService;
@@ -13,11 +14,6 @@ export default class LoginForm extends Component {
   @tracked changeset = new ImmerChangeset({
     email: 'deflorenne.amaury@triptyk.eu',
     password: '123456789',
-  });
-
-  validationSchema = object({
-    email: email('Please enter a valid email address'),
-    password: string().min(8, 'Password must be at least 8 characters'),
   });
 
   onSubmit = async (changeset: typeof this.changeset) => {
@@ -28,13 +24,13 @@ export default class LoginForm extends Component {
   }
 
   <template>
-    <div class="login-form-container">
+    <div class="login-form-container" data-test-login-form>
       <h2>Login</h2>
       <TpkForm
         @changeset={{this.changeset}}
         @onSubmit={{this.onSubmit}}
         @reactive={{true}}
-        @validationSchema={{this.validationSchema}}
+        @validationSchema={{LoginValidationSchema}}
       as |F|>
         <F.TpkEmailPrefab @label="Email" @validationField="email" />
         <F.TpkPasswordPrefab @label="Password" @validationField="password" />
@@ -43,3 +39,11 @@ export default class LoginForm extends Component {
     </div>
   </template>
 }
+
+export const pageObject = ifTesting(() => create({
+  scope: '[data-test-login-form]',
+  email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
+  submit: clickable('button[type="submit"]'),
+}));
+

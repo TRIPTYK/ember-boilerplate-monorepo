@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { object, string, email } from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
@@ -7,6 +6,12 @@ import type UserService from '#src/services/user.ts';
 import type { UserChangeset } from '#src/changesets/user.ts';
 import { UserValidationSchema } from '#src/components/forms/user-validation.ts';
 import type RouterService from '@ember/routing/router-service';
+import {
+  create,
+  fillable,
+  clickable,
+} from 'ember-cli-page-object';
+import { ifTesting } from '../../../tests/utils.js';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -34,18 +39,24 @@ export default class UsersForm extends Component<UsersFormArgs> {
   }
 
   <template>
-    <div class="users-form-container">
-      <h2>Users Form</h2>
-      <TpkForm
-        @changeset={{@changeset}}
-        @onSubmit={{this.onSubmit}}
-        @validationSchema={{this.validationSchema}}
-      as |F|>
-        <F.TpkInputPrefab @label="First Name" @validationField="firstName" />
-        <F.TpkInputPrefab @label="Last Name" @validationField="lastName" />
-        <F.TpkEmailPrefab @label="Email" @validationField="email" />
-        <button type="submit">Submit</button>
-      </TpkForm>
-    </div>
+    <TpkForm
+      @changeset={{@changeset}}
+      @onSubmit={{this.onSubmit}}
+      @validationSchema={{this.validationSchema}}
+      data-test-users-form
+    as |F|>
+      <F.TpkInputPrefab @label="First Name" @validationField="firstName" />
+      <F.TpkInputPrefab @label="Last Name" @validationField="lastName" />
+      <F.TpkEmailPrefab @label="Email" @validationField="email" />
+      <button type="submit">Submit</button>
+    </TpkForm>
   </template>
 }
+
+export const pageObject = ifTesting(() => create({
+  scope: '[data-test-users-form]',
+  firstName: fillable('[data-test-tpk-prefab-input-container="firstName"] input'),
+  lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
+  email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  submit: clickable('button[type="submit"]'),
+}));

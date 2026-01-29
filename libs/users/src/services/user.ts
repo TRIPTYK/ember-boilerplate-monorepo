@@ -12,7 +12,7 @@ type UpdateUserData = ValidatedUser & { id: string };
 export default class UserService extends Service {
   @service declare store: Store;
 
-  async save(data: ValidatedUser) {
+  public async save(data: ValidatedUser) {
     if (data.id) {
       return this.update(data as UpdateUserData);
     } else {

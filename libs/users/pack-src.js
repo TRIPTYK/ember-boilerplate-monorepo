@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'src');
+const testDir = path.join(__dirname, 'tests');
 const outputFile = path.join(__dirname, 'src-packed.txt');
 
 // Code file extensions to include
@@ -79,6 +80,7 @@ console.log(`\n📦 Packing code files from: ${srcDir}\n`);
 
 try {
   readFilesRecursive(srcDir);
+  readFilesRecursive(testDir);
 
   // Add summary
   const separator = `${'='.repeat(80)}\n\n`;

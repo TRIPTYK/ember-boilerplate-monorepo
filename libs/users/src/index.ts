@@ -7,6 +7,7 @@ import Base from 'ember-simple-auth/session-stores/base'
 import LocalStorage from 'ember-simple-auth/session-stores/local-storage';
 import type CurrentUserService from './services/current-user';
 import type { Store } from '@warp-drive/core';
+import IntlService from 'ember-intl/services/intl';
 
 export function moduleRegistry() {
   return buildRegistry({
@@ -21,6 +22,9 @@ export function moduleRegistry() {
     './session-stores/base': {
       default: Base
     },
+    './services/intl': {
+      default: IntlService
+    },
     './session-stores/local-storage': {
       default: LocalStorage
     }
@@ -31,9 +35,11 @@ export async function initialize(owner: Owner) {
   const sessionService = owner.lookup('service:session') as SessionService | undefined;
   const currentUserService = owner.lookup('service:current-user') as CurrentUserService | undefined;
   const storeService = owner.lookup('service:store') as Store | undefined;
+  const intlService = owner.lookup('service:intl') as IntlService | undefined;
   assert('Session service must be available', sessionService);
   assert('CurrentUser service must be available', currentUserService);
   assert('Store service must be available', storeService);
+  assert('Intl service must be available', intlService);
   await sessionService.setup();
   await currentUserService.load();
 }

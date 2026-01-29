@@ -1,0 +1,1012 @@
+================================================================================
+
+
+================================================================================
+FILE: changesets/user.ts
+================================================================================
+
+import ImmerChangeset from "ember-immer-changeset";
+
+export interface DraftUser {
+  id?: string | null;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
+export class UserChangeset  extends ImmerChangeset<DraftUser> {}
+
+
+
+================================================================================
+FILE: components/forms/login-form.gts
+================================================================================
+
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { ImmerChangeset } from 'ember-immer-changeset';
+import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import { service } from '@ember/service';
+import type SessionService from 'ember-simple-auth/services/session';
+import { ifTesting } from '../../../tests/utils.js';
+import { clickable, create, fillable } from 'ember-cli-page-object';
+import LoginValidationSchema from './login-validation.js';
+
+export default class LoginForm extends Component {
+  @service declare session: SessionService;
+
+  @tracked changeset = new ImmerChangeset({
+    email: 'deflorenne.amaury@triptyk.eu',
+    password: '123456789',
+  });
+
+  onSubmit = async (changeset: typeof this.changeset) => {
+    await this.session.authenticate('authenticator:jwt', {
+      email: changeset.get('email'),
+      password: changeset.get('password'),
+    })
+  }
+
+  <template>
+    <div class="login-form-container">
+      <h2>Login</h2>
+      <TpkForm
+        @changeset={{this.changeset}}
+        @onSubmit={{this.onSubmit}}
+        @reactive={{true}}
+        @validationSchema={{LoginValidationSchema}}
+      as |F|>
+        <F.TpkEmailPrefab @label="Email" @validationField="email" />
+        <F.TpkPasswordPrefab @label="Password" @validationField="password" />
+        <button type="submit">Login</button>
+      </TpkForm>
+    </div>
+  </template>
+}
+
+export const pageObject = ifTesting(() => create({
+  scope: '[data-test-login-form]',
+  email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
+  submit: clickable('button[type="submit"]'),
+}));
+
+
+
+
+================================================================================
+FILE: components/forms/login-validation.ts
+================================================================================
+
+import { email, object, string } from "zod";
+
+const LoginValidationSchema = object({
+  email: email('Please enter a valid email address'),
+  password: string().min(8, 'Password must be at least 8 characters'),
+});
+
+export default LoginValidationSchema;
+
+
+
+================================================================================
+FILE: components/forms/user-form.gts
+================================================================================
+
+import Component from '@glimmer/component';
+import { object, string, email } from 'zod';
+import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import { service } from '@ember/service';
+import type UserService from '#src/services/user.ts';
+import type { UserChangeset } from '#src/changesets/user.ts';
+import { UserValidationSchema } from '#src/components/forms/user-validation.ts';
+import type RouterService from '@ember/routing/router-service';
+import {
+  create,
+  fillable,
+  clickable,
+} from 'ember-cli-page-object';
+import { ifTesting } from '../../../tests/utils.js';
+
+interface UsersFormArgs {
+  changeset: UserChangeset;
+}
+
+export default class UsersForm extends Component<UsersFormArgs> {
+  @service declare user: UserService;
+  @service declare router: RouterService;
+
+  validationSchema = object({
+    firstName: string().min(2, 'At least 2 characters'),
+    lastName: string().min(2, 'At least 2 characters'),
+    email: email('Invalid email')
+  });
+
+  onSubmit = async () => {
+    // we cannot fully guarentee that the changeset is valid here, so we re-validate using the schema.
+    const data = await UserValidationSchema.parseAsync(this.args.changeset.data);
+    await this.user.save(data);
+    await this.router.transitionTo('dashboard.users');
+  }
+
+  onChange = (value: unknown) => {
+    console.log('Value changed:', value);
+  }
+
+  <template>
+    <TpkForm
+      @changeset={{@changeset}}
+      @onSubmit={{this.onSubmit}}
+      @validationSchema={{this.validationSchema}}
+      data-test-users-form
+    as |F|>
+      <F.TpkInputPrefab @label="First Name" @validationField="firstName" />
+      <F.TpkInputPrefab @label="Last Name" @validationField="lastName" />
+      <F.TpkEmailPrefab @label="Email" @validationField="email" />
+      <button type="submit">Submit</button>
+    </TpkForm>
+  </template>
+}
+
+export const pageObject = ifTesting(() => create({
+  scope: '[data-test-users-form]',
+  firstName: fillable('[data-test-tpk-prefab-input-container="firstName"] input'),
+  lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
+  email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  submit: clickable('button[type="submit"]'),
+}));
+
+
+
+================================================================================
+FILE: components/forms/user-validation.ts
+================================================================================
+
+import { email, object, string } from "zod";
+import type z from "zod";
+
+export const UserValidationSchema = object({
+  firstName: string().min(1, "First name is required"),
+  lastName: string().min(1, "Last name is required"),
+  email: email("Invalid email address"),
+  id: string().optional().nullable(),
+});
+export default UserValidationSchema;
+
+export type ValidatedUser = z.infer<typeof UserValidationSchema>;
+
+
+
+================================================================================
+FILE: components/user-table.gts
+================================================================================
+
+import type RouterService from '@ember/routing/router-service';
+import { service } from '@ember/service';
+import Component from '@glimmer/component';
+import TableGenericPrefab, { type TableParams } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
+import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+
+class UsersTable extends Component<object> {
+  @service declare router: RouterService;
+
+  tableParams: TableParams = {
+    entity: 'users',
+    pageSizes: [10, 30, 50, 75],
+    rowClick: (element) => {
+      this.router.transitionTo('dashboard.users.edit', (element as { id: string }).id);
+    },
+    defaultSortColumn: 'firstName',
+    columns: [
+      {
+        field: 'firstName',
+        headerName: 'Nom',
+        sortable: true,
+      },
+      {
+        field: 'lastName',
+        headerName: 'Prénom',
+        sortable: true,
+      },
+      {
+        field: 'email',
+        headerName: 'Email',
+        sortable: false,
+      },
+    ],
+    actionMenu: [],
+  };
+
+  onAddUser = () => {
+    this.router.transitionTo('dashboard.users.create');
+  }
+
+  <template>
+    <TpkButton @label="Add User" @onClick={{this.onAddUser}} />
+    <TableGenericPrefab @tableParams={{this.tableParams}} />
+  </template>;
+}
+
+export default UsersTable;
+
+
+
+================================================================================
+FILE: handlers/auth.ts
+================================================================================
+
+import { service } from '@ember/service';
+import type { NextFn } from '@warp-drive/core/request';
+import type { RequestContext } from '@warp-drive/core/types/request';
+import type SessionService from 'ember-simple-auth/services/session';
+
+export default class AuthHandler {
+  @service declare session: SessionService;
+
+  request<T>(context: RequestContext, next: NextFn<T>) {
+    const headers = new Headers(context.request.headers);
+    headers.append(
+      'Authorization',
+      `Bearer ${this.session.data.authenticated.access_token}`,
+    );
+
+    return next(Object.assign({}, context.request, { headers }));
+  }
+}
+
+
+
+================================================================================
+FILE: http-mocks/all.ts
+================================================================================
+
+import login from "./login.ts";
+import users from "./users.ts";
+
+export default [
+  ...login,
+  ...users
+]
+
+
+
+================================================================================
+FILE: http-mocks/login.ts
+================================================================================
+
+import { http, HttpResponse } from "msw";
+
+export default [
+  http.post('/api/v1/auth/login', () => {
+    return HttpResponse.json({
+      data: {
+        accessToken: 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.ANCf_8p1AE4ZQs7QuqGAyyfTEgYrKSjKWkhBk5cIn1_2QVr2jEjmM-1tu7EgnyOf_fAsvdFXva8Sv05iTGzETg',
+        refreshToken: 'mock-refresh',
+      },
+    });
+  }),
+];
+
+
+
+================================================================================
+FILE: http-mocks/users.ts
+================================================================================
+
+import { HttpResponse } from 'msw';
+import type { paths } from 'backend-app';
+import { createOpenApiHttp } from "openapi-msw";
+
+const mockUsers = [
+  {
+    id: '1',
+    type: 'users' as const,
+    attributes: {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com'
+    },
+  },
+  {
+    id: '2',
+    type: 'users' as const,
+    attributes: {
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane.smith@example.com'
+    },
+  },
+  {
+    id: '3',
+    type: 'users' as const,
+    attributes: {
+      firstName: 'Bob Johnson',
+      lastName: 'Johnson',
+      email: 'bob.johnson@example.com'
+    },
+  },
+];
+
+const http = createOpenApiHttp<paths>();
+
+export default [
+  http.untyped.get('/api/v1/users/profile', () => {
+    return HttpResponse.json({
+      data: mockUsers[0],
+    });
+  }),
+  http.untyped.get('/api/v1/users/:id', (req) => {
+    const { id } = req.params;
+    const user = mockUsers.find((user) => user.id === id);
+    if (user) {
+      return HttpResponse.json({
+        data: user,
+      });
+    } else {
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              status: '404',
+              title: 'Not Found',
+              detail: `User with id ${id} not found`,
+            },
+          ],
+        },
+        { status: 404 }
+      );
+    }
+  }),
+  http.untyped.get('/api/v1/users', ({ request }) => {
+    const url = new URL(request.url);
+    const searchQuery = url.searchParams.get('filter[search]');
+    const sortParam = url.searchParams.get('sort');
+
+    let results = [...mockUsers];
+
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      results = results.filter((user) => {
+        const firstName = user.attributes.firstName.toLowerCase();
+        const lastName = user.attributes.lastName.toLowerCase();
+        const email = user.attributes.email.toLowerCase();
+        return firstName.includes(query) || lastName.includes(query) || email.includes(query);
+      });
+    }
+
+    // Apply sort
+    if (sortParam) {
+      const isDescending = sortParam.startsWith('-');
+      const field = isDescending ? sortParam.slice(1) : sortParam;
+
+      results.sort((a, b) => {
+        let aValue: string | undefined;
+        let bValue: string | undefined;
+
+        if (field === 'firstName' || field === 'lastName' || field === 'email') {
+          aValue = a.attributes[field];
+          bValue = b.attributes[field];
+        }
+
+        if (aValue === undefined || bValue === undefined) {
+          return 0;
+        }
+
+        const comparison = aValue.localeCompare(bValue);
+        return isDescending ? -comparison : comparison;
+      });
+    }
+
+    return HttpResponse.json({
+      data: results,
+      meta: {
+        total: results.length,
+      },
+    });
+  }),
+  http.untyped.post('/api/v1/users', async (req) => {
+    const json = await req.request.json() as Record<string, any>;
+
+    return HttpResponse.json({
+      data: {
+        id: json.data.lid,
+        type: 'users' as const,
+        attributes: json.data.attributes,
+      }
+    });
+  }),
+  http.untyped.patch('/api/v1/users', async (req) => {
+    const json = await req.request.json() as Record<string, any>;
+
+    return HttpResponse.json({
+      data: {
+        id: json.data.lid,
+        type: 'users' as const,
+        attributes: json.data.attributes,
+      }
+    });
+  })
+];
+
+
+
+================================================================================
+FILE: index.ts
+================================================================================
+
+import { assert } from '@ember/debug';
+import type Owner from '@ember/owner';
+import type { DSL } from '@ember/routing/lib/dsl';
+import { buildRegistry } from 'ember-strict-application-resolver/build-registry';
+import SessionService from 'ember-simple-auth/services/session';
+import Base from 'ember-simple-auth/session-stores/base'
+import LocalStorage from 'ember-simple-auth/session-stores/local-storage';
+import type CurrentUserService from './services/current-user';
+import type { Store } from '@warp-drive/core';
+import IntlService from 'ember-intl/services/intl';
+
+export function moduleRegistry() {
+  return buildRegistry({
+    ...import.meta.glob('./routes/**/*.{js,ts}', { eager: true }),
+    ...import.meta.glob('./templates/**/*.{js,ts}', { eager: true }),
+    ...import.meta.glob('./helpers/**/*.{js,ts}', { eager: true }),
+    ...import.meta.glob('./components/**/*.{js,ts}', { eager: true }),
+    ...import.meta.glob('./services/**/*.{js,ts}', { eager: true }),
+    './services/session': {
+      default: SessionService
+    },
+    './session-stores/base': {
+      default: Base
+    },
+    './services/intl': {
+      default: IntlService
+    },
+    './session-stores/local-storage': {
+      default: LocalStorage
+    }
+  })();
+}
+
+export async function initialize(owner: Owner) {
+  const sessionService = owner.lookup('service:session') as SessionService | undefined;
+  const currentUserService = owner.lookup('service:current-user') as CurrentUserService | undefined;
+  const storeService = owner.lookup('service:store') as Store | undefined;
+  const intlService = owner.lookup('service:intl') as IntlService | undefined;
+  assert('Session service must be available', sessionService);
+  assert('CurrentUser service must be available', currentUserService);
+  assert('Store service must be available', storeService);
+  assert('Intl service must be available', intlService);
+  await sessionService.setup();
+  await currentUserService.load();
+}
+
+export function forRouter(this: DSL) {
+  this.route('users', function() {
+    this.route('create');
+    this.route('edit', { path: '/:user_id/edit' });
+  });
+}
+
+export function authRoutes(this: DSL) {
+  this.route('login');
+  this.route('logout');
+}
+
+
+
+================================================================================
+FILE: routes/dashboard/users/create-template.gts
+================================================================================
+
+
+import { UserChangeset } from "#src/changesets/user.ts";
+import UsersForm from "#src/components/forms/user-form.gts";
+import Component from "@glimmer/component";
+import type { UsersCreateRouteSignature } from "./create.gts";
+import type Owner from "@ember/owner";
+
+export default class UsersCreateRouteTemplate extends Component<UsersCreateRouteSignature> {
+  changeset = new UserChangeset({});
+
+  public constructor(owner: Owner, args: UsersCreateRouteSignature) {
+    super(owner, args);
+    console.log("Creating UsersCreateRouteTemplate", this.changeset);
+  }
+
+  <template>
+    <UsersForm @changeset={{this.changeset}} />
+  </template>
+}
+
+
+
+================================================================================
+FILE: routes/dashboard/users/create.gts
+================================================================================
+
+import Route from '@ember/routing/route';
+
+export type UsersCreateRouteSignature = {
+  model: Awaited<ReturnType<UsersCreateRoute['model']>>;
+  controller: undefined;
+};
+
+export default class UsersCreateRoute extends Route {}
+
+
+
+
+================================================================================
+FILE: routes/dashboard/users/edit-template.gts
+================================================================================
+
+
+import { UserChangeset } from "#src/changesets/user.ts";
+import UsersForm from "#src/components/forms/user-form.gts";
+import Component from "@glimmer/component";
+import type { UsersEditRouteSignature } from "./edit.gts";
+
+export default class UsersEditRouteTemplate extends Component<UsersEditRouteSignature> {
+  changeset = new UserChangeset({
+    firstName: this.args.model.user.firstName,
+    lastName: this.args.model.user.lastName,
+    email: this.args.model.user.email,
+  });
+
+  <template>
+    <UsersForm @changeset={{this.changeset}} />
+  </template>
+}
+
+
+
+================================================================================
+FILE: routes/dashboard/users/edit.gts
+================================================================================
+
+import type { User } from '#src/schemas/users.ts';
+import { assert } from '@ember/debug';
+import Route from '@ember/routing/route';
+import { service } from '@ember/service';
+import type { Store } from '@warp-drive/core';
+import { findRecord } from '@warp-drive/utilities/json-api';
+
+export type UsersEditRouteSignature = {
+  model: Awaited<ReturnType<UsersEditRoute['model']>>;
+  controller: undefined;
+};
+
+export default class UsersEditRoute extends Route {
+  @service declare store: Store;
+
+  async model({ user_id }: { user_id: string }) {
+    const user = await this.store.request(
+      findRecord<User>('users', user_id, {
+        include: [],
+      }),
+    )
+
+    assert('User must not be null', user.content.data !== null);
+    const data = user.content.data;
+
+    return {
+      user: data
+    };
+  }
+}
+
+
+
+
+================================================================================
+FILE: routes/dashboard/users/index-template.gts
+================================================================================
+
+
+import UsersTable from "#src/components/user-table.gts";
+import type { TOC } from "@ember/component/template-only";
+import type UsersIndexRoute from "./index.gts";
+
+export default <template>
+  <h1>List des utilisateurs</h1>
+  <UsersTable />
+</template> as TOC<{
+  model: Awaited<ReturnType<UsersIndexRoute['model']>>;
+  controller: undefined;
+}>;
+
+
+
+
+================================================================================
+FILE: routes/dashboard/users/index.gts
+================================================================================
+
+import Route from '@ember/routing/route';
+
+export default class UsersIndexRoute extends Route {}
+
+
+
+================================================================================
+FILE: routes/login-template.gts
+================================================================================
+
+
+import LoginForm from "#src/components/forms/login-form.gts";
+import type { TOC } from "@ember/component/template-only";
+
+export default <template>
+  <LoginForm />
+</template> as TOC<object>
+
+
+
+================================================================================
+FILE: routes/login.gts
+================================================================================
+
+import Route from '@ember/routing/route';
+import { service } from '@ember/service';
+import type SessionService from 'ember-simple-auth/services/session';
+
+export default class LoginRoute extends Route {
+  @service declare session: SessionService;
+
+  beforeModel() {
+    this.session.prohibitAuthentication('application');
+  }
+}
+
+
+
+
+
+================================================================================
+FILE: routes/logout.ts
+================================================================================
+
+import Route from '@ember/routing/route';
+import { service } from '@ember/service';
+import type SessionService from 'ember-simple-auth/services/session';
+
+export default class LogoutRoute extends Route {
+  @service declare session: SessionService;
+
+  async beforeModel() {
+    await this.session.invalidate();
+  }
+}
+
+
+
+================================================================================
+FILE: schemas/users.ts
+================================================================================
+
+import { withDefaults, type WithLegacy } from '@warp-drive/legacy/model/migration-support';
+import type { Type } from '@warp-drive/core/types/symbols';
+
+const UserSchema = withDefaults({
+  type: 'users',
+  fields: [
+    { name: 'firstName', kind: 'attribute' },
+    { name: 'lastName', kind: 'attribute' },
+    { name: 'email', kind: 'attribute' },
+  ],
+});
+
+export default UserSchema;
+
+export type User = WithLegacy<{
+  firstName: string;
+  lastName: string;
+  email: string;
+  [Type]: 'users';
+}>
+
+
+
+================================================================================
+FILE: services/current-user.ts
+================================================================================
+
+import type { User } from "#src/schemas/users.ts";
+import Service from "@ember/service";
+import { service } from "@ember/service";
+import { tracked } from "@glimmer/tracking";
+import type { Store } from "@warp-drive/core";
+import type SessionService from "ember-simple-auth/services/session";
+
+export default class CurrentUserService extends Service {
+  @service declare store: Store;
+  @service declare session: SessionService;
+  @tracked user?: User;
+
+  get currentUser(): User {
+    if (!this.user) {
+      throw new Error("No current user set");
+    }
+
+    return this.user;
+  }
+
+  async load() {
+    if (!this.session.isAuthenticated) {
+      this.user = undefined;
+      return;
+    }
+
+    const response = await this.store.request<User>({
+      url: "/api/v1/users/profile",
+      method: "GET",
+    });
+
+    this.user = response.content;
+  }
+}
+
+
+
+================================================================================
+FILE: services/user.ts
+================================================================================
+
+import type { User } from "#src/schemas/users.ts";
+import { type ValidatedUser } from "#src/components/forms/user-validation.ts";
+import { assert } from "@ember/debug";
+import Service from "@ember/service";
+import { service } from "@ember/service";
+import { cacheKeyFor, type Store } from "@warp-drive/core";
+import { createRecord, updateRecord } from '@warp-drive/utilities/json-api';
+
+type CreateUserData = ValidatedUser & { id: undefined };
+type UpdateUserData = ValidatedUser & { id: string };
+
+export default class UserService extends Service {
+  @service declare store: Store;
+
+  public async save(data: ValidatedUser) {
+    if (data.id) {
+      return this.update(data as UpdateUserData);
+    } else {
+      return this.create(data as CreateUserData);
+    }
+  }
+
+  private create(data: CreateUserData) {
+    const user = this.store.createRecord<User>('users', data);
+    const request = createRecord(user);
+
+    request.body = JSON.stringify(
+      {
+        data: this.store.cache.peek(cacheKeyFor(user))
+      }
+    );
+
+    return this.store.request(request);
+  }
+
+  private update(data: UpdateUserData) {
+    const existingUser = this.store.peekRecord<User>({ id: data.id, type: 'users' });
+    assert('User must exist to be updated', existingUser);
+    const request = updateRecord(existingUser);
+
+    request.body = JSON.stringify(
+      {
+        data: this.store.cache.peek(cacheKeyFor(existingUser))
+      }
+    );
+
+    return this.store.request(request);
+  }
+}
+
+
+
+================================================================================
+FILE: app.ts
+================================================================================
+
+import Application from "ember-strict-application-resolver";
+import { initialize, moduleRegistry } from "#src/index.js";
+import {  moduleRegistry as inputValidationRegistry  }  from '@triptyk/ember-input-validation';
+import IntlService from 'ember-intl/services/intl';
+import compatModules from '@embroider/virtual/compat-modules';
+import PageTitleService from "ember-page-title/services/page-title";
+import EmberRouter from "@ember/routing/router";
+import AdaptiveStore from "ember-simple-auth/session-stores/adaptive";
+import SessionService from "ember-simple-auth/services/session";
+import setupSession from 'ember-simple-auth/initializers/setup-session';
+import type Owner from "@ember/owner";
+import { getOwnConfig } from '@embroider/macros';
+
+class Router extends EmberRouter {
+  location = 'none';
+  rootURL = '/';
+}
+
+export class TestApp extends Application {
+  podModulePrefix = '';
+  modules = {
+    './router': Router,
+    ...moduleRegistry(),
+    ...inputValidationRegistry(),
+    ...compatModules,
+    './services/intl': { default: IntlService},
+    './services/page-title': { default: PageTitleService},
+    './session-stores/application': { default: AdaptiveStore },
+    './services/session': { default: SessionService },
+    './initializers/setup-session': { default: setupSession },
+  };
+}
+
+
+export async function initializeTestApp(owner: Owner, locale: string) {
+    owner.register('session-stores:application', AdaptiveStore);
+    const router = owner.lookup('router:main') as Router;
+    router.setupRouter();
+    const intl = owner.lookup('service:intl');
+    intl.setLocale(locale);
+    intl.setOnMissingTranslation(key => `t:${key}`);
+    setupSession(owner);
+    await initialize(owner);
+}
+
+
+
+================================================================================
+FILE: integration/login-form.test.gts
+================================================================================
+
+import { describe, expect as hardExpect, vi } from "vitest";
+import { renderingTest } from "ember-vitest";
+import { render } from '@ember/test-helpers';
+import { UserChangeset } from '#src/changesets/user.ts';
+import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
+import { initializeTestApp, TestApp } from "../app.ts";
+import type UserService from "#src/services/user.ts";
+import { stubRouter } from "../utils.ts";
+
+const expect = hardExpect.soft;
+
+describe('tpk-form', function() {
+  renderingTest.scoped({ app: ({}, use) => use(TestApp) });
+
+
+});
+
+
+
+================================================================================
+FILE: integration/users-form-test.gts
+================================================================================
+
+import { describe, expect as hardExpect, vi } from "vitest";
+import { renderingTest } from "ember-vitest";
+import { click, fillIn, render } from '@ember/test-helpers';
+import { UserChangeset } from '#src/changesets/user.ts';
+import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
+import { initializeTestApp, TestApp } from "../app.ts";
+import type UserService from "#src/services/user.ts";
+import { stubRouter } from "../utils.ts";
+
+const expect = hardExpect.soft;
+
+vi.mock('#src/services/user.ts', async (importActual) => {
+  const actual = await importActual<typeof import('#src/services/user.ts')>();
+  return {
+    ...actual,
+    default: class MockUserService extends actual.default {
+      save = vi.fn()
+    }
+  };
+});
+
+
+
+describe('tpk-form', function() {
+  renderingTest.scoped({ app: ({}, use) => use(TestApp) });
+
+  renderingTest('Should call user service when form is valid', async function({ context }) {
+    await initializeTestApp(context.owner, 'en-us');
+
+    const userService = context.owner.lookup('service:user') as UserService;
+    const router = stubRouter(context.owner);
+
+    const changeset = new UserChangeset({});
+
+    await render(<template>
+      <UsersForm @changeset={{changeset}} />
+    </template>);
+
+    await pageObject.firstName('John');
+    await pageObject.lastName('Doe');
+    await pageObject.email('john.doe@example.com');
+    await pageObject.submit();
+
+    expect(userService.save).toHaveBeenCalled();
+    expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
+  });
+
+  renderingTest('Should not call user service when form is invalid', async function({ context }) {
+    await initializeTestApp(context.owner, 'en-us');
+
+    const userService = context.owner.lookup('service:user') as UserService;
+    const router = stubRouter(context.owner);
+
+    router.transitionTo = vi.fn().mockResolvedValue(undefined);
+
+    const changeset = new UserChangeset({});
+
+    await render(<template>
+      <UsersForm @changeset={{changeset}} />
+    </template>);
+
+    await pageObject.firstName('');
+    await pageObject.lastName('');
+    await pageObject.email('john.doe@example.com');
+    await pageObject.submit();
+
+    expect(userService.save).not.toHaveBeenCalled();
+    expect(router.transitionTo).not.toHaveBeenCalled();
+  });
+});
+
+
+
+================================================================================
+FILE: test-helper.ts
+================================================================================
+
+import { resumeTest } from "@ember/test-helpers";
+import { afterEach, beforeEach, vi } from "vitest";
+
+const callback = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.key === 'r') {
+    event.preventDefault();
+    resumeTest();
+  }
+};
+
+beforeEach(() => {
+  document.addEventListener('keydown', callback);
+});
+
+afterEach(() => {
+  document.removeEventListener('keydown', callback);
+  vi.resetAllMocks();
+});
+
+
+
+================================================================================
+FILE: utils.ts
+================================================================================
+
+import { assert } from '@ember/debug';
+import type Owner from '@ember/owner';
+import { getOwnConfig } from '@embroider/macros';
+import { vi } from 'vitest';
+
+export function ifTesting<T>(something: () => T) {
+  let pageObject : T | undefined = undefined;
+
+  const config = getOwnConfig() as Record<string, unknown>;
+  if (config.isTesting) {
+    return pageObject = something();
+  }
+
+  assert("Expected page object to be defined in testing environment", pageObject);
+  // force return type
+  return pageObject as T;
+}
+
+export function stubRouter(owner: Owner, value?: unknown) {
+    const router = owner.lookup('service:router');
+    router.transitionTo = vi.fn().mockResolvedValue(value);
+    return router;
+}
+
+

@@ -1,67 +1,70 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { click, fillIn, find, render } from '@ember/test-helpers';
-import { object, string} from 'zod';
-import ImmerChangeset from 'ember-immer-changeset';
-import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import { describe, expect as hardExpect, vi } from "vitest";
+import { renderingTest } from "ember-vitest";
+import { click, fillIn, render } from '@ember/test-helpers';
+import { UserChangeset } from '#src/changesets/user.ts';
+import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
+import { initializeTestApp, TestApp } from "../app.ts";
+import type UserService from "#src/services/user.ts";
+import { stubRouter } from "../utils.ts";
 
-import TpkFormService from '@triptyk/ember-input-validation/services/tpk-form';
-import { getOwner } from '@ember/owner';
+const expect = hardExpect.soft;
 
-module('tpk-form', function(hooks) {
-  setupRenderingTest(hooks);
-
-  test('Should pass errors to the prefab inputs when the changeset is invalid upon submission', async function(assert) {
-    const changeset = new ImmerChangeset({});
-    const schema = object({
-      firstName: string().min(10, 'Too small: expected string to have >=10 characters'),
-      email: string().email('Invalid email address'),
-    });
-
-
-    getOwner(this)?.register('service:tpk-form', TpkFormService);
-
-    const onSubmit = () => {
-      // no-op
-    };
+vi.mock('#src/services/user.ts', async (importActual) => {
+  const actual = await importActual<typeof import('#src/services/user.ts')>();
+  return {
+    ...actual,
+    default: class MockUserService extends actual.default {
+      save = vi.fn()
+    }
+  };
+});
 
 
+
+describe('tpk-form', function() {
+  renderingTest.scoped({ app: ({}, use) => use(TestApp) });
+
+  renderingTest('Should call user service when form is valid', async function({ context }) {
+    await initializeTestApp(context.owner, 'en-us');
+
+    const userService = context.owner.lookup('service:user') as UserService;
+    const router = stubRouter(context.owner);
+
+    const changeset = new UserChangeset({});
 
     await render(<template>
-      <TpkForm
-        @changeset={{changeset}}
-        @validationSchema={{schema}}
-        @onSubmit={{onSubmit}}
-        @reactive={{true}}
-        @autoScrollOnError={{true}}
-        @removeErrorsOnSubmit={{true}}
-        @executeOnValid={{true}}
-        as |F|
-      >
-        <F.TpkInputPrefab
-          data-test-name
-          @label="test"
-          @validationField="name"
-        />
-        <F.TpkInput @label="test" @type="email" @validationField="email" as |I|>
-          {{log I.errors}}
-          <I.Label />
-          <I.Input />
-        </F.TpkInput>
-        <button type="submit">Submit</button>
-      </TpkForm>
-    </template>)
+      <UsersForm @changeset={{changeset}} />
+    </template>);
 
-    await new Promise((res) => setTimeout(res, 60000)); // wait for next tick
+    await pageObject.firstName('John');
+    await pageObject.lastName('Doe');
+    await pageObject.email('john.doe@example.com');
+    await pageObject.submit();
 
-    assert.false(changeset.isInvalid);
+    expect(userService.save).toHaveBeenCalled();
+    expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
+  });
 
-    await fillIn('[data-test-name] input', 't@g.com');
+  renderingTest('Should not call user service when form is invalid', async function({ context }) {
+    await initializeTestApp(context.owner, 'en-us');
 
-    await click('button[type="submit"]');
+    const userService = context.owner.lookup('service:user') as UserService;
+    const router = stubRouter(context.owner);
 
-    assert.true(changeset.isInvalid);
-    assert.ok(find('[data-test-tpk-validation-errors]'));
-    assert.true(find('[data-test-tpk-validation-errors]')?.textContent?.includes('Too small: expected string to have >=10 characters'));
+    router.transitionTo = vi.fn().mockResolvedValue(undefined);
+
+    const changeset = new UserChangeset({});
+
+    await render(<template>
+      <UsersForm @changeset={{changeset}} />
+    </template>);
+
+    await pageObject.firstName('');
+    await pageObject.lastName('');
+    await pageObject.email('john.doe@example.com');
+    await pageObject.submit();
+
+    expect(userService.save).not.toHaveBeenCalled();
+    expect(router.transitionTo).not.toHaveBeenCalled();
   });
 });

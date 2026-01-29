@@ -16,6 +16,9 @@ const isCompat = Boolean(process.env.ENABLE_COMPAT_BUILD);
 const { setConfig } = require('@warp-drive/core/build-config');
 
 const macros = buildMacros({
+  setOwnConfig: {
+    isTesting: true
+  },
   configure: (config) => {
     setConfig(config, {
       compatWith: '5.6'
