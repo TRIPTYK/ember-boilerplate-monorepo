@@ -13,6 +13,7 @@ import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
 import UserSchema from "#src/schemas/users.ts";
 import "@warp-drive/ember/install";
+import FlashMessageService from "ember-cli-flash/services/flash-messages";
 
 class Router extends EmberRouter {
   location = 'none';
@@ -34,6 +35,7 @@ export class TestApp extends Application {
     './services/page-title': { default: PageTitleService},
     './session-stores/application': { default: AdaptiveStore },
     './services/session': { default: SessionService },
+    './services/flash-message': { default: FlashMessageService },
     ...moduleRegistry(),
     ...inputValidationRegistry(),
     ...compatModules,
@@ -54,7 +56,10 @@ export default class TestStore extends useLegacyStore({
 export async function initializeTestApp(owner: Owner, locale: string) {
     owner.register('session-stores:application', AdaptiveStore);
     owner.register('service:store', TestStore);
+    owner.register('service:flash-messages', FlashMessageService);
+    owner.register('config:environment', { flashMessageDefaults: {} });
     const router = owner.lookup('router:main') as Router;
+
     router.setupRouter();
     const intl = owner.lookup('service:intl');
     intl.setLocale(locale);

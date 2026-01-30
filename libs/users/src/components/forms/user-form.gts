@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { object, string, email } from 'zod';
+import z, { object, string, email } from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type UserService from '#src/services/user.ts';
@@ -25,19 +25,14 @@ export default class UsersForm extends Component<UsersFormArgs> {
   validationSchema = object({
     firstName: string().min(2, 'At least 2 characters'),
     lastName: string().min(2, 'At least 2 characters'),
-    email: email('Invalid email')
+    email: email('Invalid email'),
+    id: string().optional(),
   });
 
-  onSubmit = async () => {
-    // we cannot fully guarentee that the changeset is valid here, so we re-validate using the schema.
-    const data = await UserValidationSchema.parseAsync(this.args.changeset.data);
+  onSubmit = async (data: z.infer<typeof UserValidationSchema>) => {
     await this.user.save(data);
     await this.router.transitionTo('dashboard.users');
     this.flashMessages.success('User saved successfully.');
-  }
-
-  onChange = (value: unknown) => {
-    console.log('Value changed:', value);
   }
 
   <template>

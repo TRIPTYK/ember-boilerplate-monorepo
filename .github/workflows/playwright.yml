@@ -1,0 +1,25 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: wyvox/action-setup-pnpm@v3
+    - name: Install Playwright Browsers
+      working-directory: ./front-app
+      run: pnpm exec playwright install --with-deps
+    - name: Run Playwright tests
+      run: pnpm run --filter ./front-app test:playwright
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: front-app/playwright-report/
+        if-no-files-found: error
+        retention-days: 30

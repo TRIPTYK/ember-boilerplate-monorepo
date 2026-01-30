@@ -1,0 +1,13 @@
+name: Tests
+
+on: [push, release]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wyvox/action-setup-pnpm@v3
+      - name: Run tests
+        run: pnpm turbo test
