@@ -6,20 +6,18 @@ import { service } from '@ember/service';
 import type SessionService from 'ember-simple-auth/services/session';
 import { clickable, create, fillable } from 'ember-cli-page-object';
 import LoginValidationSchema from './login-validation.ts';
+import type z from 'zod';
 
 export default class LoginForm extends Component {
   @service declare session: SessionService;
 
   @tracked changeset = new ImmerChangeset({
-    email: 'deflorenne.amaury@triptyk.eu',
-    password: '123456789',
+    email: '',
+    password: '',
   });
 
-  onSubmit = async (changeset: typeof this.changeset) => {
-    await this.session.authenticate('authenticator:jwt', {
-      email: changeset.get('email'),
-      password: changeset.get('password'),
-    })
+  onSubmit = async (data: z.infer<typeof LoginValidationSchema>) => {
+    await this.session.authenticate('authenticator:jwt', data)
   }
 
   <template>

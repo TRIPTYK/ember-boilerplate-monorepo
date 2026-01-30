@@ -15,17 +15,13 @@ export default defineConfig({
     setupFiles: ['./tests/test-helper.ts'],
     include: ["tests/**/*-test.{gjs,gts}"],
     maxConcurrency: 1,
-    testTimeout: 120000,
+    testTimeout: 10000,
     browser: {
       provider: playwright(),
       enabled: true,
-      headless: false,
-      // at least one instance is required
+      headless: process.env.CI === 'true',
       instances: [
         { browser: "chromium" },
-        // { browser: 'firefox' },
-        // { browser: 'edge' },
-        // { browser: 'safari' },
       ],
     },
   },
