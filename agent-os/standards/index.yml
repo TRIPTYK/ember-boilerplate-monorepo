@@ -1,0 +1,35 @@
+# Agent OS Standards Index
+
+backend:
+  application-context:
+    description: Type-safe DI container pattern for backend services
+  configuration:
+    description: Environment variable validation using Zod schemas
+  error-format:
+    description: Consistent error response structure with code, message, status
+
+frontend:
+  file-extensions:
+    description: .gts for templates, .ts for logic-only files
+  forms:
+    description: Form state management using ImmerChangeset and TpkForm
+  route-templates:
+    description: Route template files colocated with route logic
+
+global:
+  folder-structure:
+    description: Standard folder organization for frontend and backend
+  import-alias:
+    description: Use #src/ import alias instead of relative paths
+
+testing:
+  msw-mocking:
+    description: Type-safe API mocking with openapi-msw
+  page-objects:
+    description: Page object exports from component files for testing
+  rendering-tests:
+    description: Scoped renderingTest pattern with TestApp
+  soft-expectations:
+    description: Use expect.soft for better test failure reporting
+  test-app-init:
+    description: Initialize test environment with initializeTestApp

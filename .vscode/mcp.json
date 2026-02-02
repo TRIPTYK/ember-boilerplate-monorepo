@@ -4,6 +4,10 @@
       "command": "npx",
       "args": ["-y", "ember-mcp"]
     },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"]
+    },
     "playwright": {
       "command": "npx",
       "args": [

@@ -25,40 +25,36 @@ FILE: components/forms/login-form.gts
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { ImmerChangeset } from 'ember-immer-changeset';
-import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type SessionService from 'ember-simple-auth/services/session';
 import { clickable, create, fillable } from 'ember-cli-page-object';
-import LoginValidationSchema from './login-validation.ts';
+import { createLoginValidationSchema } from './login-validation.ts';
+import type z from 'zod';
+import TpkLoginForm from '@triptyk/ember-ui/components/prefabs/tpk-login';
+import type CurrentUserService from '#src/services/current-user.ts';
+import { t } from 'ember-intl';
+import type { IntlService } from 'ember-intl';
 
 export default class LoginForm extends Component {
   @service declare session: SessionService;
+  @service declare currentUser: CurrentUserService;
+  @service declare intl: IntlService;
 
-  @tracked changeset = new ImmerChangeset({
-    email: 'deflorenne.amaury@triptyk.eu',
-    password: '123456789',
-  });
+  get loginValidationSchema(): ReturnType<typeof createLoginValidationSchema> {
+    return createLoginValidationSchema(this.intl);
+  }
 
-  onSubmit = async (changeset: typeof this.changeset) => {
-    await this.session.authenticate('authenticator:jwt', {
-      email: changeset.get('email'),
-      password: changeset.get('password'),
-    })
+  onSubmit = async (data: z.infer<ReturnType<typeof createLoginValidationSchema>>) => {
+    await this.session.authenticate('authenticator:jwt', data);
   }
 
   <template>
     <div class="login-form-container" data-test-login-form>
-      <h2>Login</h2>
-      <TpkForm
-        @changeset={{this.changeset}}
+      <h2>{{t "users.forms.login.title"}}</h2>
+      <TpkLoginForm
         @onSubmit={{this.onSubmit}}
-        @reactive={{true}}
-        @validationSchema={{LoginValidationSchema}}
-      as |F|>
-        <F.TpkEmailPrefab @label="Email" @validationField="email" />
-        <F.TpkPasswordPrefab @label="Password" @validationField="password" />
-        <button type="submit">Login</button>
-      </TpkForm>
+        @loginSchema={{this.loginValidationSchema}}
+      />
     </div>
   </template>
 }
@@ -78,7 +74,14 @@ FILE: components/forms/login-validation.ts
 ================================================================================
 
 import { email, object, string } from "zod";
+import type { IntlService } from 'ember-intl';
 
+export const createLoginValidationSchema = (intl: IntlService) => object({
+  email: email(intl.t('users.forms.login.validation.invalidEmail')),
+  password: string().min(8, intl.t('users.forms.login.validation.passwordTooShort')),
+});
+
+// For backwards compatibility, export a default that can be used with intl
 const LoginValidationSchema = object({
   email: email('Please enter a valid email address'),
   password: string().min(8, 'Password must be at least 8 characters'),
@@ -93,12 +96,12 @@ FILE: components/forms/user-form.gts
 ================================================================================
 
 import Component from '@glimmer/component';
-import { object, string, email } from 'zod';
+import z from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type UserService from '#src/services/user.ts';
 import type { UserChangeset } from '#src/changesets/user.ts';
-import { UserValidationSchema } from '#src/components/forms/user-validation.ts';
+import { createUserValidationSchema } from '#src/components/forms/user-validation.ts';
 import type RouterService from '@ember/routing/router-service';
 import {
   create,
@@ -106,6 +109,7 @@ import {
   clickable,
 } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
+import { t, type IntlService } from 'ember-intl';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -115,23 +119,16 @@ export default class UsersForm extends Component<UsersFormArgs> {
   @service declare user: UserService;
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
+  @service declare intl: IntlService;
 
-  validationSchema = object({
-    firstName: string().min(2, 'At least 2 characters'),
-    lastName: string().min(2, 'At least 2 characters'),
-    email: email('Invalid email')
-  });
-
-  onSubmit = async () => {
-    // we cannot fully guarentee that the changeset is valid here, so we re-validate using the schema.
-    const data = await UserValidationSchema.parseAsync(this.args.changeset.data);
-    await this.user.save(data);
-    await this.router.transitionTo('dashboard.users');
-    this.flashMessages.success('User saved successfully.');
+  get validationSchema() {
+    return createUserValidationSchema(this.intl);
   }
 
-  onChange = (value: unknown) => {
-    console.log('Value changed:', value);
+  onSubmit = async (data: z.infer<ReturnType<typeof createUserValidationSchema>>) => {
+    await this.user.save(data);
+    await this.router.transitionTo('dashboard.users');
+    this.flashMessages.success(this.intl.t('users.forms.user.messages.saveSuccess'));
   }
 
   <template>
@@ -141,10 +138,10 @@ export default class UsersForm extends Component<UsersFormArgs> {
       @validationSchema={{this.validationSchema}}
       data-test-users-form
     as |F|>
-      <F.TpkInputPrefab @label="First Name" @validationField="firstName" />
-      <F.TpkInputPrefab @label="Last Name" @validationField="lastName" />
-      <F.TpkEmailPrefab @label="Email" @validationField="email" />
-      <button type="submit">Submit</button>
+      <F.TpkInputPrefab @label={{t "users.forms.user.labels.firstName"}} @validationField="firstName" />
+      <F.TpkInputPrefab @label={{t "users.forms.user.labels.lastName"}} @validationField="lastName" />
+      <F.TpkEmailPrefab @label={{t "users.forms.user.labels.email"}} @validationField="email" />
+      <button type="submit">{{t "users.forms.user.actions.submit"}}</button>
     </TpkForm>
   </template>
 }
@@ -165,16 +162,16 @@ FILE: components/forms/user-validation.ts
 
 import { email, object, string } from "zod";
 import type z from "zod";
+import type { IntlService } from 'ember-intl';
 
-export const UserValidationSchema = object({
-  firstName: string().min(1, "First name is required"),
-  lastName: string().min(1, "Last name is required"),
-  email: email("Invalid email address"),
+export const createUserValidationSchema = (intl: IntlService) => object({
+  firstName: string().min(1, intl.t('users.forms.user.validation.firstNameRequired')),
+  lastName: string().min(1, intl.t('users.forms.user.validation.lastNameRequired')),
+  email: email(intl.t('users.forms.user.validation.invalidEmail')),
   id: string().optional().nullable(),
 });
-export default UserValidationSchema;
 
-export type ValidatedUser = z.infer<typeof UserValidationSchema>;
+export type ValidatedUser = z.infer<ReturnType<typeof createUserValidationSchema>>;
 
 
 
@@ -187,43 +184,47 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import TableGenericPrefab, { type TableParams } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
 import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+import { t, type IntlService } from 'ember-intl';
 
 class UsersTable extends Component<object> {
   @service declare router: RouterService;
+  @service declare intl: IntlService;
 
-  tableParams: TableParams = {
-    entity: 'users',
-    pageSizes: [10, 30, 50, 75],
-    rowClick: (element) => {
-      this.router.transitionTo('dashboard.users.edit', (element as { id: string }).id);
-    },
-    defaultSortColumn: 'firstName',
-    columns: [
-      {
-        field: 'firstName',
-        headerName: 'Nom',
-        sortable: true,
+  get tableParams(): TableParams {
+    return {
+      entity: 'users',
+      pageSizes: [10, 30, 50, 75],
+      rowClick: (element) => {
+        this.router.transitionTo('dashboard.users.edit', (element as { id: string }).id);
       },
-      {
-        field: 'lastName',
-        headerName: 'Prénom',
-        sortable: true,
-      },
-      {
-        field: 'email',
-        headerName: 'Email',
-        sortable: false,
-      },
-    ],
-    actionMenu: [],
-  };
+      defaultSortColumn: 'firstName',
+      columns: [
+        {
+          field: 'firstName',
+          headerName: this.intl.t('users.table.headers.firstName'),
+          sortable: true,
+        },
+        {
+          field: 'lastName',
+          headerName: this.intl.t('users.table.headers.lastName'),
+          sortable: true,
+        },
+        {
+          field: 'email',
+          headerName: this.intl.t('users.table.headers.email'),
+          sortable: false,
+        },
+      ],
+      actionMenu: [],
+    };
+  }
 
   onAddUser = () => {
     this.router.transitionTo('dashboard.users.create');
   }
 
   <template>
-    <TpkButton @label="Add User" @onClick={{this.onAddUser}} />
+    <TpkButton @label={{t "users.table.actions.addUser"}} @onClick={{this.onAddUser}} />
     <TableGenericPrefab @tableParams={{this.tableParams}} />
   </template>;
 }
@@ -608,9 +609,10 @@ FILE: routes/dashboard/users/index-template.gts
 import UsersTable from "#src/components/user-table.gts";
 import type { TOC } from "@ember/component/template-only";
 import type UsersIndexRoute from "./index.gts";
+import { t } from 'ember-intl';
 
 export default <template>
-  <h1>List des utilisateurs</h1>
+  <h1>{{t "users.pages.list.title"}}</h1>
   <UsersTable />
 </template> as TOC<{
   model: Awaited<ReturnType<UsersIndexRoute['model']>>;
@@ -718,7 +720,9 @@ import Service from "@ember/service";
 import { service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
 import type { Store } from "@warp-drive/core";
+import { query } from "@warp-drive/utilities/json-api";
 import type SessionService from "ember-simple-auth/services/session";
+import type { ReactiveDataDocument } from '@warp-drive/core/reactive';
 
 export default class CurrentUserService extends Service {
   @service declare store: Store;
@@ -739,12 +743,11 @@ export default class CurrentUserService extends Service {
       return;
     }
 
-    const response = await this.store.request<User>({
-      url: "/api/v1/users/profile",
-      method: "GET",
-    });
+    const response = await this.store.request<ReactiveDataDocument<User>>(query<User>('users', {}, {
+      resourcePath: 'users/profile'
+    }));
 
-    this.user = response.content;
+    this.user = response.content.data;
   }
 }
 
@@ -825,6 +828,7 @@ import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
 import UserSchema from "#src/schemas/users.ts";
 import "@warp-drive/ember/install";
+import FlashMessageService from "ember-cli-flash/services/flash-messages";
 
 class Router extends EmberRouter {
   location = 'none';
@@ -846,6 +850,7 @@ export class TestApp extends Application {
     './services/page-title': { default: PageTitleService},
     './session-stores/application': { default: AdaptiveStore },
     './services/session': { default: SessionService },
+    './services/flash-message': { default: FlashMessageService },
     ...moduleRegistry(),
     ...inputValidationRegistry(),
     ...compatModules,
@@ -866,7 +871,10 @@ export default class TestStore extends useLegacyStore({
 export async function initializeTestApp(owner: Owner, locale: string) {
     owner.register('session-stores:application', AdaptiveStore);
     owner.register('service:store', TestStore);
+    owner.register('service:flash-messages', FlashMessageService);
+    owner.register('config:environment', { flashMessageDefaults: {} });
     const router = owner.lookup('router:main') as Router;
+
     router.setupRouter();
     const intl = owner.lookup('service:intl');
     intl.setLocale(locale);
@@ -1081,6 +1089,7 @@ import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
 import { initializeTestApp, TestApp } from "../app.ts";
 import type UserService from "#src/services/user.ts";
 import { stubRouter } from "../utils.ts";
+import { string } from "zod";
 
 const expect = hardExpect.soft;
 
@@ -1104,7 +1113,6 @@ describe('tpk-form', function() {
 
     const userService = context.owner.lookup('service:user') as UserService;
     const router = stubRouter(context.owner);
-
     const changeset = new UserChangeset({});
 
     await render(<template>

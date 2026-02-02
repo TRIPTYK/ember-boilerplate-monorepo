@@ -1,5 +1,5 @@
 {
-  "name": "backend-app",
+  "name": "@libs/users-backend",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -52,7 +52,6 @@
     "true-myth": "catalog:",
     "ts-dotenv": "catalog:",
     "vitest": "^4.0.18",
-    "@libs/users-backend": "workspace:*",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -93,6 +92,6 @@
     "vite-tsconfig-paths": "catalog:"
   },
   "volta": {
-    "extends": "../package.json"
+    "extends": "../../package.json"
   }
 }

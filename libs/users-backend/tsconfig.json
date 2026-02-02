@@ -1,0 +1,10 @@
+{
+  "extends": "@libs/utils/configs/backend-lib/tsconfig.base.json",
+  "include": ["src", "tests"],
+  "compilerOptions": {
+    "paths": {
+      "@lib/*": ["./src/*"],
+      "@tests/*": ["./tests/*"]
+    }
+  }
+}
