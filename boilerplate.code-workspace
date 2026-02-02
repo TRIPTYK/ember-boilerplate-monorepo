@@ -4,18 +4,27 @@
     },
     "folders": [
         {
-            "path": "libs/users"
-        },
-        {
+            "name": "@app/front",
             "path": "front-app"
         },
         {
+            "name": "@app/backend",
             "path": "backend-app"
         },
         {
+            "name": "@libs/users",
+            "path": "libs/users"
+        },
+        {
+            "name": "@libs/users-backend",
+            "path": "libs/users-backend"
+        },
+        {
+            "name": "@libs/utils",
             "path": "libs/utils"
         },
         {
+            "name": "ROOT",
             "path": "."
         }
     ]

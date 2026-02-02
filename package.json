@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "backend-app": "workspace:^",
-    "turbo": "^2.7.4"
+    "turbo": "catalog:"
   },
   "volta": {
     "node": "24.13.0",
