@@ -1,12 +1,11 @@
 import { describe, expect as hardExpect, vi } from "vitest";
 import { renderingTest } from "ember-vitest";
-import { click, fillIn, render } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import { UserChangeset } from '#src/changesets/user.ts';
 import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
 import { initializeTestApp, TestApp } from "../app.ts";
 import type UserService from "#src/services/user.ts";
 import { stubRouter } from "../utils.ts";
-import { string } from "zod";
 
 const expect = hardExpect.soft;
 
@@ -23,6 +22,7 @@ vi.mock('#src/services/user.ts', async (importActual) => {
 
 
 describe('tpk-form', function() {
+  // eslint-disable-next-line no-empty-pattern
   renderingTest.scoped({ app: ({}, use) => use(TestApp) });
 
   renderingTest('Should call user service when form is valid', async function({ context }) {
@@ -41,7 +41,9 @@ describe('tpk-form', function() {
     await pageObject.email('john.doe@example.com');
     await pageObject.submit();
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(userService.save).toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
   });
 
@@ -64,7 +66,9 @@ describe('tpk-form', function() {
     await pageObject.email('john.doe@example.com');
     await pageObject.submit();
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(userService.save).not.toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(router.transitionTo).not.toHaveBeenCalled();
   });
 });

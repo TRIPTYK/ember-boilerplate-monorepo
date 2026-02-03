@@ -1,5 +1,5 @@
 import { HttpResponse } from 'msw';
-import type { paths } from '@app/backend';
+import type { paths } from '@apps/backend';
 import { createOpenApiHttp } from "openapi-msw";
 
 const mockUsers = [

@@ -4,12 +4,12 @@
     },
     "folders": [
         {
-            "name": "@app/front",
-            "path": "@app/front"
+            "name": "@apps/front",
+            "path": "@apps/front"
         },
         {
-            "name": "@app/backend",
-            "path": "@app/backend"
+            "name": "@apps/backend",
+            "path": "@apps/backend"
         },
         {
             "name": "@libs/users",

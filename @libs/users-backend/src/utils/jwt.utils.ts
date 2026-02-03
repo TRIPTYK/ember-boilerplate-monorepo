@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export interface JwtPayload {
   userId: string;
@@ -16,14 +16,14 @@ export interface TokenPair {
 export function generateTokens(
   payload: JwtPayload,
   jwtSecret: string,
-  jwtRefreshSecret: string
+  jwtRefreshSecret: string,
 ): TokenPair {
   const accessToken = jwt.sign(payload, jwtSecret, {
-    expiresIn: '15m',
+    expiresIn: "15m",
   });
 
   const refreshToken = jwt.sign(payload, jwtRefreshSecret, {
-    expiresIn: '7d',
+    expiresIn: "7d",
   });
 
   return { accessToken, refreshToken };

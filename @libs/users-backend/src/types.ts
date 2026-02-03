@@ -1,7 +1,7 @@
-import type { UserSchemaType } from './schemas/user.schema.js';
+import type { UserEntityType } from "./entities/user.entity.js";
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyRequest {
-    user?: UserSchemaType;
+    user?: UserEntityType;
   }
 }

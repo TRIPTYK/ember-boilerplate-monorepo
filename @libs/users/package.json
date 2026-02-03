@@ -98,7 +98,7 @@
     "@warp-drive/build-config": "catalog:",
     "@warp-drive/core-types": "catalog:",
     "babel-plugin-ember-template-compilation": "~4.0.0",
-    "@app/backend": "workspace:^",
+    "@apps/backend": "workspace:^",
     "concurrently": "^9.0.1",
     "ember-basic-dropdown": "catalog:",
     "ember-cli-flash": "catalog:",
