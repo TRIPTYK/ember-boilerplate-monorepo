@@ -39,8 +39,8 @@ async function checkPostgresRunning(): Promise<boolean> {
 }
 
 async function startPostgres() {
-  log("Starting PostgreSQL via docker-compose...");
-  execSync("docker-compose up -d database", {
+  log("Starting PostgreSQL via dockercompose...");
+  execSync("docker compose up -d database", {
     cwd: ROOT_DIR,
     stdio: "inherit",
   });
