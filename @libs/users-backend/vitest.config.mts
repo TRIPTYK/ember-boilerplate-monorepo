@@ -18,7 +18,6 @@ export default defineConfig({
           test: {
           name: "Integration Tests",
           globalSetup: "./tests/global-setup.ts",
-          maxWorkers: 1,
           include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
           environment: "node",
           pool: "forks",

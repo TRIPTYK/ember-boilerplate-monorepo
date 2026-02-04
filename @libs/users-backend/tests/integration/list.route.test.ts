@@ -156,3 +156,26 @@ test("ListRoute returns JSON:API error when not authenticated", async () => {
     code: "UNAUTHORIZED",
   });
 });
+
+test("ListRoute ignores invalid sort field", async () => {
+  await module.createUser({
+    id: "alice-id",
+    email: "alice@test.com",
+    firstName: "Alice",
+    lastName: "Smith",
+    password: "testpassword",
+  });
+
+  const response = await module.fastifyInstance.inject({
+    method: "GET",
+    url: "/users?sort=invalidField",
+    headers: {
+      authorization: module.generateBearerToken(TestModule.TEST_USER_ID),
+    },
+  });
+
+  expect(response.statusCode).toBe(200);
+  const body = response.json();
+  expect(body).toHaveProperty("data");
+  expect(body.data.length).toBeGreaterThan(0);
+});

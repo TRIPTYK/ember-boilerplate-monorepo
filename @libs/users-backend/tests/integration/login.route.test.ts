@@ -92,3 +92,39 @@ test("LoginRoute returns validation error on missing fields", async () => {
 
   expect(response.statusCode).toBe(400);
 });
+
+test("LoginRoute stores deviceInfo when provided", async () => {
+  const response = await module.fastifyInstance.inject({
+    method: "POST",
+    url: "/auth/login",
+    payload: {
+      email: "a@test.com",
+      password: "testpassword",
+      deviceInfo: "iPhone 15",
+    },
+  });
+
+  expect(response.statusCode).toBe(200);
+  const body = response.json();
+  expect(body).toHaveProperty("data");
+  expect(body.data).toHaveProperty("accessToken");
+  expect(body.data).toHaveProperty("refreshToken");
+});
+
+test("LoginRoute works without user-agent header", async () => {
+  const response = await module.fastifyInstance.inject({
+    method: "POST",
+    url: "/auth/login",
+    headers: {
+      "user-agent": undefined,
+    },
+    payload: {
+      email: "a@test.com",
+      password: "testpassword",
+    },
+  });
+
+  expect(response.statusCode).toBe(200);
+  const body = response.json();
+  expect(body).toHaveProperty("data");
+});

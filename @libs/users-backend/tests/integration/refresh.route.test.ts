@@ -153,3 +153,25 @@ test("RefreshRoute returns JSON:API error when user not found", async () => {
     detail: "User not found",
   });
 });
+
+test("RefreshRoute works without user-agent header", async () => {
+  const refreshToken = module.generateRefreshToken(TestModule.TEST_USER_ID);
+  await module.storeRefreshToken(TestModule.TEST_USER_ID, refreshToken);
+
+  const response = await module.fastifyInstance.inject({
+    method: "POST",
+    url: "/auth/refresh",
+    headers: {
+      "user-agent": undefined,
+    },
+    payload: {
+      refreshToken,
+    },
+  });
+
+  expect(response.statusCode).toBe(200);
+  const body = response.json();
+  expect(body).toHaveProperty("data");
+  expect(body.data).toHaveProperty("accessToken");
+  expect(body.data).toHaveProperty("refreshToken");
+});
