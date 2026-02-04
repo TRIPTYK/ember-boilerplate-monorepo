@@ -1,4 +1,4 @@
-import { testEnv } from "@tests/utils/test-app.js";
+import { testEnv } from "#tests/utils/test-app.js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { App, type FastifyInstanceType } from "../../src/app/app.js";
 

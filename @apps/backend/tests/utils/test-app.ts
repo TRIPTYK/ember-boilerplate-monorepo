@@ -1,4 +1,4 @@
-import { App } from "@apps/app/app.js";
+import { App } from "#src/app/app.js";
 import { getTestContext } from "./test-context.js";
 
 export interface TestEnv {

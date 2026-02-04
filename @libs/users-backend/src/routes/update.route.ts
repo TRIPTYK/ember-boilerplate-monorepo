@@ -1,4 +1,4 @@
-import type { FastifyInstanceTypeForModule, Route } from "#src/init.js";
+import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import { wrap, type EntityRepository } from "@mikro-orm/core";
 import { object, string } from "zod";
 import {
@@ -6,7 +6,7 @@ import {
   SerializedUserSchema,
 } from "#src/serializers/user.serializer.js";
 import type { UserEntityType } from "#src/entities/user.entity.js";
-import { makeSingleJsonApiTopDocument } from "@libs/backend-shared";
+import { makeSingleJsonApiTopDocument, type Route } from "@libs/backend-shared";
 
 export class UpdateRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}

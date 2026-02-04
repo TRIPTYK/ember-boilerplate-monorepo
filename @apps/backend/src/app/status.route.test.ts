@@ -1,7 +1,7 @@
 import { describe, it, expect, afterAll, beforeAll } from "vitest";
 import { statusRoute } from "./status.route.js";
-import { fastifyTestInstance } from "@tests/utils/fastify-instance.js";
-import type { FastifyInstanceType } from "@apps/app/app.js";
+import { fastifyTestInstance } from "#tests/utils/fastify-instance.js";
+import type { FastifyInstanceType } from "#src/app/app.js";
 
 describe("statusRoute", () => {
   let fastifyInstance: FastifyInstanceType;

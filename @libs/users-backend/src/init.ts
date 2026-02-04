@@ -9,6 +9,8 @@ import type { LibraryContext } from "./context.js";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { createJwtAuthMiddleware } from "#src/middlewares/jwt-auth.middleware.js";
 import { LoginRoute } from "#src/routes/login.route.js";
+import { RefreshRoute } from "#src/routes/refresh.route.js";
+import { LogoutRoute } from "#src/routes/logout.route.js";
 import { CreateRoute } from "#src/routes/create.route.js";
 import { ProfileRoute } from "#src/routes/profile.route.js";
 import { ListRoute } from "#src/routes/list.route.js";
@@ -39,9 +41,16 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
     const authRoutes: Route<FastifyInstanceTypeForModule>[] = [
       new LoginRoute(
         this.context.em.getRepository(UserEntity),
+        this.context.em,
         this.context.configuration.jwtSecret,
         this.context.configuration.jwtRefreshSecret,
       ),
+      new RefreshRoute(
+        this.context.em,
+        this.context.configuration.jwtSecret,
+        this.context.configuration.jwtRefreshSecret,
+      ),
+      new LogoutRoute(this.context.em, this.context.configuration.jwtRefreshSecret),
     ];
 
     const jwtAuthMiddleware = createJwtAuthMiddleware(

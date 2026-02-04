@@ -19,7 +19,8 @@ import packageJson from "../../package.json" with { type: "json" };
 import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
-import { Module, type ModuleInterface } from "@libs/users-backend";
+import { Module } from "@libs/users-backend";
+import type { ModuleInterface } from "@libs/backend-shared";
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -33,9 +34,7 @@ export class App {
   private constructor(
     private fastify: FastifyInstanceType,
     private context: ApplicationContext,
-  ) {
-    this.context = context;
-  }
+  ) {}
 
   public static async init(context: ApplicationContext) {
     const loggerInstance = logger(context.configuration);

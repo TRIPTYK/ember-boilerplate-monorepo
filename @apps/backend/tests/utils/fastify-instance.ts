@@ -1,5 +1,5 @@
-import type { FastifyInstanceType } from "@apps/app/app.js";
-import { logger } from "@apps/app/logger.js";
+import type { FastifyInstanceType } from "#src/app/app.js";
+import { logger } from "#src/app/logger.js";
 import fastify from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 

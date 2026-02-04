@@ -1,4 +1,4 @@
-import type { AppConfiguration } from "@apps/configuration.js";
+import type { AppConfiguration } from "#src/configuration.js";
 import type { Logger } from "pino";
 import { logger } from "./logger.js";
 import type { MikroORM } from "@mikro-orm/core";

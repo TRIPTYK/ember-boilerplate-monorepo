@@ -3,8 +3,8 @@
   "include": ["src", "tests"],
   "compilerOptions": {
     "paths": {
-      "@apps/*": ["./src/*"],
-      "@tests/*": ["./tests/*"]
+      "#src/*": ["./src/*"],
+      "#tests/*": ["./tests/*"]
     }
   }
 }

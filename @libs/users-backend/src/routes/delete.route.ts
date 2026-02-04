@@ -1,7 +1,8 @@
-import type { FastifyInstanceTypeForModule, Route } from "#src/init.js";
+import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { literal, object, string } from "zod";
 import type { UserEntityType } from "#src/entities/user.entity.js";
+import type { Route } from "@libs/backend-shared";
 
 export class DeleteRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}

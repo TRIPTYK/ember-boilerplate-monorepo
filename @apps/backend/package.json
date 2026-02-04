@@ -28,6 +28,7 @@
     "schema:fresh": "pnpm mikro-orm schema:fresh --seed -r"
   },
   "dependencies": {
+    "@libs/backend-shared": "workspace:*",
     "@fastify/cookie": "catalog:",
     "@fastify/cors": "catalog:",
     "@fastify/passport": "catalog:",

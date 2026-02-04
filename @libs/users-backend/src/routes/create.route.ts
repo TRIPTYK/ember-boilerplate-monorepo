@@ -1,4 +1,4 @@
-import type { FastifyInstanceTypeForModule, Route } from "#src/init.js";
+import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import { type UserEntityType } from "#src/entities/user.entity.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { randomUUID } from "crypto";
@@ -8,7 +8,7 @@ import {
 } from "#src/serializers/user.serializer.js";
 import { hash } from "argon2";
 import { email, object, string } from "zod";
-import { makeSingleJsonApiTopDocument } from "@libs/backend-shared";
+import { makeSingleJsonApiTopDocument, type Route } from "@libs/backend-shared";
 
 export class CreateRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}

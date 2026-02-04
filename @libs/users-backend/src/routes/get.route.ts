@@ -1,4 +1,4 @@
-import type { FastifyInstanceTypeForModule, Route } from "#src/init.js";
+import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { object, string } from "zod";
 import {
@@ -6,6 +6,7 @@ import {
   SerializedUserSchema,
 } from "#src/serializers/user.serializer.js";
 import type { UserEntityType } from "#src/entities/user.entity.js";
+import type { Route } from "@libs/backend-shared";
 
 export class GetRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}

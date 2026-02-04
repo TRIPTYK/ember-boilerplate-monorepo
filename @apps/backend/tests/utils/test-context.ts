@@ -1,5 +1,5 @@
-import { createApplicationContext } from "@apps/app/application.context.js";
-import type { AppConfiguration } from "@apps/configuration.js";
+import { createApplicationContext } from "#src/app/application.context.js";
+import type { AppConfiguration } from "#src/configuration.js";
 
 export async function getTestContext() {
   const config = {

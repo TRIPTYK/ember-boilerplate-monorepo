@@ -1,4 +1,4 @@
-import type { ModuleInterface } from "@libs/users-backend";
+import type { ModuleInterface } from "@libs/backend-shared";
 import type { FastifyInstanceType } from "./app.js";
 import type { ApplicationContext } from "./application.context.js";
 import { statusRoute } from "./status.route.js";
@@ -19,7 +19,7 @@ export async function appRouter(
           }
         });
       });
-      for await (const mod of modules) {
+      for (const mod of modules) {
         await mod.setupRoutes(fastify);
       }
     },
