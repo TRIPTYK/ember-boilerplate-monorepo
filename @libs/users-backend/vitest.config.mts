@@ -2,12 +2,28 @@ import { defineConfig } from "vitest/config";
 import path from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [path()],
   test: {
-    globalSetup: "./tests/global-setup.ts",
-    maxWorkers: 1,
-    include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
-    environment: "node",
-    pool: "forks",
+    projects: [
+      {
+        plugins: [path()],
+        test: {
+          name: "Unit Tests",
+          include: ["tests/unit/*.test.ts"],
+          environment: "node",
+          pool: "threads",
+        }
+      },
+      {
+          plugins: [path()],
+          test: {
+          name: "Integration Tests",
+          globalSetup: "./tests/global-setup.ts",
+          maxWorkers: 1,
+          include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
+          environment: "node",
+          pool: "forks",
+        }
+      }
+    ],
   },
 });
