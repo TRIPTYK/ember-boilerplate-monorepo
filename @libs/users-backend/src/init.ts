@@ -6,7 +6,7 @@ import type {
   RawServerDefault,
 } from "fastify";
 import type { LibraryContext } from "./context.js";
-import type { ZodTypeProvider } from "fastify-type-provider-zod";
+import { hasZodFastifySchemaValidationErrors, type ZodTypeProvider } from "fastify-type-provider-zod";
 import { createJwtAuthMiddleware } from "#src/middlewares/jwt-auth.middleware.js";
 import { LoginRoute } from "#src/routes/login.route.js";
 import { RefreshRoute } from "#src/routes/refresh.route.js";
@@ -70,11 +70,28 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
     // User CRUD routes (under /users prefix)
     await fastify.register(
       async (f) => {
-        // Apply JWT authentication middleware to all routes except /profile
+        // Apply JWT authentication middleware to all routes
         f.addHook("preValidation", async (request, reply) => {
-          if (!request.url.endsWith("/profile")) {
-            await jwtAuthMiddleware(request, reply);
+          await jwtAuthMiddleware(request, reply);
+        });
+
+        // Handle validation errors globally for all user routes
+        f.setErrorHandler((error, request, reply) => {
+          if (hasZodFastifySchemaValidationErrors(error)) {
+            return reply.status(400).send({
+              errors: error.validation.map((issue) => ({
+                status: "400",
+                title: "Validation Error",
+                detail: issue.message,
+                source: {
+                  pointer: `/${issue.instancePath.replace(/^\./, "").replace(/\./g, "/")}`,
+                },
+              })),
+            });
           }
+
+          // Re-throw other errors to be handled by the parent error handler
+          throw error;
         });
 
         const userRoutes: Route<FastifyInstanceTypeForModule>[] = [

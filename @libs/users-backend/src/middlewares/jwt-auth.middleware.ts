@@ -2,6 +2,7 @@ import type { EntityManager } from "@mikro-orm/core";
 import { verifyAccessToken } from "#src/utils/jwt.utils.js";
 import { UserEntity } from "#src/entities/user.entity.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { makeJsonApiError } from "@libs/backend-shared";
 
 /**
  * JWT authentication middleware
@@ -13,22 +14,24 @@ export function createJwtAuthMiddleware(em: EntityManager, jwtSecret: string) {
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return reply.code(401).send({
-        message: "Missing or invalid authorization header",
-        code: "UNAUTHORIZED",
-        status: 401,
-      });
+      return reply.code(401).send(
+        makeJsonApiError(401, "Unauthorized", {
+          code: "UNAUTHORIZED",
+          detail: "Missing or invalid authorization header",
+        }),
+      );
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
     const payload = verifyAccessToken(token, jwtSecret);
 
     if (!payload) {
-      return reply.code(401).send({
-        message: "Invalid or expired token",
-        code: "UNAUTHORIZED",
-        status: 401,
-      });
+      return reply.code(401).send(
+        makeJsonApiError(401, "Unauthorized", {
+          code: "UNAUTHORIZED",
+          detail: "Invalid or expired token",
+        }),
+      );
     }
 
     // Load user from database
@@ -36,14 +39,14 @@ export function createJwtAuthMiddleware(em: EntityManager, jwtSecret: string) {
     const user = await userRepository.findOne({ id: payload.userId });
 
     if (!user) {
-      return reply.code(401).send({
-        message: "User not found",
-        code: "UNAUTHORIZED",
-        status: 401,
-      });
+      return reply.code(401).send(
+        makeJsonApiError(401, "Unauthorized", {
+          code: "UNAUTHORIZED",
+          detail: "User not found",
+        }),
+      );
     }
 
-    // Attach user to request
-    request.user = user as any;
+    request.user = user;
   };
 }

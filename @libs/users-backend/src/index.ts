@@ -1,3 +1,6 @@
+import { RefreshTokenEntity } from "#src/entities/refresh-token.entity.js";
+import { UserEntity } from "#src/entities/user.entity.js";
+
 export * from "#src/entities/user.entity.js";
 export * from "#src/entities/refresh-token.entity.js";
 export * from "#src/routes/create.route.js";
@@ -13,3 +16,8 @@ export * from "#src/serializers/user.serializer.js";
 export * from "#src/utils/token.utils.js";
 export * from "#src/utils/token-cleanup.utils.js";
 export * from "#src/init.js";
+
+export const entities = [
+    UserEntity,
+    RefreshTokenEntity,
+];

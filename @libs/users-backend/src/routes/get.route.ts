@@ -6,7 +6,7 @@ import {
   SerializedUserSchema,
 } from "#src/serializers/user.serializer.js";
 import type { UserEntityType } from "#src/entities/user.entity.js";
-import type { Route } from "@libs/backend-shared";
+import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 
 export class GetRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}
@@ -23,10 +23,7 @@ export class GetRoute implements Route {
             200: object({
               data: SerializedUserSchema,
             }),
-            404: object({
-              message: string(),
-              code: string(),
-            }),
+            404: jsonApiErrorDocumentSchema,
           },
         },
       },
@@ -36,10 +33,12 @@ export class GetRoute implements Route {
         const user = await this.userRepository.findOne({ id });
 
         if (!user) {
-          return reply.code(404).send({
-            message: `User with id ${id} not found`,
-            code: "USER_NOT_FOUND",
-          });
+          return reply.code(404).send(
+            makeJsonApiError(404, "Not Found", {
+              code: "USER_NOT_FOUND",
+              detail: `User with id ${id} not found`,
+            }),
+          );
         }
 
         return reply.send(jsonApiSerializeSingleUserDocument(user));

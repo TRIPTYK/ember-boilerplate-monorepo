@@ -1,5 +1,5 @@
 import type { FastifyInstanceTypeForModule } from "#src/init.js";
-import type { Route } from "@libs/backend-shared";
+import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 import type { EntityManager } from "@mikro-orm/core";
 import { verifyRefreshToken, generateTokens } from "#src/utils/jwt.utils.js";
 import { hashToken } from "#src/utils/token.utils.js";
@@ -30,10 +30,7 @@ export class RefreshRoute implements Route {
                 refreshToken: string(),
               }),
             }),
-            401: object({
-              message: string(),
-              code: string(),
-            }),
+            401: jsonApiErrorDocumentSchema,
           },
         },
       },
@@ -44,10 +41,12 @@ export class RefreshRoute implements Route {
         const payload = verifyRefreshToken(refreshToken, this.jwtRefreshSecret);
 
         if (!payload) {
-          return reply.code(401).send({
-            message: "Invalid or expired refresh token",
-            code: "INVALID_TOKEN",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Invalid Token", {
+              code: "INVALID_TOKEN",
+              detail: "Invalid or expired refresh token",
+            }),
+          );
         }
 
         // Look up token in DB by hash
@@ -56,10 +55,12 @@ export class RefreshRoute implements Route {
         const storedToken = await refreshTokenRepo.findOne({ tokenHash });
 
         if (!storedToken) {
-          return reply.code(401).send({
-            message: "Refresh token not found",
-            code: "TOKEN_NOT_FOUND",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Token Not Found", {
+              code: "TOKEN_NOT_FOUND",
+              detail: "Refresh token not found",
+            }),
+          );
         }
 
         // If token is revoked, invalidate entire family (theft detection)
@@ -69,18 +70,22 @@ export class RefreshRoute implements Route {
             { revokedAt: new Date().toISOString() },
           );
 
-          return reply.code(401).send({
-            message: "Token has been revoked",
-            code: "TOKEN_REVOKED",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Token Revoked", {
+              code: "TOKEN_REVOKED",
+              detail: "Token has been revoked",
+            }),
+          );
         }
 
         // Check if token is expired
         if (new Date(storedToken.expiresAt) < new Date()) {
-          return reply.code(401).send({
-            message: "Refresh token has expired",
-            code: "TOKEN_EXPIRED",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Token Expired", {
+              code: "TOKEN_EXPIRED",
+              detail: "Refresh token has expired",
+            }),
+          );
         }
 
         // Verify user still exists
@@ -88,10 +93,12 @@ export class RefreshRoute implements Route {
         const user = await userRepo.findOne({ id: payload.userId });
 
         if (!user) {
-          return reply.code(401).send({
-            message: "User not found",
-            code: "USER_NOT_FOUND",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "User Not Found", {
+              code: "USER_NOT_FOUND",
+              detail: "User not found",
+            }),
+          );
         }
 
         // Revoke old token

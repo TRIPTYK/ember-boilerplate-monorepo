@@ -1,5 +1,5 @@
 import type { FastifyInstanceTypeForModule } from "#src/init.js";
-import type { Route } from "@libs/backend-shared";
+import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 import type { EntityManager, EntityRepository } from "@mikro-orm/core";
 import { verifyPassword } from "#src/utils/auth.utils.js";
 import { generateTokens } from "#src/utils/jwt.utils.js";
@@ -34,10 +34,7 @@ export class LoginRoute implements Route {
                 refreshToken: string(),
               }),
             }),
-            401: object({
-              message: string(),
-              code: string(),
-            }),
+            401: jsonApiErrorDocumentSchema,
           },
         },
       },
@@ -48,20 +45,24 @@ export class LoginRoute implements Route {
         const user = await this.userRepository.findOne({ email });
 
         if (!user) {
-          return reply.code(401).send({
-            message: "Invalid email or password",
-            code: "INVALID_CREDENTIALS",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Invalid Credentials", {
+              code: "INVALID_CREDENTIALS",
+              detail: "Invalid email or password",
+            }),
+          );
         }
 
         // Verify password
         const isValidPassword = await verifyPassword(user.password, password);
 
         if (!isValidPassword) {
-          return reply.code(401).send({
-            message: "Invalid email or password",
-            code: "INVALID_CREDENTIALS",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Invalid Credentials", {
+              code: "INVALID_CREDENTIALS",
+              detail: "Invalid email or password",
+            }),
+          );
         }
 
         // Generate tokens

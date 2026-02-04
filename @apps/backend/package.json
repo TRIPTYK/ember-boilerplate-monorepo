@@ -55,7 +55,7 @@
     "playwright": "^1.58.1",
     "true-myth": "catalog:",
     "ts-dotenv": "catalog:",
-    "vitest": "^4.0.18",
+    "vitest": "catalog:",
     "zod": "^3.24.1"
   },
   "devDependencies": {

@@ -28,3 +28,51 @@ export const makeSingleJsonApiTopDocument = <T extends ZodObject>(
     data: dataSchema,
     meta: z.optional(z.record(z.string(), z.unknown())),
   });
+
+
+export const jsonApiErrorSchema = object({
+  id: string().optional(),
+  links: object({
+    about: string().optional(),
+    type: string().optional(),
+  }).optional(),
+  status: string(),
+  code: string().optional(),
+  title: string(),
+  detail: string().optional(),
+  source: object({
+    pointer: string().optional(),
+    parameter: string().optional(),
+    header: string().optional(),
+  }).optional(),
+  meta: z.record(z.string(), z.unknown()).optional(),
+});
+
+export const jsonApiErrorDocumentSchema = object({
+  errors: z.array(jsonApiErrorSchema),
+});
+
+export type JsonApiError = z.infer<typeof jsonApiErrorSchema>;
+export type JsonApiErrorDocument = z.infer<typeof jsonApiErrorDocumentSchema>;
+
+export function makeJsonApiError(
+  status: number,
+  title: string,
+  options?: {
+    code?: string;
+    detail?: string;
+    source?: { pointer?: string; parameter?: string; header?: string };
+  },
+): JsonApiErrorDocument {
+  return {
+    errors: [
+      {
+        status: String(status),
+        title,
+        code: options?.code,
+        detail: options?.detail,
+        source: options?.source,
+      },
+    ],
+  };
+}

@@ -51,7 +51,7 @@ catalog:
   '@triptyk/ember-ui': git+https://github.com/TRIPTYK/ember-common-ui/tree/upgrade-ember-ember-ui-dist
   '@types/amqplib': ^0.10.6
   '@types/handlebars': ^4.1.0
-  '@types/jsonwebtoken': ^9.0.8
+  '@types/jsonwebtoken': '9.0.3'
   '@types/nodemailer': ^7.0.9
   '@types/passport-http-bearer': ^1.0.41
   '@types/passport-jwt': ^4.0.1
@@ -103,7 +103,7 @@ catalog:
   flatpickr: ^4.6.13
   globals: ^17.1.0
   handlebars: ^4.7.8
-  jsonwebtoken: ^9.0.2
+  jsonwebtoken: '9.0.2'
   mailgen: ^2.0.29
   msw: ^2.12.7
   nodemailer: ^7.0.13
@@ -133,6 +133,7 @@ catalog:
   vite-plugin-node: ^7.0.0
   vite-tsconfig-paths: ^6.0.5
   webpack: ^5.104.1
+  vitest: 4.1.0-beta.3
 
 patchedDependencies:
   '@embroider/vite': patches/@embroider__vite.patch

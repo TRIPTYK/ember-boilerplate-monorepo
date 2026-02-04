@@ -2,7 +2,7 @@ import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { literal, object, string } from "zod";
 import type { UserEntityType } from "#src/entities/user.entity.js";
-import type { Route } from "@libs/backend-shared";
+import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 
 export class DeleteRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}
@@ -16,14 +16,8 @@ export class DeleteRoute implements Route {
             id: string(),
           }),
           response: {
-            403: object({
-              message: string(),
-              code: string(),
-            }),
-            404: object({
-              message: string(),
-              code: string(),
-            }),
+            403: jsonApiErrorDocumentSchema,
+            404: jsonApiErrorDocumentSchema,
             204: literal(null),
           },
         },
@@ -33,19 +27,23 @@ export class DeleteRoute implements Route {
         const currentUser = request.user!;
 
         if (currentUser.id !== id) {
-          return reply.code(403).send({
-            message: "You can only delete your own profile",
-            code: "FORBIDDEN",
-          });
+          return reply.code(403).send(
+            makeJsonApiError(403, "Forbidden", {
+              code: "FORBIDDEN",
+              detail: "You can only delete your own profile",
+            }),
+          );
         }
 
         const user = await this.userRepository.findOne({ id });
 
         if (!user) {
-          return reply.code(404).send({
-            message: `User with id ${id} not found`,
-            code: "USER_NOT_FOUND",
-          });
+          return reply.code(404).send(
+            makeJsonApiError(404, "Not Found", {
+              code: "USER_NOT_FOUND",
+              detail: `User with id ${id} not found`,
+            }),
+          );
         }
 
         await this.userRepository.getEntityManager().remove(user).flush();

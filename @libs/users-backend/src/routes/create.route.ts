@@ -30,7 +30,7 @@ export class CreateRoute implements Route {
             }),
           ),
           response: {
-            200: makeSingleJsonApiTopDocument(SerializedUserSchema),
+            200: makeSingleJsonApiTopDocument(SerializedUserSchema)
           },
         },
       },

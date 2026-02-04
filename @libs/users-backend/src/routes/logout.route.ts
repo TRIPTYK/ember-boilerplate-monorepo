@@ -1,5 +1,5 @@
 import type { FastifyInstanceTypeForModule } from "#src/init.js";
-import type { Route } from "@libs/backend-shared";
+import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 import type { EntityManager } from "@mikro-orm/core";
 import { verifyRefreshToken } from "#src/utils/jwt.utils.js";
 import { hashToken } from "#src/utils/token.utils.js";
@@ -28,10 +28,7 @@ export class LogoutRoute implements Route {
                 message: string(),
               }),
             }),
-            401: object({
-              message: string(),
-              code: string(),
-            }),
+            401: jsonApiErrorDocumentSchema,
           },
         },
       },
@@ -42,10 +39,12 @@ export class LogoutRoute implements Route {
         const payload = verifyRefreshToken(refreshToken, this.jwtRefreshSecret);
 
         if (!payload) {
-          return reply.code(401).send({
-            message: "Invalid or expired refresh token",
-            code: "INVALID_TOKEN",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Invalid Token", {
+              code: "INVALID_TOKEN",
+              detail: "Invalid or expired refresh token",
+            }),
+          );
         }
 
         const refreshTokenRepo = this.em.getRepository(RefreshTokenEntity);
@@ -70,10 +69,12 @@ export class LogoutRoute implements Route {
         const storedToken = await refreshTokenRepo.findOne({ tokenHash });
 
         if (!storedToken) {
-          return reply.code(401).send({
-            message: "Refresh token not found",
-            code: "TOKEN_NOT_FOUND",
-          });
+          return reply.code(401).send(
+            makeJsonApiError(401, "Token Not Found", {
+              code: "TOKEN_NOT_FOUND",
+              detail: "Refresh token not found",
+            }),
+          );
         }
 
         storedToken.revokedAt = new Date().toISOString();
