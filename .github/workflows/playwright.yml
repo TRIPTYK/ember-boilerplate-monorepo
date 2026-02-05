@@ -17,7 +17,8 @@ jobs:
       working-directory: ./@apps/e2e
       run: pnpm exec playwright install --with-deps
     - name: Run Playwright tests
-      run: pnpm run --filter ./@apps/e2e test
+      working-directory: ./@apps/e2e
+      run: pnpm test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

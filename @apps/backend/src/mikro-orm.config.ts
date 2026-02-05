@@ -1,6 +1,6 @@
 import { defineConfig } from "@mikro-orm/postgresql";
-import { loadConfiguration } from "./configuration.js";
-import { databaseConfig } from "./app/database.connection.js";
+import { loadConfiguration } from "./configuration.ts";
+import { databaseConfig } from "./app/database.connection.ts";
 import { seed } from "@ngneat/falso";
 
 const config = loadConfiguration();

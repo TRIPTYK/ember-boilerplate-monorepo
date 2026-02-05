@@ -20,7 +20,7 @@
     "lint:format": "oxfmt check src tests",
     "lint:format:fix": "oxfmt fix src tests",
     "format": "pnpm lint:format:fix",
-    "mikro-orm": "vite-node --env-file-if-exists=.env node_modules/@mikro-orm/cli/cli.js",
+    "mikro-orm": "vite-node --env-file-if-exists=.env node_modules/@mikro-orm/cli/esm.js",
     "lint:fix": "oxlint --type-aware --type-check --fix",
     "schema:update": "pnpm mikro-orm schema:update --run",
     "schema:drop": "pnpm mikro-orm schema:drop --run",

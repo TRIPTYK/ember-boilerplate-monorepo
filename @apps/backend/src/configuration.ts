@@ -12,7 +12,6 @@ const schema = object({
   SESSION_KEY: string(),
   JWT_SECRET: string(),
   JWT_REFRESH_SECRET: string(),
-  SEED_CLASS: string().optional(),
   SEED: string().default("42").optional(),
   // Email configuration
   APP_NAME: string().default("Registr"),
