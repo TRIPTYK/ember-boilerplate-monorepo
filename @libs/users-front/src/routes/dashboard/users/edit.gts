@@ -17,7 +17,7 @@ export default class UsersEditRoute extends Route {
     const user = await this.store.request(
       findRecord<User>('users', user_id, {
         include: [],
-      }),
+      })
     );
 
     assert('User must not be null', user.content.data !== null);

@@ -12,7 +12,7 @@
     "dev": "vite-node --watch --env-file=.env src/app.bootstrap.ts",
     "dev:e2e": "vite-node --watch --env-file=.env.e2e src/app.bootstrap.ts",
     "e2e:setup": "vite-node --env-file=.env.e2e node_modules/@mikro-orm/cli/cli.js schema:fresh --seed E2ESeeder --run",
-    "test": "pnpm vitest -c vitest.config.mts",
+    "test": "pnpm vitest run",
     "build": "pnpm vite build",
     "lint": "pnpm concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
     "lint:js": "oxlint --type-aware --type-check",

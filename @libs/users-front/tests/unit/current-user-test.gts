@@ -12,7 +12,7 @@ describe('Service | CurrentUser | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const currentUserService = context.owner.lookup(
-      'service:current-user',
+      'service:current-user'
     ) as CurrentUserService;
     expect(() => currentUserService.currentUser).toThrow('No current user set');
   });
@@ -22,7 +22,7 @@ describe('Service | CurrentUser | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const currentUserService = context.owner.lookup(
-      'service:current-user',
+      'service:current-user'
     ) as CurrentUserService;
 
     // Set a user manually
@@ -46,7 +46,7 @@ describe('Service | CurrentUser | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const currentUserService = context.owner.lookup(
-      'service:current-user',
+      'service:current-user'
     ) as CurrentUserService;
 
     // Set a user first
@@ -61,7 +61,7 @@ describe('Service | CurrentUser | Unit', () => {
     vi.spyOn(
       currentUserService.session,
       'isAuthenticated',
-      'get',
+      'get'
     ).mockReturnValue(false);
 
     await currentUserService.load();
@@ -74,7 +74,7 @@ describe('Service | CurrentUser | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const currentUserService = context.owner.lookup(
-      'service:current-user',
+      'service:current-user'
     ) as CurrentUserService;
 
     const mockUser = {
@@ -89,12 +89,12 @@ describe('Service | CurrentUser | Unit', () => {
     vi.spyOn(
       currentUserService.session,
       'isAuthenticated',
-      'get',
+      'get'
     ).mockReturnValue(true);
 
     // Mock store request to return our mock user
     vi.spyOn(currentUserService.store, 'request').mockResolvedValue({
-      content: mockUser,
+      content: { data: mockUser },
     } as never);
 
     await currentUserService.load();
@@ -108,7 +108,7 @@ describe('Service | CurrentUser | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const currentUserService = context.owner.lookup(
-      'service:current-user',
+      'service:current-user'
     ) as CurrentUserService;
 
     const mockUser = {
@@ -123,12 +123,12 @@ describe('Service | CurrentUser | Unit', () => {
     vi.spyOn(
       currentUserService.session,
       'isAuthenticated',
-      'get',
+      'get'
     ).mockReturnValue(true);
 
     // Mock store request to return our mock user
     vi.spyOn(currentUserService.store, 'request').mockResolvedValue({
-      content: mockUser,
+      content: { data: mockUser },
     } as never);
 
     await currentUserService.load();

@@ -6,7 +6,7 @@ export const createLoginValidationSchema = (intl: IntlService) =>
     email: email(intl.t('users.forms.login.validation.invalidEmail')),
     password: string().min(
       8,
-      intl.t('users.forms.login.validation.passwordTooShort'),
+      intl.t('users.forms.login.validation.passwordTooShort')
     ),
   });
 

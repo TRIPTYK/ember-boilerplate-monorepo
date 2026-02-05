@@ -32,8 +32,8 @@ export default class CurrentUserService extends Service {
         {},
         {
           resourcePath: 'users/profile',
-        },
-      ),
+        }
+      )
     );
 
     console.log('user', response.content.data, 'loaded');

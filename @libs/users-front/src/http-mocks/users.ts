@@ -56,7 +56,7 @@ export default [
           message: 'Not Found',
           code: 'USER_NOT_FOUND',
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
   }),

@@ -19,7 +19,8 @@
       "ember-basic-dropdown": "git+https://github.com/cibernox/ember-basic-dropdown/tree/dist"
     },
     "patchedDependencies": {
-      "@embroider/vite": "patches/@embroider__vite.patch"
+      "@embroider/vite": "patches/@embroider__vite.patch",
+      "ember-power-select-with-create": "patches/ember-power-select-with-create.patch"
     },
     "onlyBuiltDependencies": [
       "@swc/core",

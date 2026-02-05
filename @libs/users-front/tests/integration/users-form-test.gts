@@ -43,7 +43,7 @@ describe('tpk-form', function () {
       expect(userService.save).toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
-    },
+    }
   );
 
   renderingTest(
@@ -69,6 +69,6 @@ describe('tpk-form', function () {
       expect(userService.save).not.toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(router.transitionTo).not.toHaveBeenCalled();
-    },
+    }
   );
 });

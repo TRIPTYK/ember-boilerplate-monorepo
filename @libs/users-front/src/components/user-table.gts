@@ -18,7 +18,7 @@ class UsersTable extends Component<object> {
       rowClick: (element) => {
         this.router.transitionTo(
           'dashboard.users.edit',
-          (element as { id: string }).id,
+          (element as { id: string }).id
         );
       },
       defaultSortColumn: 'firstName',

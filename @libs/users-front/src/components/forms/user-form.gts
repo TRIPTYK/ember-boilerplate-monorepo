@@ -27,14 +27,16 @@ export default class UsersForm extends Component<UsersFormArgs> {
   }
 
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createUserValidationSchema>>,
+    data: z.infer<ReturnType<typeof createUserValidationSchema>>
   ) => {
     await this.user.save(data);
     await this.router.transitionTo('dashboard.users');
     this.flashMessages.success(
-      this.intl.t('users.forms.user.messages.saveSuccess'),
+      this.intl.t('users.forms.user.messages.saveSuccess')
     );
   };
+
+  tpkButton = () => {};
 
   <template>
     <TpkForm
@@ -61,10 +63,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
           class="col-span-12 md:col-span-4"
         />
         <div class="col-span-12 flex flex-col items-end">
-          <TpkButton
-            @label={{t "users.forms.user.actions.submit"}}
-            type="submit"
-          />
+          <button type="submit" />
           <LinkTo @route="dashboard.users" class="text-sm text-primary underline text-center mt-2">
             Back to users
           </LinkTo>
@@ -77,7 +76,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
 export const pageObject = create({
   scope: '[data-test-users-form]',
   firstName: fillable(
-    '[data-test-tpk-prefab-input-container="firstName"] input',
+    '[data-test-tpk-prefab-input-container="firstName"] input'
   ),
   lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),

@@ -29,7 +29,7 @@ describe('login-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const sessionService = context.owner.lookup(
-        'service:session',
+        'service:session'
       ) as SessionService;
 
       await render(<template><LoginForm /></template>);
@@ -43,9 +43,9 @@ describe('login-form', function () {
         {
           email: 'test@example.com',
           password: 'strongpassword123',
-        },
+        }
       );
-    },
+    }
   );
 
   renderingTest(
@@ -54,7 +54,7 @@ describe('login-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const sessionService = context.owner.lookup(
-        'service:session',
+        'service:session'
       ) as SessionService;
 
       await render(<template><LoginForm /></template>);
@@ -64,7 +64,7 @@ describe('login-form', function () {
       await pageObject.submit();
 
       expect(sessionService.authenticate).not.toHaveBeenCalled();
-    },
+    }
   );
 
   renderingTest(
@@ -73,7 +73,7 @@ describe('login-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const sessionService = context.owner.lookup(
-        'service:session',
+        'service:session'
       ) as SessionService;
 
       await render(<template><LoginForm /></template>);
@@ -83,7 +83,7 @@ describe('login-form', function () {
       await pageObject.submit();
 
       expect(sessionService.authenticate).not.toHaveBeenCalled();
-    },
+    }
   );
 
   renderingTest(
@@ -92,7 +92,7 @@ describe('login-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const sessionService = context.owner.lookup(
-        'service:session',
+        'service:session'
       ) as SessionService;
 
       await render(<template><LoginForm /></template>);
@@ -102,6 +102,6 @@ describe('login-form', function () {
       await pageObject.submit();
 
       expect(sessionService.authenticate).not.toHaveBeenCalled();
-    },
+    }
   );
 });

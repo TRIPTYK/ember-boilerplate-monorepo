@@ -22,7 +22,7 @@
     "start": "vite-node --env-file-if-exists=.env src/app.bootstrap.ts",
     "start:production": "vite-node dist/app.bootstrap.js",
     "dev": "vite-node --env-file-if-exists=.env --watch src/app.bootstrap.ts",
-    "test": "pnpm vitest -c vitest.config.mts",
+    "test": "pnpm vitest run",
     "build": "pnpm tsdown",
     "lint": "pnpm concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
     "lint:js": "oxlint --type-aware --type-check",

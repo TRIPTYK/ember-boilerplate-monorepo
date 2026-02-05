@@ -7,11 +7,11 @@ interface AuthLayoutSignature {
   };
 }
 
-<template>
+export default <template>
   <div class="auth-layout" ...attributes>
     <img src="/assets/img/boilerplate_logo.png" alt="boilerplate" class="w-32" />
     <div class="auth-layout-content">
       {{yield}}
     </div>
   </div>
-</template> satisfies TOC<AuthLayoutSignature>;
+</template> as TOC<AuthLayoutSignature>;

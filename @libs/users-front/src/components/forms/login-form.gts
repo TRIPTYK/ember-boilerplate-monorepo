@@ -22,7 +22,7 @@ export default class LoginForm extends Component {
   }
 
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createLoginValidationSchema>>,
+    data: z.infer<ReturnType<typeof createLoginValidationSchema>>
   ) => {
     await this.session.authenticate('authenticator:jwt', data);
   };
@@ -50,7 +50,7 @@ export const pageObject = create({
   scope: '[data-test-login-form]',
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
   password: fillable(
-    '[data-test-tpk-prefab-password-container="password"] input',
+    '[data-test-tpk-prefab-password-container="password"] input'
   ),
   submit: clickable('button[type="submit"]'),
 });

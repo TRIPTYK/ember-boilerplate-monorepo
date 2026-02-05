@@ -84,7 +84,7 @@ catalog:
   ember-concurrency: ^5.1.0
   ember-flatpickr: ^9.0.2
   ember-immer-changeset: ~2.0.0
-  ember-intl: ~8.0.3
+  ember-intl: ~8.0.5
   ember-load-initializers: ^3.0.1
   ember-modifier: ^4.2.2
   ember-page-title: ^9.0.3
@@ -92,7 +92,7 @@ catalog:
   ember-resources: ^7.0.7
   ember-simple-auth: ^8.2.0
   ember-simple-auth-token: ~6.0.1
-  ember-source: ~6.10.0
+  ember-source: ~6.10.1
   ember-strict-application-resolver: ^0.1.1
   ember-truth-helpers: ^5.0.0
   ember-vitest: ^0.3.3
@@ -105,7 +105,7 @@ catalog:
   handlebars: ^4.7.8
   jsonwebtoken: "9.0.2"
   mailgen: ^2.0.29
-  msw: ^2.12.7
+  msw: ^2.12.8
   nodemailer: ^7.0.13
   openapi-msw: ^2.0.0
   oxfmt: ^0.28.0
@@ -132,8 +132,8 @@ catalog:
   type-fest: ^5.4.3
   vite-plugin-node: ^7.0.0
   vite-tsconfig-paths: ^6.0.5
-  webpack: ^5.104.1
   vitest: 4.1.0-beta.3
+  webpack: ^5.105.0
 
 patchedDependencies:
   "@embroider/vite": patches/@embroider__vite.patch
