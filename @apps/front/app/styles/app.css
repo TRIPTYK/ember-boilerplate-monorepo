@@ -3,11 +3,19 @@
 @import '@triptyk/ember-input/dist/app.css';
 @import '@triptyk/ember-ui/dist/app.css';
 @import '@triptyk/ember-input-validation/dist/app.css';
-
-@plugin "daisyui";
 @import './auth.css';
+
+@plugin "daisyui" {
+  themes:
+    nord --default,
+    dracula,
+    cupcake,
+    corporate,
+    lemonade;
+}
 
 /* Additional global styles can be added below */
 @source "../../node_modules/@triptyk/ember-ui";
 @source "../../node_modules/@triptyk/ember-input";
 @source "../../node_modules/@triptyk/ember-input-validation";
+@source "../../node_modules/@libs/users-front";

@@ -48,10 +48,14 @@ class UsersTable extends Component<object> {
   };
 
   <template>
-    <TpkButton
-      @label={{t "users.table.actions.addUser"}}
-      @onClick={{this.onAddUser}}
-    />
+
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl font-semibold">{{t "users.pages.list.title"}}</h1>
+      <TpkButton
+        @label={{t "users.table.actions.addUser"}}
+        @onClick={{this.onAddUser}}
+      />
+    </div>
     <TableGenericPrefab @tableParams={{this.tableParams}} />
   </template>
 }

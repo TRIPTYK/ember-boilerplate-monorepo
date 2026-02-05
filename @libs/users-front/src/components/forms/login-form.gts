@@ -10,6 +10,7 @@ import { t } from 'ember-intl';
 import type { IntlService } from 'ember-intl';
 import AuthLayout from '../auth-layout.gts';
 import { LinkTo } from '@ember/routing';
+import { hash } from '@ember/helper';
 
 export default class LoginForm extends Component {
   @service declare session: SessionService;

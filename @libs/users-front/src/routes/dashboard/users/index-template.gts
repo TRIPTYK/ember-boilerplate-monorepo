@@ -1,10 +1,8 @@
 import UsersTable from '#src/components/user-table.gts';
 import type { TOC } from '@ember/component/template-only';
 import type UsersIndexRoute from './index.gts';
-import { t } from 'ember-intl';
 
-<template>
-  <h1>{{t "users.pages.list.title"}}</h1>
+export default <template>
   <UsersTable />
 </template> as TOC<{
   model: Awaited<ReturnType<UsersIndexRoute['model']>>;

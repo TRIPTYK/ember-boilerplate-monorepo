@@ -9,6 +9,7 @@ interface AuthLayoutSignature {
 
 <template>
   <div class="auth-layout" ...attributes>
+    <img src="/assets/img/boilerplate_logo.png" alt="boilerplate" class="w-32" />
     <div class="auth-layout-content">
       {{yield}}
     </div>

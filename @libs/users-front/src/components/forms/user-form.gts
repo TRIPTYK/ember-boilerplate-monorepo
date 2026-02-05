@@ -9,6 +9,8 @@ import type RouterService from '@ember/routing/router-service';
 import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
+import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+import { LinkTo } from '@ember/routing';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -42,19 +44,32 @@ export default class UsersForm extends Component<UsersFormArgs> {
       data-test-users-form
       as |F|
     >
-      <F.TpkInputPrefab
-        @label={{t "users.forms.user.labels.firstName"}}
-        @validationField="firstName"
-      />
-      <F.TpkInputPrefab
-        @label={{t "users.forms.user.labels.lastName"}}
-        @validationField="lastName"
-      />
-      <F.TpkEmailPrefab
-        @label={{t "users.forms.user.labels.email"}}
-        @validationField="email"
-      />
-      <button type="submit">{{t "users.forms.user.actions.submit"}}</button>
+      <div class="grid grid-cols-12 gap-x-6 gap-y-3 max-w-4xl">
+        <F.TpkInputPrefab
+          @label={{t "users.forms.user.labels.firstName"}}
+          @validationField="firstName"
+          class="col-span-12 md:col-span-4"
+        />
+        <F.TpkInputPrefab
+          @label={{t "users.forms.user.labels.lastName"}}
+          @validationField="lastName"
+          class="col-span-12 md:col-span-4"
+        />
+        <F.TpkEmailPrefab
+          @label={{t "users.forms.user.labels.email"}}
+          @validationField="email"
+          class="col-span-12 md:col-span-4"
+        />
+        <div class="col-span-12 flex flex-col items-end">
+          <TpkButton
+            @label={{t "users.forms.user.actions.submit"}}
+            type="submit"
+          />
+          <LinkTo @route="dashboard.users" class="text-sm text-primary underline text-center mt-2">
+            Back to users
+          </LinkTo>
+        </div>
+      </div>
     </TpkForm>
   </template>
 }
