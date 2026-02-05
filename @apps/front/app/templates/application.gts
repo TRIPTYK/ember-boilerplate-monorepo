@@ -16,19 +16,11 @@ class ApplicationTemplate extends Component<ApplicationSignature> {
 
   <template>
     {{pageTitle "Application"}}
-
-    {{#each this.flashMessages.queue as |flashC|}}
-      <FlashMessage @flash={{flashC}} as |component flash|>
-        {{#if flash.componentName}}
-          {{! @glint-expect-error }}
-          {{component flash.componentName content=flash.content}}
-        {{else}}
-          {{! @glint-expect-error }}
-          <h6>{{component.flashType}}</h6>
-          <p>{{flash.message}}</p>
-        {{/if}}
-      </FlashMessage>
-    {{/each}}
+    <div class="alerts">
+      {{#each this.flashMessages.arrangedQueue as |flash|}}
+        <FlashMessage @flash={{flash}} />
+      {{/each}}
+    </div>
 
     {{outlet}}
   </template>

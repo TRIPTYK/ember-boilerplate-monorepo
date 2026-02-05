@@ -6,6 +6,9 @@ import TableGenericPrefab, {
 } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
 import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
 import { t, type IntlService } from 'ember-intl';
+import EditIcon from '#src/assets/icons/edit.gts';
+import DeleteIcon from '#src/assets/icons/delete.gts';
+import type { TOC } from '@ember/component/template-only';
 
 class UsersTable extends Component<object> {
   @service declare router: RouterService;
@@ -39,7 +42,26 @@ class UsersTable extends Component<object> {
           sortable: false,
         },
       ],
-      actionMenu: [],
+      actionMenu: [
+      {
+        icon: <template><EditIcon class="size-4" /></template> as TOC<{
+          Element: SVGSVGElement;
+        }>,
+        action: (element: unknown) => {
+          this.router.transitionTo('dashboard.users.edit', (element as { id: string }).id);
+        },
+        name: this.intl.t('users.table.actions.edit'),
+      },
+      {
+        icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
+          Element: SVGSVGElement;
+        }>,
+        action: (element: unknown) => {
+          console.log('Delete clicked', element);
+        },
+        name: this.intl.t('users.table.actions.delete'),
+      },
+    ],
     };
   }
 

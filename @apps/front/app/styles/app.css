@@ -4,6 +4,7 @@
 @import '@triptyk/ember-ui/dist/app.css';
 @import '@triptyk/ember-input-validation/dist/app.css';
 @import './auth.css';
+@import './flash.css';
 
 @plugin "daisyui" {
   themes:

@@ -49,25 +49,27 @@ export default class UsersForm extends Component<UsersFormArgs> {
         <F.TpkInputPrefab
           @label={{t "users.forms.user.labels.firstName"}}
           @validationField="firstName"
-          class="col-span-12 md:col-span-4"
+          class="col-span-12 md:col-span-3"
         />
         <F.TpkInputPrefab
           @label={{t "users.forms.user.labels.lastName"}}
           @validationField="lastName"
-          class="col-span-12 md:col-span-4"
+          class="col-span-12 md:col-span-3"
         />
         <F.TpkPasswordPrefab
           @label={{t "users.forms.user.labels.password"}}
           @validationField="password"
-          class="col-span-12 md:col-span-4"
+          class="col-span-12 md:col-span-3"
         />
         <F.TpkEmailPrefab
           @label={{t "users.forms.user.labels.email"}}
           @validationField="email"
-          class="col-span-12 md:col-span-4"
+          class="col-span-12 md:col-span-3"
         />
-        <div class="col-span-12 flex flex-col items-end">
-          <button type="submit" />
+        <div class="col-span-12 flex items-center justify-between gap-2">
+          <button type="submit" class="btn btn-primary">
+            {{t "users.forms.user.actions.submit"}}
+          </button>
           <LinkTo
             @route="dashboard.users"
             class="text-sm text-primary underline text-center mt-2"
