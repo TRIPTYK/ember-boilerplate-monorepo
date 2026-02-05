@@ -9,7 +9,7 @@ export default class DashboardIndexRoute extends Route {
   @service declare router: RouterService;
 
   beforeModel(t: Transition) {
-    // this.session.requireAuthentication(t, 'login');
-    // this.router.transitionTo('dashboard.users');
+    this.session.requireAuthentication(t, 'login');
+    this.router.transitionTo('dashboard.users');
   }
 }

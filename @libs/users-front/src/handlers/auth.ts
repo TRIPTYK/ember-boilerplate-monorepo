@@ -10,12 +10,11 @@ export default class AuthHandler {
     const headers = new Headers(context.request.headers);
 
     const authData = this.session.data.authenticated as Record<string, unknown>;
-    const accessToken = (authData?.['data'] as Record<string, unknown>)?.['accessToken'] as string | undefined;
+    const accessToken = (authData?.['data'] as Record<string, unknown>)?.[
+      'accessToken'
+    ] as string | undefined;
 
-    headers.append(
-      'Authorization',
-      accessToken ? `Bearer ${accessToken}` : '',
-    );
+    headers.append('Authorization', accessToken ? `Bearer ${accessToken}` : '');
 
     return next(Object.assign({}, context.request, { headers }));
   }

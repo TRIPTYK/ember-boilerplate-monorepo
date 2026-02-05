@@ -7,7 +7,6 @@ import type Owner from '@ember/owner';
 import { LegacyNetworkHandler } from '@warp-drive/legacy/compat';
 import { setOwner } from '@ember/owner';
 import AuthHandler from '@libs/users-front/handlers/auth';
-import type SessionService from 'ember-simple-auth/services/session';
 import { getOwner } from '@ember/owner';
 
 setBuildURLConfig({
@@ -21,14 +20,12 @@ const legacyStore = useLegacyStore({
   modelFragments: true,
   cache: JSONAPICache,
   schemas: [UserSchema],
-  handlers: [
-  ],
+  handlers: [],
 });
 
 export default class MyStore extends legacyStore {
   constructor(owner: Owner) {
     super(owner);
-
 
     const authHandler = new AuthHandler();
     setOwner(authHandler, getOwner(this)!);
@@ -38,12 +35,7 @@ export default class MyStore extends legacyStore {
     setOwner(this.requestManager, getOwner(this)!);
 
     this.requestManager = manager
-      .use([
-          authHandler,
-          LegacyNetworkHandler,
-          Fetch
-      ]
-      )
+      .use([authHandler, LegacyNetworkHandler, Fetch])
       .useCache(CacheHandler);
   }
 }
