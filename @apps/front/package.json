@@ -56,7 +56,7 @@
     "@eonasdan/tempus-dominus": "catalog:",
     "@eslint/js": "^9.39.1",
     "@glimmer/component": "catalog:",
-    "@glint/ember-tsc": "~1.0.9",
+    "@glint/ember-tsc": "~1.1.1",
     "@glint/template": "catalog:",
     "@libs/users-front": "workspace:^",
     "@playwright/test": "catalog:",

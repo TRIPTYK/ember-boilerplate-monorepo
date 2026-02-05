@@ -9,7 +9,9 @@ import type { IntlService } from 'ember-intl';
 export default class ForgotPasswordTemplate extends Component {
   @service declare intl: IntlService;
 
-  get forgotPasswordValidationSchema(): ReturnType<typeof createForgotPasswordValidationSchema> {
+  get forgotPasswordValidationSchema(): ReturnType<
+    typeof createForgotPasswordValidationSchema
+  > {
     return createForgotPasswordValidationSchema(this.intl);
   }
 

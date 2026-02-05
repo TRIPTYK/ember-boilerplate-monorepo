@@ -122,7 +122,10 @@ export default class DashboardTemplate extends Component {
         </div>
       </:content>
       <:footer>
-        <div class="flex items-center justify-between w-full p-2 px-4 gap-3 {{if this.sidebarCollapsed 'flex-col'}}">
+        <div
+          class="flex items-center justify-between w-full p-2 px-4 gap-3
+            {{if this.sidebarCollapsed 'flex-col'}}"
+        >
           <FooterComponent @collapsed={{this.sidebarCollapsed}} />
           <ThemeSelector @sidebarCollapsed={{this.sidebarCollapsed}} />
         </div>
@@ -130,7 +133,6 @@ export default class DashboardTemplate extends Component {
     </TpkDashBoard>
   </template>
 }
-
 
 const FooterComponent = <template>
   <div class="flex items-center gap-3 {{if @collapsed 'flex-col'}}">

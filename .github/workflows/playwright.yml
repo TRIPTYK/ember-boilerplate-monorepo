@@ -11,6 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: wyvox/action-setup-pnpm@v3
+    - name: Build
+      run: pnpm turbo build
     - name: Install Playwright Browsers
       working-directory: ./@apps/e2e
       run: pnpm exec playwright install --with-deps

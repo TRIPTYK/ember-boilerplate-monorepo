@@ -9,7 +9,6 @@ import type RouterService from '@ember/routing/router-service';
 import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
-import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
 import { LinkTo } from '@ember/routing';
 
 interface UsersFormArgs {
@@ -64,7 +63,10 @@ export default class UsersForm extends Component<UsersFormArgs> {
         />
         <div class="col-span-12 flex flex-col items-end">
           <button type="submit" />
-          <LinkTo @route="dashboard.users" class="text-sm text-primary underline text-center mt-2">
+          <LinkTo
+            @route="dashboard.users"
+            class="text-sm text-primary underline text-center mt-2"
+          >
             Back to users
           </LinkTo>
         </div>

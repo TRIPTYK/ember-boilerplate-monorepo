@@ -1,36 +1,36 @@
 table:
   headers:
-    firstName: "First Name"
-    lastName: "Last Name"
-    email: "Email"
+    firstName: 'First Name'
+    lastName: 'Last Name'
+    email: 'Email'
   actions:
-    addUser: "Add User"
+    addUser: 'Add User'
 
 forms:
   login:
-    title: "Login"
+    title: 'Login'
     validation:
-      invalidEmail: "Please enter a valid email address"
-      passwordTooShort: "Password must be at least 8 characters"
+      invalidEmail: 'Please enter a valid email address'
+      passwordTooShort: 'Password must be at least 8 characters'
   forgotPassword:
-    title: "Forgot Password"
+    title: 'Forgot Password'
     validation:
-      invalidEmail: "Please enter a valid email address"
+      invalidEmail: 'Please enter a valid email address'
   user:
     labels:
-      firstName: "First Name"
-      lastName: "Last Name"
-      email: "Email"
+      firstName: 'First Name'
+      lastName: 'Last Name'
+      email: 'Email'
     validation:
-      firstNameRequired: "First name is required"
-      lastNameRequired: "Last name is required"
-      invalidEmail: "Invalid email address"
-      minLength: "At least 2 characters"
+      firstNameRequired: 'First name is required'
+      lastNameRequired: 'Last name is required'
+      invalidEmail: 'Invalid email address'
+      minLength: 'At least 2 characters'
     actions:
-      submit: "Submit"
+      submit: 'Submit'
     messages:
-      saveSuccess: "User saved successfully."
+      saveSuccess: 'User saved successfully.'
 
 pages:
   list:
-    title: "User List"
+    title: 'User List'

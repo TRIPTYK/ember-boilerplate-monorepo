@@ -48,7 +48,6 @@ class UsersTable extends Component<object> {
   };
 
   <template>
-
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-semibold">{{t "users.pages.list.title"}}</h1>
       <TpkButton
