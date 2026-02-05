@@ -29,7 +29,6 @@ export const makeSingleJsonApiTopDocument = <T extends ZodObject>(
     meta: z.optional(z.record(z.string(), z.unknown())),
   });
 
-
 export const jsonApiErrorSchema = object({
   id: string().optional(),
   links: object({

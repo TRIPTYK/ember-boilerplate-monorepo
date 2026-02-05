@@ -12,9 +12,7 @@ export function databaseConfig(config: Pick<AppConfiguration, "DATABASE_URI">) {
   });
 }
 
-export async function createDatabaseConnection(
-  config: Pick<AppConfiguration, "DATABASE_URI">,
-) {
+export async function createDatabaseConnection(config: Pick<AppConfiguration, "DATABASE_URI">) {
   const orm = await MikroORM.init(databaseConfig(config));
   return orm;
 }

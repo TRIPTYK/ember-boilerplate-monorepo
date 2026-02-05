@@ -11,10 +11,18 @@ backend:
     description: JSON:API response format for Ember frontend compatibility
   jwt-authentication:
     description: JWT Bearer tokens with access/refresh token pattern
+  mikro-orm-patterns:
+    description: Runtime entity definitions with defineEntity() and em.flush()
+  module-interface:
+    description: ModuleInterface pattern for route registration with em.fork()
   password-hashing:
     description: Argon2 password hashing utilities
+  route-classes:
+    description: Class-based routes with constructor-injected dependencies
   route-schemas:
     description: Inline Zod schema validation for request/response with colocation
+  scoped-middleware:
+    description: Fastify register() callbacks for scoped auth middleware
 
 frontend:
   file-extensions:
@@ -35,6 +43,8 @@ global:
     description: Use #src/ import alias instead of relative paths
   monorepo-packages:
     description: "@apps for deployables, @libs for shared packages"
+  post-implementation-checks:
+    description: Run lint globally and tests on modified packages after implementation
 
 testing:
   e2e-playwright:
