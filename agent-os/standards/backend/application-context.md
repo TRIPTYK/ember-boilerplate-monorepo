@@ -1,20 +1,38 @@
-# Application Context Pattern
+# Application Context
 
-Use ApplicationContext as a type-safe DI container for backend services.
+Top-level container for shared backend dependencies (config, logger, ORM).
 
 ```typescript
 export interface ApplicationContext {
   configuration: AppConfiguration;
   logger: Logger;
-  // Add services, repositories, etc.
+  orm: MikroORM;
+}
+
+export async function createApplicationContext(config: AppConfiguration) {
+  return {
+    configuration: config,
+    logger: logger({ PRODUCTION_ENV: config.PRODUCTION_ENV }),
+    orm: await createDatabaseConnection(config),
+  } satisfies ApplicationContext;
 }
 ```
 
-**Pass context to route handlers and services:**
+**Usage:** Pass to feature modules when initializing them:
 ```typescript
-export async function appRouter(fastify: FastifyInstanceType, context: ApplicationContext) {
-  // Use context.logger, context.configuration, etc.
-}
+const context = await createApplicationContext(config);
+
+const UserModule = Module.init({
+  em: context.orm.em.fork(),
+  configuration: context.configuration,
+});
 ```
 
-**Why:** Type-safe dependency injection without complex DI frameworks. Easier to test and understand than global imports.
+**Relationship to ModuleInterface:** ApplicationContext is the app-level container created at startup. Feature modules (ModuleInterface) receive what they need from it during initialization.
+
+**Rules:**
+- Create once at app startup
+- Pass relevant parts to feature modules via Module.init()
+- Don't import ApplicationContext in feature libraries — they receive dependencies explicitly
+
+**Why:** Type-safe dependency injection. Feature modules stay decoupled from app-level concerns.

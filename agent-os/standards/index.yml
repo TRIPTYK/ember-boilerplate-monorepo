@@ -2,7 +2,7 @@
 
 backend:
   application-context:
-    description: Type-safe DI container pattern for backend services
+    description: Top-level app container for config, logger, ORM
   configuration:
     description: Environment variable validation using Zod schemas
   error-format:
@@ -10,7 +10,7 @@ backend:
   json-api-serialization:
     description: JSON:API response format for Ember frontend compatibility
   jwt-authentication:
-    description: JWT Bearer tokens with access/refresh token pattern
+    description: JWT tokens, generation, verification middleware, and auth flow
   mikro-orm-patterns:
     description: Runtime entity definitions with defineEntity() and em.flush()
   module-interface:
@@ -25,6 +25,8 @@ backend:
     description: Fastify register() callbacks for scoped auth middleware
 
 frontend:
+  auth-handler:
+    description: WarpDrive auth handler for injecting JWT tokens into requests
   file-extensions:
     description: .gts for templates, .ts for logic-only files
   forms:
@@ -33,8 +35,6 @@ frontend:
     description: Route template files colocated with route logic
 
 global:
-  auth-middleware:
-    description: Full-stack auth middleware for backend and frontend
   feature-libraries:
     description: Paired [feature]-front and [feature]-backend libraries
   folder-structure:
@@ -54,8 +54,6 @@ testing:
   page-objects:
     description: Page object exports from component files for testing
   rendering-tests:
-    description: Scoped renderingTest pattern with TestApp
+    description: Component testing with renderingTest, TestApp, and initializeTestApp
   soft-expectations:
     description: Use expect.soft for better test failure reporting
-  test-app-init:
-    description: Initialize test environment with initializeTestApp
