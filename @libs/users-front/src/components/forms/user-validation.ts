@@ -20,3 +20,5 @@ export const createUserValidationSchema = (intl: IntlService) =>
 export type ValidatedUser = z.infer<
   ReturnType<typeof createUserValidationSchema>
 >;
+
+export type UpdateUserData = ValidatedUser & { id: string };

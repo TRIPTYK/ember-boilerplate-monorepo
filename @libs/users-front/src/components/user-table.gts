@@ -9,10 +9,13 @@ import { t, type IntlService } from 'ember-intl';
 import EditIcon from '#src/assets/icons/edit.gts';
 import DeleteIcon from '#src/assets/icons/delete.gts';
 import type { TOC } from '@ember/component/template-only';
+import type UserService from '#src/services/user.ts';
+import type { UpdateUserData } from './forms/user-validation';
 
 class UsersTable extends Component<object> {
   @service declare router: RouterService;
   @service declare intl: IntlService;
+  @service declare user: UserService;
 
   get tableParams(): TableParams {
     return {
@@ -56,8 +59,9 @@ class UsersTable extends Component<object> {
         icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
           Element: SVGSVGElement;
         }>,
-        action: (element: unknown) => {
-          console.log('Delete clicked', element);
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        action: async (element: unknown) => {
+          await this.user.delete(element as UpdateUserData);
         },
         name: this.intl.t('users.table.actions.delete'),
       },

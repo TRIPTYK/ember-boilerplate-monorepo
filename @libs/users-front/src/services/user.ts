@@ -4,7 +4,7 @@ import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
 import { cacheKeyFor, type Store } from '@warp-drive/core';
-import { createRecord, updateRecord } from '@warp-drive/utilities/json-api';
+import { createRecord, deleteRecord, updateRecord } from '@warp-drive/utilities/json-api';
 
 type CreateUserData = ValidatedUser & { id: undefined };
 type UpdateUserData = ValidatedUser & { id: string };
@@ -18,6 +18,16 @@ export default class UserService extends Service {
     } else {
       return this.create(data as CreateUserData);
     }
+  }
+
+  delete(data: UpdateUserData) {
+    const existingUser = this.store.peekRecord<User>({
+      id: data.id,
+      type: 'users',
+    });
+    assert('User must exist to be deleted', existingUser);
+    const request = deleteRecord(existingUser);
+    return this.store.request(request);
   }
 
   private async create(data: CreateUserData) {

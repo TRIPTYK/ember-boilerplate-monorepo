@@ -138,4 +138,11 @@ export default [
       },
     });
   }),
+  http.delete('/api/v1/users/{id}', (req) => {
+    const { id } = req.params;
+    const user = mockUsers.find((user) => user.id === id);
+    if (user) {
+      return HttpResponse.json();
+    }
+  }),
 ];
