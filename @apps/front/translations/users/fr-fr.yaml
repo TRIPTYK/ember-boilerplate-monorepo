@@ -1,4 +1,6 @@
 table:
+  confirmModal:
+    question: "Êtes-vous sûr de vouloir supprimer cet utilisateur {firstName} {lastName} ?"
   headers:
     firstName: "Prénom"
     lastName: "Nom"
@@ -33,6 +35,8 @@ forms:
       submit: "Soumettre"
     messages:
       saveSuccess: "Utilisateur enregistré avec succès."
+      deleteSuccess: "Utilisateur supprimé avec succès."
+      deleteError: "Erreur lors de la suppression de l'utilisateur."
 
 pages:
   list:

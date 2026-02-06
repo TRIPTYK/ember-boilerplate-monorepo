@@ -17,7 +17,6 @@ export default class AuthHandler {
     ] as string | undefined;
 
     headers.append('Authorization', accessToken ? `Bearer ${accessToken}` : '');
-
     return next(Object.assign({}, context.request, { headers }));
   }
 }

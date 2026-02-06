@@ -5,17 +5,34 @@ import TableGenericPrefab, {
   type TableParams,
 } from '@triptyk/ember-ui/components/prefabs/tpk-table-generic-prefab';
 import TpkButton from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+import TpkConfirmModalPrefab from '@triptyk/ember-ui/components/prefabs/tpk-confirm-modal-prefab';
 import { t, type IntlService } from 'ember-intl';
 import EditIcon from '#src/assets/icons/edit.gts';
 import DeleteIcon from '#src/assets/icons/delete.gts';
 import type { TOC } from '@ember/component/template-only';
 import type UserService from '#src/services/user.ts';
 import type { UpdateUserData } from './forms/user-validation';
+import { tracked } from '@glimmer/tracking';
+import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
 
 class UsersTable extends Component<object> {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare user: UserService;
+  @service declare flashMessages: FlashMessagesService;
+
+  @tracked selectedUserForDelete: UpdateUserData | null = null;
+
+  get isModalOpen(): boolean {
+    return this.selectedUserForDelete !== null;
+  }
+
+  get confirmQuestion(): string {
+    return this.intl.t('users.table.confirmModal.question', {
+      firstName: this.selectedUserForDelete?.firstName,
+      lastName: this.selectedUserForDelete?.lastName,
+    });
+  }
 
   get tableParams(): TableParams {
     return {
@@ -59,9 +76,8 @@ class UsersTable extends Component<object> {
         icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
           Element: SVGSVGElement;
         }>,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        action: async (element: unknown) => {
-          await this.user.delete(element as UpdateUserData);
+        action: (element: unknown) => {
+          this.openModalOnDelete(element as UpdateUserData);
         },
         name: this.intl.t('users.table.actions.delete'),
       },
@@ -73,6 +89,26 @@ class UsersTable extends Component<object> {
     this.router.transitionTo('dashboard.users.create');
   };
 
+  openModalOnDelete = (element: UpdateUserData) => {
+    this.selectedUserForDelete = element;
+  };
+
+  onCloseModal = () => {
+    this.selectedUserForDelete = null;
+  };
+
+  onConfirmDelete = async () => {
+    if (this.selectedUserForDelete) {
+      try {
+        await this.user.delete(this.selectedUserForDelete);
+        this.flashMessages.success(this.intl.t('users.forms.user.messages.deleteSuccess'));
+      } catch {
+        this.flashMessages.danger(this.intl.t('users.forms.user.messages.deleteError'));
+      }
+      this.onCloseModal();
+    }
+  };
+
   <template>
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-semibold">{{t "users.pages.list.title"}}</h1>
@@ -82,6 +118,15 @@ class UsersTable extends Component<object> {
       />
     </div>
     <TableGenericPrefab @tableParams={{this.tableParams}} />
+    <TpkConfirmModalPrefab
+      @onClose={{this.onCloseModal}}
+      @onConfirm={{this.onConfirmDelete}}
+      @icon=""
+      @cancelText={{t "global.cancel"}}
+      @confirmText={{t "global.confirm"}}
+      @confirmQuestion={{this.confirmQuestion}}
+      @isOpen={{this.isModalOpen}}
+    />
   </template>
 }
 

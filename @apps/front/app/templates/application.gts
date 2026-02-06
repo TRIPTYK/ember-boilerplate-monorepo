@@ -16,6 +16,7 @@ class ApplicationTemplate extends Component<ApplicationSignature> {
 
   <template>
     {{pageTitle "Application"}}
+    <div id="tpk-modal"></div>
     <div class="alerts">
       {{#each this.flashMessages.arrangedQueue as |flash|}}
         <FlashMessage @flash={{flash}} />

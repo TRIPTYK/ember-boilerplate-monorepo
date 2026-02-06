@@ -9,7 +9,6 @@ export default class UsersCreateRouteTemplate extends Component<UsersCreateRoute
 
   public constructor(owner: Owner, args: UsersCreateRouteSignature) {
     super(owner, args);
-    console.log('Creating UsersCreateRouteTemplate', this.changeset);
   }
 
   <template><UsersForm @changeset={{this.changeset}} /></template>
