@@ -89,5 +89,6 @@ export const pageObject = create({
   ),
   lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
   submit: clickable('button[type="submit"]'),
 });
