@@ -81,10 +81,8 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
         // Handle validation errors globally for all user routes
         f.setErrorHandler((error, request, reply) => {
           console.log(error);
-            
 
           if (hasZodFastifySchemaValidationErrors(error)) {
-
             return reply.status(400).send({
               errors: error.validation.map((issue) => ({
                 status: "400",
