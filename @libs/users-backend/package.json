@@ -7,15 +7,15 @@
   "author": "",
   "type": "module",
   "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.d.mts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.mts"
     },
     "./*": {
       "import": "./dist/*.mjs",
-      "types": "./dist/*.d.ts"
+      "types": "./dist/*.d.mts"
     }
   },
   "scripts": {

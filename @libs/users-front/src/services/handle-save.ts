@@ -38,25 +38,26 @@ export default class HandleSaveService extends Service {
         );
       }
       if (transitionOnSuccess)
-      await this.router.transitionTo(
-        transitionOnSuccess!,
-        idForTransitionOnSuccess ?? undefined
-      );
-     } catch(error) {
+        await this.router.transitionTo(
+          transitionOnSuccess!,
+          idForTransitionOnSuccess ?? undefined
+        );
+    } catch (error) {
       if (error instanceof AggregateError) {
         for (const singleError of error.errors as JSONAPIError[]) {
-          changeset.addError({
-            message: singleError.detail ,
-            key: singleError.source.pointer.replace('//data/attributes/', ''),
-            value: undefined,
-            originalValue: undefined
-          });
+          console.error(singleError);
+          // changeset.addError({
+          //   message: singleError.detail ,
+          //   key: singleError.source.pointer.replace('//data/attributes/', ''),
+          //   value: undefined,
+          //   originalValue: undefined
+          // });
         }
       }
       if (transitionOnError) {
         await this.router.transitionTo(transitionOnError);
       }
-     }
+    }
   }
 }
 
