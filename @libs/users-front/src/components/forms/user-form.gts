@@ -10,6 +10,7 @@ import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
 import { LinkTo } from '@ember/routing';
+import type ImmerChangeset from 'ember-immer-changeset';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -26,9 +27,10 @@ export default class UsersForm extends Component<UsersFormArgs> {
   }
 
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createUserValidationSchema>>
+    data: z.infer<ReturnType<typeof createUserValidationSchema>>,
+    c: ImmerChangeset<z.infer<ReturnType<typeof createUserValidationSchema>>>
   ) => {
-    await this.user.save(data);
+    await this.user.save(c);
     await this.router.transitionTo('dashboard.users');
     this.flashMessages.success(
       this.intl.t('users.forms.user.messages.saveSuccess')

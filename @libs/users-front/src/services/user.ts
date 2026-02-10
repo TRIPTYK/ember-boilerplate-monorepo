@@ -4,7 +4,8 @@ import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
 import { cacheKeyFor, type Store } from '@warp-drive/core';
-import { createRecord, deleteRecord, updateRecord } from '@warp-drive/utilities/json-api';
+import { createRecord, updateRecord } from '@warp-drive/utilities/json-api';
+import type ImmerChangeset from 'ember-immer-changeset';
 
 type CreateUserData = ValidatedUser & { id: undefined };
 type UpdateUserData = ValidatedUser & { id: string };
@@ -12,25 +13,15 @@ type UpdateUserData = ValidatedUser & { id: string };
 export default class UserService extends Service {
   @service declare store: Store;
 
-  public async save(data: ValidatedUser) {
-    if (data.id) {
-      return this.update(data as UpdateUserData);
+  public async save(changeset: ImmerChangeset<ValidatedUser>) {
+    if (changeset.data.id) {
+      return this.update(changeset.data as UpdateUserData, changeset);
     } else {
-      return this.create(data as CreateUserData);
+      return this.create(changeset.data as CreateUserData, changeset);
     }
   }
 
-  delete(data: UpdateUserData) {
-    const existingUser = this.store.peekRecord<User>({
-      id: data.id,
-      type: 'users',
-    });
-    assert('User must exist to be deleted', existingUser);
-    const request = deleteRecord(existingUser);
-    return this.store.request(request);
-  }
-
-  private async create(data: CreateUserData) {
+  private async create(data: CreateUserData, changeset: ImmerChangeset<ValidatedUser>) {
     const user = this.store.createRecord<User>('users', data);
     const request = createRecord(user);
 
@@ -38,15 +29,10 @@ export default class UserService extends Service {
       data: this.store.cache.peek(cacheKeyFor(user)),
     });
 
-    try {
-      const create = await this.store.request(request);
-      return create;
-    } catch (error) {
-      console.error('Error creating user:', error);
-    }
+    await this.store.request(request);
   }
 
-  private update(data: UpdateUserData) {
+  private async update(data: UpdateUserData, changeset: ImmerChangeset<ValidatedUser>) {
     const existingUser = this.store.peekRecord<User>({
       id: data.id,
       type: 'users',
@@ -58,6 +44,6 @@ export default class UserService extends Service {
       data: this.store.cache.peek(cacheKeyFor(existingUser)),
     });
 
-    return this.store.request(request);
+    await this.store.request(request);
   }
 }
