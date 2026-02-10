@@ -20,6 +20,7 @@ import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
 import { Module } from "@libs/users-backend";
+import { Module as TodoModule } from "@libs/todos-backend";
 import type { ModuleInterface } from "@libs/backend-shared";
 
 export type FastifyInstanceType = FastifyInstance<
@@ -55,23 +56,6 @@ export class App {
     });
     fastifyInstance.register(fastifyPassport.default.initialize());
     fastifyInstance.register(fastifyPassport.default.secureSession());
-
-    // fastifyPassport.default.use('local', new PassportJWT({
-    //     secretOrKey: context.configuration.SESSION_KEY,
-    //     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-    // }, async function (jwtPayload, verify) {
-    //     const user = await context.userRepository.getById(jwtPayload.id);
-    //     if (user) {
-    //         verify(null, user);
-    //     } else {
-    //         verify(new Error('User not found'));
-    //     }
-    // }));
-
-    // fastifyPassport.default.registerUserSerializer(serializeUser);
-    // fastifyPassport.default.registerUserDeserializer(async (id) => {
-    //     return context.userRepository.getById(String(id));
-    // })
 
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
@@ -142,11 +126,6 @@ export class App {
       },
     );
 
-    // assignSubscribers(
-    //     context.eventEmitter,
-    //     context
-    // );
-
     const app = new App(fastify, context);
 
     const UserModule = Module.init({
@@ -158,7 +137,15 @@ export class App {
       },
     });
 
-    await app.setupRoutes([UserModule]);
+    const TodosModule = TodoModule.init({
+      fastifyInstance: fastify,
+      em: context.orm.em.fork(),
+      configuration: {
+        jwtSecret: context.configuration.JWT_SECRET,
+      },
+    });
+
+    await app.setupRoutes([UserModule, TodosModule]);
 
     return app;
   }
