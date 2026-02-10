@@ -22,6 +22,10 @@
             "path": "@libs/users-front"
         },
         {
+            "name": "@libs/todos-front",
+            "path": "@libs/todos-front"
+        },
+        {
             "name": "@libs/users-backend",
             "path": "@libs/users-backend"
         },
