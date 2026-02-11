@@ -76,7 +76,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
             @route="dashboard.users"
             class="text-sm text-primary underline text-center mt-2"
           >
-            Back to users
+            {{t "users.forms.user.actions.back"}}
           </LinkTo>
         </div>
       </div>

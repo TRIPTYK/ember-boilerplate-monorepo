@@ -9,11 +9,34 @@ import TpkConfirmModalPrefab from '@triptyk/ember-ui/components/prefabs/tpk-conf
 import { t, type IntlService } from 'ember-intl';
 import EditIcon from '#src/assets/icons/edit.gts';
 import DeleteIcon from '#src/assets/icons/delete.gts';
+import CompletedIcon from '#src/assets/icons/completed.gts';
 import type { TOC } from '@ember/component/template-only';
 import type TodoService from '#src/services/todo.ts';
 import type { UpdateTodoData } from './forms/todo-validation';
 import { tracked } from '@glimmer/tracking';
 import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
+import { hash } from '@ember/helper';
+import type { Todo } from '#src/schemas/todos.ts';
+import TpkCheckboxComponent from '@triptyk/ember-input/components/tpk-checkbox';
+
+interface TodoCheckboxComponentArgs {
+  Args: {
+    row: Todo;
+  },
+  Blocks: {
+    default: [],
+  },
+}
+
+const TodoCheckboxComponent: TOC<TodoCheckboxComponentArgs> = <template>
+  <TpkCheckboxComponent
+    @label="123"
+    @checked={{@row.completed}}
+    as |C|
+  >
+    <C.Input class="checkbox disabled" />
+  </TpkCheckboxComponent>
+</template>;
 
 class TodosTable extends Component<object> {
   @service declare router: RouterService;
@@ -57,6 +80,7 @@ class TodosTable extends Component<object> {
           field: 'completed',
           headerName: this.intl.t('todos.table.headers.completed'),
           sortable: false,
+          component: "todoCheckbox"
         },
       ],
       actionMenu: [
@@ -70,6 +94,16 @@ class TodosTable extends Component<object> {
         name: this.intl.t('todos.table.actions.edit'),
       },
       {
+        icon: <template><CompletedIcon class="size-4" /></template> as TOC<{
+          Element: SVGSVGElement;
+        }>,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        action: async (element: unknown) => {
+          await this.onChangeCompleted(element as UpdateTodoData);
+        },
+        name: this.intl.t('todos.table.actions.changeCompleted'),
+      },
+      {
         icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
           Element: SVGSVGElement;
         }>,
@@ -81,6 +115,11 @@ class TodosTable extends Component<object> {
     ],
     };
   }
+
+  onChangeCompleted = async (element: UpdateTodoData) => {
+    element.completed = !element.completed;
+    await this.todo.update(element);
+  };
 
   onAddTodo = () => {
     this.router.transitionTo('dashboard.todos.create');
@@ -114,7 +153,14 @@ class TodosTable extends Component<object> {
         @onClick={{this.onAddTodo}}
       />
     </div>
-    <TableGenericPrefab @tableParams={{this.tableParams}} />
+    <TableGenericPrefab
+      @tableParams={{this.tableParams}}
+      @columnsComponent={{hash
+        todoCheckbox=(component
+          TodoCheckboxComponent
+        )
+      }}
+    />
     <TpkConfirmModalPrefab
       @onClose={{this.onCloseModal}}
       @onConfirm={{this.onConfirmDelete}}

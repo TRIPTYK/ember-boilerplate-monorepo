@@ -6,7 +6,7 @@ export const createTodoValidationSchema = (intl: IntlService) =>
   object({
     title: string(intl.t('todos.forms.todo.validation.titleRequired')).min(1, intl.t('todos.forms.todo.validation.titleRequired')),
     description: string(intl.t('todos.forms.todo.validation.descriptionRequired')).min(1, intl.t('todos.forms.todo.validation.descriptionRequired')),
-    completed: boolean(intl.t('todos.forms.todo.validation.completedRequired')).optional().nullable(),
+    completed: boolean(intl.t('todos.forms.todo.validation.completedRequired')).optional(),
     id: string().optional().nullable(),
   });
 

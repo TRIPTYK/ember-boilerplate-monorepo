@@ -33,6 +33,7 @@ forms:
       minLength: "Au moins 2 caractères"
     actions:
       submit: "Soumettre"
+      back: "Retour à la liste des utilisateurs"
     messages:
       saveSuccess: "Utilisateur enregistré avec succès."
       deleteSuccess: "Utilisateur supprimé avec succès."

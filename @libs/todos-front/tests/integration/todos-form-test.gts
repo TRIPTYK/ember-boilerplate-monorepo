@@ -1,19 +1,19 @@
 import { describe, expect as hardExpect, vi } from 'vitest';
 import { renderingTest } from 'ember-vitest';
 import { render } from '@ember/test-helpers';
-import { UserChangeset } from '#src/changesets/todo.ts';
-import UsersForm, { pageObject } from '#src/components/forms/todo-form.gts';
+import { TodoChangeset } from '#src/changesets/todo.ts';
+import TodoForm, { pageObject } from '#src/components/forms/todo-form.gts';
 import { initializeTestApp, TestApp } from '../app.ts';
-import type UserService from '#src/services/todo.ts';
 import { stubRouter } from '../utils.ts';
+import type TodoService from '#src/services/todo.ts';
 
 const expect = hardExpect.soft;
 
-vi.mock('#src/services/user.ts', async (importActual) => {
+vi.mock('#src/services/todo.ts', async (importActual) => {
   const actual = await importActual<typeof import('#src/services/todo.ts')>();
   return {
     ...actual,
-    default: class MockUserService extends actual.default {
+    default: class MockTodoService extends actual.default {
       save = vi.fn();
     },
   };
@@ -24,50 +24,49 @@ describe('tpk-form', function () {
   renderingTest.scoped({ app: ({}, use) => use(TestApp) });
 
   renderingTest(
-    'Should call user service when form is valid',
+    'Should call todo service when form is valid',
     async function ({ context }) {
       await initializeTestApp(context.owner, 'en-us');
 
-      const userService = context.owner.lookup('service:user') as UserService;
+      const todoService = context.owner.lookup('service:todo') as TodoService;
       const router = stubRouter(context.owner);
-      const changeset = new UserChangeset({});
+      const changeset = new TodoChangeset({});
 
-      await render(<template><UsersForm @changeset={{changeset}} /></template>);
+      await render(<template><TodoForm @changeset={{changeset}} /></template>);
 
-      await pageObject.firstName('John');
-      await pageObject.lastName('Doe');
-      await pageObject.email('john.doe@example.com');
-      await pageObject.password('password123');
+      await pageObject.title('Test Todo');
+      await pageObject.description('Test Description');
+      await pageObject.completed();
       await pageObject.submit();
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(userService.save).toHaveBeenCalled();
+      expect(todoService.save).toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
+      expect(router.transitionTo).toHaveBeenCalledWith('dashboard.todos');
     }
   );
 
   renderingTest(
-    'Should not call user service when form is invalid',
+    'Should not call todo service when form is invalid',
     async function ({ context }) {
       await initializeTestApp(context.owner, 'en-us');
 
-      const userService = context.owner.lookup('service:user') as UserService;
+      const todoService = context.owner.lookup('service:todo') as TodoService;
       const router = stubRouter(context.owner);
 
       router.transitionTo = vi.fn().mockResolvedValue(undefined);
 
-      const changeset = new UserChangeset({});
+      const changeset = new TodoChangeset({});
 
-      await render(<template><UsersForm @changeset={{changeset}} /></template>);
+      await render(<template><TodoForm @changeset={{changeset}} /></template>);
 
-      await pageObject.firstName('');
-      await pageObject.lastName('');
-      await pageObject.email('john.doe@example.com');
+      await pageObject.title('');
+      await pageObject.description('');
+      await pageObject.completed();
       await pageObject.submit();
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(userService.save).not.toHaveBeenCalled();
+      expect(todoService.save).not.toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(router.transitionTo).not.toHaveBeenCalled();
     }

@@ -1,4 +1,3 @@
-import login from './login.ts';
-import users from './users.ts';
+import todos from './todos.ts';
 
-export default [...login, ...users];
+export default [...todos];

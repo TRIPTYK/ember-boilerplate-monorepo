@@ -1,0 +1,34 @@
+table:
+  confirmModal:
+    question: "Are you sure you want to delete this todo ?"
+  headers:
+    title: "Title"
+    description: "Description"
+    completed: "Completed"
+  actions:
+    addTodo: "Add Todo"
+    changeCompleted: "Change the status of the todo"
+    edit: "Edit"
+    delete: "Delete"
+
+forms:
+  todo:
+    labels:
+      title: "Title"
+      description: "Description"
+      completed: "Completed"
+    validation:
+      titleRequired: "Title is required"
+      descriptionRequired: "Description is required"
+      completed: "Completed is required"
+    actions:
+      submit: "Submit"
+      back: "Back to todos"
+    messages:
+      saveSuccess: "Todo saved successfully."
+      deleteSuccess: "Todo deleted successfully."
+      deleteError: "Error deleting Todo."
+
+pages:
+  list:
+    title: "Todo List"

@@ -1,6 +1,5 @@
 import Application from 'ember-strict-application-resolver';
 import {
-  authRoutes,
   forRouter,
   initialize,
   moduleRegistry,
@@ -10,15 +9,13 @@ import IntlService from 'ember-intl/services/intl';
 import compatModules from '@embroider/virtual/compat-modules';
 import PageTitleService from 'ember-page-title/services/page-title';
 import EmberRouter from '@ember/routing/router';
-import AdaptiveStore from 'ember-simple-auth/session-stores/adaptive';
-import SessionService from 'ember-simple-auth/services/session';
 import setupSession from 'ember-simple-auth/initializers/setup-session';
 import type Owner from '@ember/owner';
 import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
-import UserSchema from '#src/schemas/users.ts';
 import '@warp-drive/ember/install';
 import FlashMessageService from 'ember-cli-flash/services/flash-messages';
+import TodoSchema from '#src/schemas/todos.ts';
 
 class Router extends EmberRouter {
   location = 'none';
@@ -29,7 +26,6 @@ Router.map(function () {
   this.route('dashboard', function () {
     forRouter.call(this);
   });
-  authRoutes.call(this);
 });
 
 export class TestApp extends Application {
@@ -38,8 +34,6 @@ export class TestApp extends Application {
     './router': Router,
     './services/intl': { default: IntlService },
     './services/page-title': { default: PageTitleService },
-    './session-stores/application': { default: AdaptiveStore },
-    './services/session': { default: SessionService },
     './services/flash-message': { default: FlashMessageService },
     ...moduleRegistry(),
     ...inputValidationRegistry(),
@@ -52,11 +46,10 @@ export default class TestStore extends useLegacyStore({
   legacyRequests: true,
   modelFragments: true,
   cache: JSONAPICache,
-  schemas: [UserSchema],
-}) {}
+  schemas: [TodoSchema],
+}) { }
 
 export async function initializeTestApp(owner: Owner, locale: string) {
-  owner.register('session-stores:application', AdaptiveStore);
   owner.register('service:store', TestStore);
   owner.register('service:flash-messages', FlashMessageService);
   owner.register('config:environment', { flashMessageDefaults: {} });

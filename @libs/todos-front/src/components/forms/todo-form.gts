@@ -2,9 +2,9 @@ import Component from '@glimmer/component';
 import z from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
-import type UserService from '#src/services/todo.ts';
-import type { TodoChangeset, UserChangeset } from '#src/changesets/todo.ts';
-import { createUserValidationSchema } from '#src/components/forms/todo-validation.ts';
+import type TodoService from '#src/services/todo.ts';
+import type { TodoChangeset } from '#src/changesets/todo.ts';
+import { createTodoValidationSchema } from '#src/components/forms/todo-validation.ts';
 import type RouterService from '@ember/routing/router-service';
 import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
@@ -17,23 +17,23 @@ interface TodosFormArgs {
 }
 
 export default class TodosForm extends Component<TodosFormArgs> {
-  @service declare user: UserService;
+  @service declare todo: TodoService;
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
 
   get validationSchema() {
-    return createUserValidationSchema(this.intl);
+    return createTodoValidationSchema(this.intl);
   }
 
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createUserValidationSchema>>,
-    c: ImmerChangeset<z.infer<ReturnType<typeof createUserValidationSchema>>>
+    data: z.infer<ReturnType<typeof createTodoValidationSchema>>,
+    c: ImmerChangeset<z.infer<ReturnType<typeof createTodoValidationSchema>>>
   ) => {
-    await this.user.save(c);
-    await this.router.transitionTo('dashboard.users');
+    await this.todo.save(c);
+    await this.router.transitionTo('dashboard.todos');
     this.flashMessages.success(
-      this.intl.t('users.forms.user.messages.saveSuccess')
+      this.intl.t('todos.forms.todo.messages.saveSuccess')
     );
   };
 
@@ -44,39 +44,34 @@ export default class TodosForm extends Component<TodosFormArgs> {
       @changeset={{@changeset}}
       @onSubmit={{this.onSubmit}}
       @validationSchema={{this.validationSchema}}
-      data-test-users-form
+      data-test-todos-form
       as |F|
     >
       <div class="grid grid-cols-12 gap-x-6 gap-y-3 max-w-4xl">
         <F.TpkInputPrefab
-          @label={{t "users.forms.user.labels.firstName"}}
-          @validationField="firstName"
-          class="col-span-12 md:col-span-3"
+          @label={{t "todos.forms.todo.labels.title"}}
+          @validationField="title"
+          class="col-span-12 md:col-span-4"
         />
-        <F.TpkInputPrefab
-          @label={{t "users.forms.user.labels.lastName"}}
-          @validationField="lastName"
-          class="col-span-12 md:col-span-3"
+        <F.TpkTextareaPrefab
+          @label={{t "todos.forms.todo.labels.description"}}
+          @validationField="description"
+          class="col-span-12 md:col-span-5"
         />
-        <F.TpkPasswordPrefab
-          @label={{t "users.forms.user.labels.password"}}
-          @validationField="password"
-          class="col-span-12 md:col-span-3"
-        />
-        <F.TpkEmailPrefab
-          @label={{t "users.forms.user.labels.email"}}
-          @validationField="email"
+        <F.TpkCheckboxPrefab
+          @label={{t "todos.forms.todo.labels.completed"}}
+          @validationField="completed"
           class="col-span-12 md:col-span-3"
         />
         <div class="col-span-12 flex items-center justify-between gap-2">
           <button type="submit" class="btn btn-primary">
-            {{t "users.forms.user.actions.submit"}}
+            {{t "todos.forms.todo.actions.submit"}}
           </button>
           <LinkTo
-            @route="dashboard.users"
+            @route="dashboard.todos"
             class="text-sm text-primary underline text-center mt-2"
           >
-            Back to users
+            {{t "todos.forms.todo.actions.back"}}
           </LinkTo>
         </div>
       </div>
@@ -85,12 +80,9 @@ export default class TodosForm extends Component<TodosFormArgs> {
 }
 
 export const pageObject = create({
-  scope: '[data-test-users-form]',
-  firstName: fillable(
-    '[data-test-tpk-prefab-input-container="firstName"] input'
-  ),
-  lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
-  email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
-  password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
+  scope: '[data-test-todos-form]',
+  title: fillable('[data-test-tpk-prefab-input-container="title"] input'),
+  description: fillable('[data-test-tpk-prefab-textarea-container="description"] textarea'),
+  completed: clickable('[data-test-tpk-prefab-checkbox-container="completed"] input'),
   submit: clickable('button[type="submit"]'),
 });

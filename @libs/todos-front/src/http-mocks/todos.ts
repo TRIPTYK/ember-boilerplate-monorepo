@@ -5,32 +5,32 @@ import { HttpResponse } from 'msw';
 import type { paths } from '@apps/backend';
 import { createOpenApiHttp } from 'openapi-msw';
 
-const mockUsers = [
+const mockTodos = [
   {
     id: '1',
-    type: 'users' as const,
+    type: 'todos' as const,
     attributes: {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
+      title: 'Eat 100 Raffaello',
+      description: 'I need to eat 100 Raffaello to be happy',
+      completed: false,
     },
   },
   {
     id: '2',
-    type: 'users' as const,
+    type: 'todos' as const,
     attributes: {
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane.smith@example.com',
+      title: 'Eat a Durum with Stephane',
+      description: 'Restaurant La Macchina, 18:00',
+      completed: true,
     },
   },
   {
     id: '3',
-    type: 'users' as const,
+    type: 'todos' as const,
     attributes: {
-      firstName: 'Bob Johnson',
-      lastName: 'Johnson',
-      email: 'bob.johnson@example.com',
+      title: 'Call my mom',
+      description: 'I need to call my mom to wish her happy birthday',
+      completed: false,
     },
   },
 ];
@@ -38,51 +38,42 @@ const mockUsers = [
 const http = createOpenApiHttp<paths>();
 
 export default [
-  http.get('/api/v1/users/profile', () => {
-    return HttpResponse.json({
-      data: mockUsers[0]!,
-    });
-  }),
-  http.get('/api/v1/users/{id}', (req) => {
+  http.untyped.get('/api/v1/todos/:id', (req) => {
     const { id } = req.params;
-    const user = mockUsers.find((user) => user.id === id);
-    if (user) {
+    const todo = mockTodos.find((todo) => todo.id === id);
+    if (todo) {
       return HttpResponse.json({
-        data: user,
+        data: todo,
       });
     } else {
       return HttpResponse.json(
         {
           message: 'Not Found',
-          code: 'USER_NOT_FOUND',
+          code: 'TODO_NOT_FOUND',
         },
         { status: 404 }
       );
     }
   }),
-  http.untyped.get('/api/v1/users', ({ request }) => {
+  http.untyped.get('/api/v1/todos', ({ request }) => {
     const url = new URL(request.url);
     const searchQuery = url.searchParams.get('filter[search]');
     const sortParam = url.searchParams.get('sort');
 
-    let results = [...mockUsers];
+    let results = [...mockTodos];
 
-    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      results = results.filter((user) => {
-        const firstName = user.attributes.firstName.toLowerCase();
-        const lastName = user.attributes.lastName.toLowerCase();
-        const email = user.attributes.email.toLowerCase();
+      results = results.filter((todo) => {
+        const title = todo.attributes.title.toLowerCase();
+        const description = todo.attributes.description.toLowerCase();
         return (
-          firstName.includes(query) ||
-          lastName.includes(query) ||
-          email.includes(query)
+          title.includes(query) ||
+          description.includes(query)
         );
       });
     }
 
-    // Apply sort
     if (sortParam) {
       const isDescending = sortParam.startsWith('-');
       const field = isDescending ? sortParam.slice(1) : sortParam;
@@ -92,9 +83,8 @@ export default [
         let bValue: string | undefined;
 
         if (
-          field === 'firstName' ||
-          field === 'lastName' ||
-          field === 'email'
+          field === 'title' ||
+          field === 'description'
         ) {
           aValue = a.attributes[field];
           bValue = b.attributes[field];
@@ -116,33 +106,44 @@ export default [
       },
     });
   }),
-  http.post('/api/v1/users/', async (req) => {
+  http.untyped.post('/api/v1/todos', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
 
     return HttpResponse.json({
       data: {
         id: json.data.lid,
-        type: 'users' as const,
+        type: 'todos' as const,
         attributes: json.data.attributes,
       },
     });
   }),
-  http.patch('/api/v1/users/{id}', async (req) => {
+  http.untyped.patch('/api/v1/todos/:id', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
 
     return HttpResponse.json({
       data: {
         id: json.data.lid,
-        type: 'users' as const,
+        type: 'todos' as const,
         attributes: json.data.attributes,
       },
     });
   }),
-  http.delete('/api/v1/users/{id}', (req) => {
+  http.untyped.put('/api/v1/todos/:id', async (req) => {
+    const json = (await req.request.json()) as Record<string, any>;
+
+    return HttpResponse.json({
+      data: {
+        id: json.data.id,
+        type: 'todos' as const,
+        attributes: json.data.attributes,
+      },
+    });
+  }),
+  http.untyped.delete('/api/v1/todos/:id', (req) => {
     const { id } = req.params;
-    const user = mockUsers.find((user) => user.id === id);
-    if (user) {
-      return HttpResponse.json({ message: 'User deleted successfully', code: 'USER_DELETED_SUCCESSFULLY' }, { status: 200 });
+    const todo = mockTodos.find((todo) => todo.id === id);
+    if (todo) {
+      return HttpResponse.json({ message: 'Todo deleted successfully', code: 'TODO_DELETED_SUCCESSFULLY' }, { status: 200 });
     }
   }),
 ];

@@ -99,6 +99,9 @@
     - Initialisation dans `@apps/front/app/routes/application.gts`
     - Importation des mocks dans `@apps/front/app/routes/application.gts`
     - Injection du router dans `@apps/front/app/routes/router.ts`
+    - Ajout dans les devDependencies de l'application frontend dans `@apps/front/package.json`
+    - Ajout du store "todo" dans `@apps/front/app/services/store.ts`
+    - Ajout du style de la librairie "todo" dans `@apps/front/app/styles/app.css` avec la ligne `@source "../../node_modules/@libs/todos-front";`
 16. Réalisation d'un test d'acceptance dans `@apps/front/tests/acceptance/todo-acceptance-test.gts` pour tester le parcours de création d'une "todo" jusqu'à son affichage dans la liste des "todos".
 17. Réalisation d'un test e2e dans `@apps/e2e/tests/todo-e2e-test.gts` basé sur un user story.
 18. Ingestion d'un Raffaello comme récompense pour ce dur labeur.

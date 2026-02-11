@@ -8,6 +8,7 @@ import { LegacyNetworkHandler } from '@warp-drive/legacy/compat';
 import { setOwner } from '@ember/owner';
 import AuthHandler from '@libs/users-front/handlers/auth';
 import { getOwner } from '@ember/owner';
+import TodoSchema from '@libs/todos-front/schemas/todos';
 
 setBuildURLConfig({
   host: null,
@@ -19,7 +20,7 @@ const legacyStore = useLegacyStore({
   legacyRequests: true,
   modelFragments: true,
   cache: JSONAPICache,
-  schemas: [UserSchema],
+  schemas: [UserSchema, TodoSchema],
   handlers: [],
 });
 
