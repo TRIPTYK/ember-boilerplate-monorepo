@@ -36,6 +36,7 @@
     "@fastify/swagger-ui": "catalog:",
     "@libs/backend-shared": "workspace:*",
     "@libs/users-backend": "workspace:*",
+    "@libs/todos-backend": "workspace:*",
     "@mikro-orm/core": "catalog:",
     "@mikro-orm/postgresql": "catalog:",
     "@mikro-orm/seeder": "catalog:",
