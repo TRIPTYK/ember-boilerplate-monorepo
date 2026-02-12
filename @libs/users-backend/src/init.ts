@@ -5,10 +5,8 @@ import type {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
-import type { LibraryContext } from "./context.js";
-import {
-  type ZodTypeProvider,
-} from "fastify-type-provider-zod";
+import type { AuthLibraryContext, UserLibraryContext } from "./context.js";
+import { type ZodTypeProvider } from "fastify-type-provider-zod";
 import { LoginRoute } from "#src/routes/login.route.js";
 import { RefreshRoute } from "#src/routes/refresh.route.js";
 import { LogoutRoute } from "#src/routes/logout.route.js";
@@ -19,7 +17,9 @@ import { GetRoute } from "#src/routes/get.route.js";
 import { UpdateRoute } from "#src/routes/update.route.js";
 import { DeleteRoute } from "#src/routes/delete.route.js";
 import { UserEntity } from "./entities/user.entity.js";
-import { handleJsonApiErrors, type ModuleInterface, type Route } from "@libs/backend-shared";
+import { type ModuleInterface, type Route } from "@libs/backend-shared";
+import { handleJsonApiErrors } from "@libs/backend-shared";
+import { createJwtAuthMiddleware } from "./index.ts";
 
 export type FastifyInstanceTypeForModule = FastifyInstance<
   RawServerDefault,
@@ -30,9 +30,9 @@ export type FastifyInstanceTypeForModule = FastifyInstance<
 >;
 
 export class AuthModule implements ModuleInterface<FastifyInstanceTypeForModule> {
-  private constructor(private context: LibraryContext) {}
+  private constructor(private context: AuthLibraryContext) {}
 
-  public static init(context: LibraryContext): AuthModule {
+  public static init(context: AuthLibraryContext): AuthModule {
     return new AuthModule(context);
   }
 
@@ -54,6 +54,10 @@ export class AuthModule implements ModuleInterface<FastifyInstanceTypeForModule>
 
     await fastify.register(
       async (f) => {
+        f.setErrorHandler((error, request, reply) => {
+          handleJsonApiErrors(error, request, reply);
+        });
+
         for (const route of authRoutes) {
           route.routeDefinition(f);
         }
@@ -64,9 +68,9 @@ export class AuthModule implements ModuleInterface<FastifyInstanceTypeForModule>
 }
 
 export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule> {
-  private constructor(private context: LibraryContext) {}
+  private constructor(private context: UserLibraryContext) {}
 
-  public static init(context: LibraryContext): UserModule {
+  public static init(context: UserLibraryContext): UserModule {
     return new UserModule(context);
   }
 
@@ -75,10 +79,6 @@ export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule>
 
     await fastify.register(
       async (f) => {
-        f.setErrorHandler((error, request, reply) => {
-          handleJsonApiErrors(error, request, reply);
-        });
-
         const userRoutes: Route<FastifyInstanceTypeForModule>[] = [
           new CreateRoute(repository),
           new ProfileRoute(),
@@ -87,6 +87,17 @@ export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule>
           new UpdateRoute(repository),
           new DeleteRoute(repository),
         ];
+
+        f.setErrorHandler((error, request, reply) => {
+          handleJsonApiErrors(error, request, reply);
+        });
+
+        const jwtAuthMiddleware = createJwtAuthMiddleware(
+          this.context.em,
+          this.context.configuration.jwtSecret,
+        );
+
+        f.addHook("preValidation", jwtAuthMiddleware);
 
         for (const route of userRoutes) {
           route.routeDefinition(f);

@@ -159,10 +159,6 @@ export class App {
         em: this.context.orm.em.fork(),
       }),
       userModule: UserModule.init({
-        configuration: {
-          jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
-          jwtSecret: this.context.configuration.JWT_SECRET,
-        },
         em: this.context.orm.em.fork(),
       }),
       todosModule: TodoModule.init({

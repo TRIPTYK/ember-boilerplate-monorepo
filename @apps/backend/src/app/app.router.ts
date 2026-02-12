@@ -3,6 +3,7 @@ import type { FastifyInstanceType } from "./app.js";
 import { statusRoute } from "./status.route.js";
 import { Module as TodoModule } from "@libs/todos-backend";
 import type { ApplicationContext } from "./application.context.ts";
+import { handleJsonApiErrors } from "@libs/backend-shared";
 
 interface AppRouterOptions {
   authModule: AuthModule;
@@ -34,7 +35,10 @@ export async function appRouter(
       );
 
       fastify.addHook("preValidation", jwtAuthMiddleware);
-
+      
+      fastify.setErrorHandler((error, request, reply) => {
+        handleJsonApiErrors(error, request, reply);
+      });
       await userModule.setupRoutes(fastify);
       await todosModule.setupRoutes(fastify);
     },

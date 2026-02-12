@@ -15,7 +15,7 @@ import { GetRoute } from "#src/routes/get.route.js";
 import { UpdateRoute } from "#src/routes/update.route.js";
 import { DeleteRoute } from "#src/routes/delete.route.js";
 import { TodoEntity } from "./entities/todo.entity.js";
-import { handleJsonApiErrors, type ModuleInterface, type Route } from "@libs/backend-shared";
+import { type ModuleInterface, type Route } from "@libs/backend-shared";
 
 export type FastifyInstanceTypeForModule = FastifyInstance<
   RawServerDefault,
@@ -37,10 +37,6 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
 
     await fastify.register(
       async (f) => {
-        f.setErrorHandler((error, request, reply) => {
-          handleJsonApiErrors(error, request, reply);
-        });
-
         const todoRoutes: Route<FastifyInstanceTypeForModule>[] = [
           new CreateRoute(repository),
           new ListRoute(this.context.em),
