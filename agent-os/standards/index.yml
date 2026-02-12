@@ -31,6 +31,14 @@ frontend:
     description: .gts for templates, .ts for logic-only files
   forms:
     description: Form state management using ImmerChangeset and TpkForm
+  library-exports:
+    description: Required exports from src/index.ts (initialize, moduleRegistry, forRouter)
+  library-integration:
+    description: How to integrate frontend libraries into the main app
+  library-structure:
+    description: Required folder structure and file organization for frontend libraries
+  library-test-setup:
+    description: Test infrastructure setup (TestApp, TestStore, initializeTestApp)
   route-templates:
     description: Route template files colocated with route logic
 
