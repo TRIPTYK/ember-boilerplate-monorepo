@@ -49,7 +49,7 @@ export default class UserService extends Service {
       type: 'users',
     });
     assert('User must exist to be updated', existingUser);
-    const request = updateRecord(existingUser);
+    const request = updateRecord(existingUser, { patch: true });
 
     request.body = JSON.stringify({
       data: this.store.cache.peek(cacheKeyFor(existingUser)),
