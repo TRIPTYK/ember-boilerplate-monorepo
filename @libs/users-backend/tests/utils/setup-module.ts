@@ -1,4 +1,11 @@
-import { entities, Module, UserEntity, RefreshTokenEntity } from "#src/index.js";
+import {
+  entities,
+  UserModule,
+  UserEntity,
+  RefreshTokenEntity,
+  type FastifyInstanceTypeForModule,
+  AuthModule,
+} from "#src/index.js";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -16,8 +23,10 @@ export class TestModule {
   public static JWT_REFRESH_SECRET = "testRefreshSecret";
   public static TEST_USER_ID = "test-user-id";
 
+  declare public fastifyInstance: FastifyInstanceTypeForModule;
+
   private constructor(
-    public module: Module,
+    public module: UserModule,
     private orm: MikroORM,
   ) {}
 
@@ -39,28 +48,34 @@ export class TestModule {
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
-    const module = Module.init({
-      fastifyInstance,
-      em: orm.em.fork(),
+    // Use the same forked em for both modules to share transaction context
+    const sharedEm = orm.em.fork();
+
+    const module = UserModule.init({
+      em: sharedEm,
       configuration: {
-        jwtRefreshSecret: TestModule.JWT_REFRESH_SECRET,
         jwtSecret: TestModule.JWT_SECRET,
+      },
+    });
+    const authModule = AuthModule.init({
+      em: sharedEm,
+      configuration: {
+        jwtSecret: TestModule.JWT_SECRET,
+        jwtRefreshSecret: TestModule.JWT_REFRESH_SECRET,
       },
     });
 
     const testModule = new TestModule(module, orm);
+    testModule.fastifyInstance = fastifyInstance;
 
     await module.setupRoutes(fastifyInstance);
+    await authModule.setupRoutes(fastifyInstance);
 
     return testModule;
   }
 
   get em() {
     return this.module["context"].em;
-  }
-
-  get fastifyInstance() {
-    return this.module["context"].fastifyInstance;
   }
 
   public generateBearerToken(userId: string) {

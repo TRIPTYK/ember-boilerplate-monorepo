@@ -20,20 +20,7 @@ aroundEach(async (runTest) => {
   await module.em.rollback();
 });
 
-test("DeleteRoute deletes user and returns 204", async () => {
-  const response = await module.fastifyInstance.inject({
-    method: "DELETE",
-    url: `/users/${TestModule.TEST_USER_ID}`,
-    headers: {
-      authorization: module.generateBearerToken(TestModule.TEST_USER_ID),
-    },
-  });
-
-  expect(response.statusCode).toBe(204);
-  expect(response.body).toBe("");
-});
-
-test("DeleteRoute returns JSON:API error when deleting another user", async () => {
+test("DeleteRoute deletes another user and returns 204", async () => {
   await module.createUser({
     id: "other-user-id",
     email: "other@test.com",
@@ -50,6 +37,19 @@ test("DeleteRoute returns JSON:API error when deleting another user", async () =
     },
   });
 
+  expect(response.statusCode).toBe(204);
+  expect(response.body).toBe("");
+});
+
+test("DeleteRoute returns JSON:API error when deleting own profile", async () => {
+  const response = await module.fastifyInstance.inject({
+    method: "DELETE",
+    url: `/users/${TestModule.TEST_USER_ID}`,
+    headers: {
+      authorization: module.generateBearerToken(TestModule.TEST_USER_ID),
+    },
+  });
+
   expect(response.statusCode).toBe(403);
   const body = response.json();
   expect(body).toHaveProperty("errors");
@@ -58,7 +58,7 @@ test("DeleteRoute returns JSON:API error when deleting another user", async () =
     status: "403",
     title: "Forbidden",
     code: "FORBIDDEN",
-    detail: "You can only delete your own profile",
+    detail: "You cannot delete your own profile",
   });
 });
 

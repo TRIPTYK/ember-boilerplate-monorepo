@@ -26,11 +26,11 @@ export class DeleteRoute implements Route {
         const { id } = request.params as { id: string };
         const currentUser = request.user!;
 
-        if (currentUser.id !== id) {
+        if (currentUser.id === id) {
           return reply.code(403).send(
             makeJsonApiError(403, "Forbidden", {
               code: "FORBIDDEN",
-              detail: "You can only delete your own profile",
+              detail: "You cannot delete your own profile",
             }),
           );
         }

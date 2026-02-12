@@ -145,6 +145,8 @@ test("RefreshRoute returns JSON:API error when user not found", async () => {
 
   expect(response.statusCode).toBe(401);
   const body = response.json();
+  console.log(body);
+
   expect(body).toHaveProperty("errors");
   expect(body.errors[0]).toMatchObject({
     status: "401",

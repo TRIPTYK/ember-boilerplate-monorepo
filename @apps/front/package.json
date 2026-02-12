@@ -59,6 +59,7 @@
     "@glint/ember-tsc": "~1.1.1",
     "@glint/template": "catalog:",
     "@libs/users-front": "workspace:^",
+    "@libs/todos-front": "workspace:^",
     "@playwright/test": "catalog:",
     "@rollup/plugin-babel": "^6.1.0",
     "@tailwindcss/vite": "catalog:",

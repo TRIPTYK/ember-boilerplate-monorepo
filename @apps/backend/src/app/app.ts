@@ -19,8 +19,8 @@ import packageJson from "../../package.json" with { type: "json" };
 import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
-import { Module } from "@libs/users-backend";
-import type { ModuleInterface } from "@libs/backend-shared";
+import { UserModule, AuthModule } from "@libs/users-backend";
+import { Module as TodoModule } from "@libs/todos-backend";
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -53,23 +53,6 @@ export class App {
     });
     fastifyInstance.register(fastifyPassport.default.initialize());
     fastifyInstance.register(fastifyPassport.default.secureSession());
-
-    // fastifyPassport.default.use('local', new PassportJWT({
-    //     secretOrKey: context.configuration.SESSION_KEY,
-    //     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-    // }, async function (jwtPayload, verify) {
-    //     const user = await context.userRepository.getById(jwtPayload.id);
-    //     if (user) {
-    //         verify(null, user);
-    //     } else {
-    //         verify(new Error('User not found'));
-    //     }
-    // }));
-
-    // fastifyPassport.default.registerUserSerializer(serializeUser);
-    // fastifyPassport.default.registerUserDeserializer(async (id) => {
-    //     return context.userRepository.getById(String(id));
-    // })
 
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
@@ -140,28 +123,14 @@ export class App {
       },
     );
 
-    // assignSubscribers(
-    //     context.eventEmitter,
-    //     context
-    // );
-
     const app = new App(fastify, context);
 
-    const UserModule = Module.init({
-      fastifyInstance: fastify,
-      em: context.orm.em.fork(),
-      configuration: {
-        jwtSecret: context.configuration.JWT_SECRET,
-        jwtRefreshSecret: context.configuration.JWT_REFRESH_SECRET,
-      },
-    });
-
-    await app.setupRoutes([UserModule]);
+    await app.setupRoutes();
 
     return app;
   }
 
-  private async setupRoutes(modules: ModuleInterface[]) {
+  private async setupRoutes() {
     this.fastify.setErrorHandler((error: FastifyError, request, reply) => {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -180,7 +149,22 @@ export class App {
       });
     });
 
-    await appRouter(this.fastify, this.context, modules);
+
+    await appRouter(this.fastify, this.context, {
+      authModule: AuthModule.init({
+        configuration: {
+          jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
+        em: this.context.orm.em.fork(),
+      }),
+      userModule: UserModule.init({
+        em: this.context.orm.em.fork(),
+      }),
+      todosModule: TodoModule.init({
+        em: this.context.orm.em.fork(),
+      }),
+    });
   }
 
   public async start() {

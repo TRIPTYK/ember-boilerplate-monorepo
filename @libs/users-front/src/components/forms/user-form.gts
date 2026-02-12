@@ -10,6 +10,7 @@ import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
 import { LinkTo } from '@ember/routing';
+import type ImmerChangeset from 'ember-immer-changeset';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -26,9 +27,10 @@ export default class UsersForm extends Component<UsersFormArgs> {
   }
 
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createUserValidationSchema>>
+    data: z.infer<ReturnType<typeof createUserValidationSchema>>,
+    c: ImmerChangeset<z.infer<ReturnType<typeof createUserValidationSchema>>>
   ) => {
-    await this.user.save(data);
+    await this.user.save(c);
     await this.router.transitionTo('dashboard.users');
     this.flashMessages.success(
       this.intl.t('users.forms.user.messages.saveSuccess')
@@ -74,7 +76,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
             @route="dashboard.users"
             class="text-sm text-primary underline text-center mt-2"
           >
-            Back to users
+            {{t "users.forms.user.actions.back"}}
           </LinkTo>
         </div>
       </div>
@@ -89,5 +91,6 @@ export const pageObject = create({
   ),
   lastName: fillable('[data-test-tpk-prefab-input-container="lastName"] input'),
   email: fillable('[data-test-tpk-prefab-email-container="email"] input'),
+  password: fillable('[data-test-tpk-prefab-password-container="password"] input'),
   submit: clickable('button[type="submit"]'),
 });

@@ -5,15 +5,16 @@
   "description": "End-to-end tests for the application",
   "type": "module",
   "scripts": {
-    "test": "pnpm run setup && playwright test",
-    "test:ui": "pnpm run setup && playwright test --ui",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
     "test:headed": "pnpm run setup && playwright test --headed",
     "test:debug": "pnpm run setup && playwright test --debug",
-    "setup": "node scripts/setup.ts && pnpm run setup:db",
-    "setup:db": "node scripts/setup-db.ts"
+    "setup": "tsx scripts/setup.ts && pnpm run setup:db",
+    "setup:db": "tsx scripts/setup-db.ts"
   },
   "devDependencies": {
     "@playwright/test": "catalog:",
-    "@types/node": "^25.2.0"
+    "@types/node": "^25.2.0",
+    "tsx": "catalog:"
   }
 }

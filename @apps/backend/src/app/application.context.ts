@@ -10,7 +10,9 @@ export interface ApplicationContext {
   orm: MikroORM;
 }
 
-export async function createApplicationContext(configuration: AppConfiguration) {
+export async function createApplicationContext(
+  configuration: AppConfiguration,
+): Promise<ApplicationContext> {
   return {
     configuration,
     logger: logger({ PRODUCTION_ENV: configuration.PRODUCTION_ENV }),

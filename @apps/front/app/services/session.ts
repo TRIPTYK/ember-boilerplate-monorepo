@@ -8,6 +8,8 @@ export default class MySession extends SessionService {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async handleAuthentication(routeAfterAuthentication: string): Promise<void> {
     await this.currentUser.load();
-    super.handleAuthentication(routeAfterAuthentication);
+    const route =
+      routeAfterAuthentication === 'index' ? 'dashboard' : routeAfterAuthentication;
+    super.handleAuthentication(route);
   }
 }

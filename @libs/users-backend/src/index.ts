@@ -18,5 +18,6 @@ export * from "#src/utils/token-cleanup.utils.js";
 export * from "#src/init.js";
 export * from "#src/utils/jwt.utils.js";
 export * from "#src/utils/auth.utils.js";
+export * from "#src/middlewares/jwt-auth.middleware.ts";
 
 export const entities = [UserEntity, RefreshTokenEntity];

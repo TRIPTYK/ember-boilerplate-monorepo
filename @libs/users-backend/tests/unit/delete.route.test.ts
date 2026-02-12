@@ -28,8 +28,8 @@ describe("DeleteRoute", () => {
       vi.mocked(mockUserRepository.findOne).mockResolvedValue(null);
 
       const mockRequest = {
-        params: { id: "user-id" },
-        user: { id: "user-id" }, // User passes auth (same ID)
+        params: { id: "target-user-id" },
+        user: { id: "current-user-id" }, // Different ID - current user trying to delete another user
       };
 
       const mockReply = {

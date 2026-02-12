@@ -35,6 +35,7 @@ forms:
       minLength: "At least 2 characters"
     actions:
       submit: "Submit"
+      back: "Back to users"
     messages:
       saveSuccess: "User saved successfully."
       deleteSuccess: "User deleted successfully."

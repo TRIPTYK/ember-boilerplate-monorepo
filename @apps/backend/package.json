@@ -9,9 +9,10 @@
   "types": "src/api-types.ts",
   "main": "app.bootstrap.js",
   "scripts": {
-    "dev": "concurrently \"pnpm turbo build:watch --filter '@libs/*'\" \"vite-node --watch --env-file=.env src/app.bootstrap.ts\"",
+    "dev": "concurrently \"pnpm turbo build:watch --filter '@libs/*-backend'\" \"vite-node --watch --env-file=.env src/app.bootstrap.ts\"",
+    "start": "vite-node --env-file=.env src/app.bootstrap.ts",
     "dev:e2e": "vite-node --watch --env-file=.env.e2e src/app.bootstrap.ts",
-    "e2e:setup": "vite-node --env-file=.env.e2e node_modules/@mikro-orm/cli/cli.js schema:fresh --seed E2ESeeder --run",
+    "e2e:setup": "pnpm --env-file=.env.e2e --node-options=--loader=ts-node/esm mikro-orm schema:fresh --seed E2ESeeder --run",
     "test": "pnpm vitest run",
     "build": "pnpm vite build",
     "lint": "pnpm concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
@@ -36,11 +37,11 @@
     "@fastify/swagger-ui": "catalog:",
     "@libs/backend-shared": "workspace:*",
     "@libs/users-backend": "workspace:*",
+    "@libs/todos-backend": "workspace:*",
     "@mikro-orm/core": "catalog:",
     "@mikro-orm/postgresql": "catalog:",
     "@mikro-orm/seeder": "catalog:",
     "@types/nodemailer": "catalog:",
-    "argon2": "catalog:",
     "date-fns": "catalog:",
     "fastify": "catalog:",
     "fastify-type-provider-zod": "catalog:",
@@ -93,9 +94,16 @@
     "tsconfig-paths": "catalog:",
     "type-fest": "catalog:",
     "vite": "8.0.0-beta.11",
-    "vite-node": "^5.3.0",
+    "vite-node": "~5.3.0",
     "vite-plugin-node": "catalog:",
     "vite-tsconfig-paths": "catalog:"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   },
   "volta": {
     "extends": "../../package.json"

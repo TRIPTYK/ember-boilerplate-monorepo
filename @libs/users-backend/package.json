@@ -7,17 +7,7 @@
   "author": "",
   "type": "module",
   "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./*": {
-      "import": "./dist/*.mjs",
-      "types": "./dist/*.d.ts"
-    }
-  },
+  "types": "dist/index.d.mts",
   "scripts": {
     "start": "vite-node --env-file-if-exists=.env src/app.bootstrap.ts",
     "start:production": "vite-node dist/app.bootstrap.js",

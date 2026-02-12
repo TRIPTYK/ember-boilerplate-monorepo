@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "fastify": "catalog:",
+    "fastify-type-provider-zod": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
