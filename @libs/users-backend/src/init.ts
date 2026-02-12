@@ -6,7 +6,7 @@ import type {
   RawServerDefault,
 } from "fastify";
 import type { AuthLibraryContext, UserLibraryContext } from "./context.js";
-import { hasZodFastifySchemaValidationErrors, type ZodTypeProvider } from "fastify-type-provider-zod";
+import { type ZodTypeProvider } from "fastify-type-provider-zod";
 import { LoginRoute } from "#src/routes/login.route.js";
 import { RefreshRoute } from "#src/routes/refresh.route.js";
 import { LogoutRoute } from "#src/routes/logout.route.js";
@@ -79,32 +79,6 @@ export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule>
 
     await fastify.register(
       async (f) => {
-        // Apply JWT authentication middleware to all routes
-        f.addHook("preValidation", async (request, reply) => {
-          await jwtAuthMiddleware(request, reply);
-        });
-
-        // Handle validation errors globally for all user routes
-        f.setErrorHandler((error, request, reply) => {
-          console.log(error);
-
-          if (hasZodFastifySchemaValidationErrors(error)) {
-            return reply.status(400).send({
-              errors: error.validation.map((issue) => ({
-                status: "400",
-                title: "Validation Error",
-                detail: issue.message,
-                source: {
-                  pointer: `/${issue.instancePath.replace(/^\./, "").replace(/\./g, "/")}`,
-                },
-              })),
-            });
-          }
-
-          // Re-throw other errors to be handled by the parent error handler
-          throw error;
-        });
-
         const userRoutes: Route<FastifyInstanceTypeForModule>[] = [
           new CreateRoute(repository),
           new ProfileRoute(),
