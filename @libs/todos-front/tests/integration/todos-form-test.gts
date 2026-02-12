@@ -26,7 +26,7 @@ describe('tpk-form', function () {
   renderingTest(
     'Should call todo service when form is valid',
     async function ({ context }) {
-      await initializeTestApp(context.owner, 'en-us');
+      initializeTestApp(context.owner, 'en-us');
 
       const todoService = context.owner.lookup('service:todo') as TodoService;
       const router = stubRouter(context.owner);
@@ -49,7 +49,7 @@ describe('tpk-form', function () {
   renderingTest(
     'Should not call todo service when form is invalid',
     async function ({ context }) {
-      await initializeTestApp(context.owner, 'en-us');
+      initializeTestApp(context.owner, 'en-us');
 
       const todoService = context.owner.lookup('service:todo') as TodoService;
       const router = stubRouter(context.owner);

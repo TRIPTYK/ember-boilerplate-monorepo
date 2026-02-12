@@ -1,9 +1,5 @@
 import Application from 'ember-strict-application-resolver';
-import {
-  forRouter,
-  initialize,
-  moduleRegistry,
-} from '#src/index.js';
+import { forRouter, initialize, moduleRegistry } from '#src/index.js';
 import { moduleRegistry as inputValidationRegistry } from '@triptyk/ember-input-validation';
 import IntlService from 'ember-intl/services/intl';
 import compatModules from '@embroider/virtual/compat-modules';
@@ -47,9 +43,9 @@ export default class TestStore extends useLegacyStore({
   modelFragments: true,
   cache: JSONAPICache,
   schemas: [TodoSchema],
-}) { }
+}) {}
 
-export async function initializeTestApp(owner: Owner, locale: string) {
+export function initializeTestApp(owner: Owner, locale: string) {
   owner.register('service:store', TestStore);
   owner.register('service:flash-messages', FlashMessageService);
   owner.register('config:environment', { flashMessageDefaults: {} });
@@ -61,5 +57,5 @@ export async function initializeTestApp(owner: Owner, locale: string) {
   intl.setLocale(locale);
   intl.setOnMissingTranslation((key) => `t:${key}`);
   setupSession(owner);
-  await initialize(owner);
+  initialize(owner);
 }

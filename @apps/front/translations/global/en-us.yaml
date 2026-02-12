@@ -1,12 +1,12 @@
-search: "Search"
-yes: "Yes"
-no: "No"
-previous: "Previous"
-next: "Next"
-missing: "No results"
-on: "On"
-results: "Results"
-results_by_page: "Results per page"
-theme: "Theme"
-confirm: "Confirm"
-cancel: "Cancel"
+search: 'Search'
+yes: 'Yes'
+no: 'No'
+previous: 'Previous'
+next: 'Next'
+missing: 'No results'
+on: 'On'
+results: 'Results'
+results_by_page: 'Results per page'
+theme: 'Theme'
+confirm: 'Confirm'
+cancel: 'Cancel'

@@ -6,9 +6,7 @@ import type {
   RawServerDefault,
 } from "fastify";
 import type { LibraryContext } from "./context.js";
-import {
-  type ZodTypeProvider,
-} from "fastify-type-provider-zod";
+import { type ZodTypeProvider } from "fastify-type-provider-zod";
 import { CreateRoute } from "#src/routes/create.route.js";
 import { ListRoute } from "#src/routes/list.route.js";
 import { GetRoute } from "#src/routes/get.route.js";

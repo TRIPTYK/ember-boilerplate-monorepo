@@ -1,4 +1,4 @@
 sidebar:
-  dashboard: "Dashboard"
-  users: "Utilisateurs"
-  todos: "Tâches"
+  dashboard: 'Dashboard'
+  users: 'Utilisateurs'
+  todos: 'Tâches'

@@ -45,7 +45,7 @@ describe('Service | Todo | Unit', () => {
   test('if todo does not already exists in store, it creates it with a POST request', async ({
     context,
   }) => {
-    await initializeTestApp(context.owner, 'en-us');
+    initializeTestApp(context.owner, 'en-us');
     const todoService = context.owner.lookup('service:todo') as TodoService;
     const changeset = new TodoChangeset({
       title: 'Test Todo',
@@ -58,7 +58,7 @@ describe('Service | Todo | Unit', () => {
   test('if todo already exists in store, it updates it with a PATCH request', async ({
     context,
   }) => {
-    await initializeTestApp(context.owner, 'en-us');
+    initializeTestApp(context.owner, 'en-us');
     const todoService = context.owner.lookup('service:todo') as TodoService;
     const store = context.owner.lookup('service:store') as Store;
     const data = {
@@ -66,7 +66,7 @@ describe('Service | Todo | Unit', () => {
       title: 'Test Todo',
       description: 'Test Description',
       completed: false,
-    }
+    };
     store.createRecord('todos', data);
 
     const changeset = new TodoChangeset(data);

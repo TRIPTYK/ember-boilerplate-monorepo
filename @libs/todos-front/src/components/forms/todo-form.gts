@@ -82,7 +82,11 @@ export default class TodosForm extends Component<TodosFormArgs> {
 export const pageObject = create({
   scope: '[data-test-todos-form]',
   title: fillable('[data-test-tpk-prefab-input-container="title"] input'),
-  description: fillable('[data-test-tpk-prefab-textarea-container="description"] textarea'),
-  completed: clickable('[data-test-tpk-prefab-checkbox-container="completed"] input'),
+  description: fillable(
+    '[data-test-tpk-prefab-textarea-container="description"] textarea'
+  ),
+  completed: clickable(
+    '[data-test-tpk-prefab-checkbox-container="completed"] input'
+  ),
   submit: clickable('button[type="submit"]'),
 });
