@@ -6,7 +6,7 @@ export async function getTestContext() {
     DEBUG: true,
     PRODUCTION_ENV: false,
     PORT: 8001,
-    DATABASE_URI: "sqlite://:memory:/:memory:",
+    DATABASE_URI: process.env.TEST_DATABASE_URL ?? '',
     SERVER_URL: "http://localhost:8001",
     SEED: "test",
     SESSION_KEY: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
