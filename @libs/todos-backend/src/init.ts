@@ -15,7 +15,8 @@ import { GetRoute } from "#src/routes/get.route.js";
 import { UpdateRoute } from "#src/routes/update.route.js";
 import { DeleteRoute } from "#src/routes/delete.route.js";
 import { TodoEntity } from "./entities/todo.entity.js";
-import { type ModuleInterface, type Route } from "@libs/backend-shared";
+import { handleJsonApiErrors, type ModuleInterface, type Route } from "@libs/backend-shared";
+import { createJwtAuthMiddleware } from "@libs/users-backend";
 
 export type FastifyInstanceTypeForModule = FastifyInstance<
   RawServerDefault,
@@ -44,6 +45,17 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
           new UpdateRoute(repository),
           new DeleteRoute(repository),
         ];
+
+        const jwtAuthMiddleware = createJwtAuthMiddleware(
+          this.context.em,
+          this.context.configuration.jwtSecret,
+        );
+
+        f.setErrorHandler((error, request, reply) => {
+          handleJsonApiErrors(error, request, reply);
+        });
+
+        f.addHook("preValidation", jwtAuthMiddleware);
 
         for (const route of todoRoutes) {
           route.routeDefinition(f);

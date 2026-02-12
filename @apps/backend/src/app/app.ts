@@ -150,7 +150,7 @@ export class App {
     });
 
 
-    await appRouter(this.fastify, this.context, {
+    await appRouter(this.fastify, {
       authModule: AuthModule.init({
         configuration: {
           jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
@@ -160,9 +160,15 @@ export class App {
       }),
       userModule: UserModule.init({
         em: this.context.orm.em.fork(),
+        configuration: {
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        }
       }),
       todosModule: TodoModule.init({
         em: this.context.orm.em.fork(),
+        configuration: {
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        }
       }),
     });
   }

@@ -1,4 +1,5 @@
 import { entities as todoEntities, Module, TodoEntity } from "#src/index.js";
+import { entities as userEntities } from "@libs/users-backend";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -27,7 +28,7 @@ export class TestModule {
     }
 
     const orm = await MikroORM.init({
-      entities: [ ...todoEntities],
+      entities: [...todoEntities, ...userEntities],
       clientUrl: connectionUrl,
       driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
     });
