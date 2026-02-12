@@ -22,16 +22,16 @@
             "path": "@libs/users-front"
         },
         {
+            "name": "@libs/users-backend",
+            "path": "@libs/users-backend"
+        },
+        {
             "name": "@libs/todos-front",
             "path": "@libs/todos-front"
         },
         {
             "name": "@libs/todos-backend",
             "path": "@libs/todos-backend"
-        },
-        {
-            "name": "@libs/users-backend",
-            "path": "@libs/users-backend"
         },
         {
             "name": "@libs/repo-utils",

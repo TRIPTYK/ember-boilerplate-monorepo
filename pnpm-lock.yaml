@@ -939,6 +939,12 @@ importers:
 
   '@libs/todos-backend':
     dependencies:
+      '@libs/backend-shared':
+        specifier: workspace:*
+        version: link:../backend-shared
+      '@libs/users-backend':
+        specifier: workspace:*
+        version: link:../users-backend
       '@mikro-orm/core':
         specifier: 'catalog:'
         version: 6.6.6
@@ -958,15 +964,9 @@ importers:
         specifier: ^4.0.0
         version: 4.3.6
     devDependencies:
-      '@libs/backend-shared':
-        specifier: workspace:*
-        version: link:../backend-shared
       '@libs/repo-utils':
         specifier: workspace:*
         version: link:../repo-utils
-      '@libs/users-backend':
-        specifier: workspace:*
-        version: link:../users-backend
       '@ngneat/falso':
         specifier: 'catalog:'
         version: 8.0.2

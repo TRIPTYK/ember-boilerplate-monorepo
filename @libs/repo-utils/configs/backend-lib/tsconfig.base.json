@@ -14,6 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "emitDecoratorMetadata": true,
+    "inlineSourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
@@ -23,7 +24,6 @@
     "outDir": "dist",
     "verbatimModuleSyntax": true,
     "forceConsistentCasingInFileNames": true,
-    "sourceMap": true,
     "inlineSources": true,
     "types": [
       "vitest/importMeta",

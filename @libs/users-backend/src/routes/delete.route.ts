@@ -5,7 +5,7 @@ import type { UserEntityType } from "#src/entities/user.entity.js";
 import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
 
 export class DeleteRoute implements Route {
-  public constructor(private userRepository: EntityRepository<UserEntityType>) { }
+  public constructor(private userRepository: EntityRepository<UserEntityType>) {}
 
   public routeDefinition(f: FastifyInstanceTypeForModule) {
     return f.delete(

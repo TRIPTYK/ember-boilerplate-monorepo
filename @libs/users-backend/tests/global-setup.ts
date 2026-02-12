@@ -21,7 +21,7 @@ export async function setup() {
     driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
   });
 
-  await orm.schema.refresh();
+  await orm.schema.refreshDatabase();
 
   const hashedPassword = await hash("testpassword");
   await orm.em.getRepository(UserEntity).insert({

@@ -1,8 +1,13 @@
 import type { EntityManager } from "@mikro-orm/core";
-import type { FastifyInstanceTypeForModule } from "./init.js";
 
-export interface LibraryContext {
-  fastifyInstance: FastifyInstanceTypeForModule;
+export interface UserLibraryContext {
+  em: EntityManager;
+  configuration: {
+    jwtSecret: string;
+  };
+}
+
+export interface AuthLibraryContext {
   em: EntityManager;
   configuration: {
     jwtRefreshSecret: string;
