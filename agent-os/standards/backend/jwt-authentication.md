@@ -16,7 +16,7 @@ const { accessToken, refreshToken } = generateTokens(
 
 **Token expiry:**
 - Access token: 15 minutes
-- Refresh token: 7 days (not currently used)
+- Refresh token: 7 days (stored as SHA-256 hash, supports rotation and theft detection)
 
 **Payload structure:**
 ```typescript

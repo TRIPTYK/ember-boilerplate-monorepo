@@ -1,26 +1,32 @@
 # Agent OS Standards Index
 
 backend:
+  app-wiring:
+    description: Steps to register a new module in @apps/backend (entities, init, router, seeder)
   application-context:
     description: Top-level app container for config, logger, ORM
+  barrel-exports:
+    description: index.ts barrel re-exports and entities array for MikroORM registration
   configuration:
     description: Environment variable validation using Zod schemas
+  entity-definitions:
+    description: MikroORM defineEntity API, inferred types, ISO string dates
   error-format:
-    description: Consistent error response structure with code, message, status
+    description: JSON:API error format via makeJsonApiError and handleJsonApiErrors
   json-api-serialization:
-    description: JSON:API response format for Ember frontend compatibility
+    description: Manual serializer functions with Zod schemas for type-safe JSON:API responses
   jwt-authentication:
     description: JWT tokens, generation, verification middleware, and auth flow
-  mikro-orm-patterns:
-    description: Runtime entity definitions with defineEntity() and em.flush()
-  module-interface:
-    description: ModuleInterface pattern for route registration with em.fork()
+  library-context:
+    description: LibraryContext interface in context.ts — em + configuration, no Fastify instance
+  module-system:
+    description: Class-based module pattern with static init(), forked EntityManager, and setupRoutes()
+  naming-conventions:
+    description: File suffixes, class/type names, #src imports, variable conventions
   password-hashing:
     description: Argon2 password hashing utilities
-  route-classes:
-    description: Class-based routes with constructor-injected dependencies
-  route-schemas:
-    description: Inline Zod schema validation for request/response with colocation
+  route-structure:
+    description: Class-based routes with Route interface, DI via constructor, array registration
   scoped-middleware:
     description: Fastify register() callbacks for scoped auth middleware
 
@@ -67,6 +73,8 @@ global:
     description: Run lint globally and tests on modified packages after implementation
 
 testing:
+  backend-integration:
+    description: Testcontainers PostgreSQL, TestModule pattern, transaction rollback isolation
   e2e-playwright:
     description: Playwright E2E tests with role-based selectors
   msw-mocking:
