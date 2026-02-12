@@ -27,7 +27,7 @@
 
 ## Backend
 
-1. Création du package de la librairie dans le dossier `@libs` avec comme nom: `@libs/todo-backend`
+1. Création du package de la librairie dans le dossier `@libs` avec comme nom: `@libs/todos-backend`
 2. Mettre en place la structure de base d'une lib avec les dossiers/fichiers suivants:
   - src/
     - index.ts
@@ -46,10 +46,7 @@
     |> exporte le type `FastifyInstanceTypeForModule` (instance Fastify typée avec ZodTypeProvider)
     - context.ts
 
-    |> contient l'interface `LibraryContext` qui définit les dépendances du module (fastifyInstance, em, configuration)
-    - router.ts
-
-    |> contient la fonction utilitaire `moduleRouter(fastifyInstance, routes)` qui enregistre un tableau de routes
+    |> contient l'interface `LibraryContext` qui définit les dépendances du module (em, configuration)
     - types.ts
 
     |> contient les augmentations de types Fastify (`declare module "fastify"`) si nécessaire
@@ -80,7 +77,7 @@
 
     |> un middleware est une fonction factory qui retourne un hook `preValidation`
     - utils/
-
+  
     |> les fonctions utilitaires de la librairie (hashing, JWT, etc.)
   - tests/
     - integration/
@@ -97,7 +94,7 @@
 
     |> contient `setup-module.ts` avec la classe `TestModule` qui initialise Fastify + le Module + la DB de test
 
-    |> `TestModule` fournit des helpers: `generateBearerToken()`, `createUser()`, `close()`, etc.
+    |> `TestModule` fournit des helpers: `generateBearerToken(userId)`, `createTodo(data)`, `close()`, etc.
 
     global-setup.ts
 
@@ -109,7 +106,7 @@
 
   package.json
 
-  |> `name`: `@libs/todo-backend`
+  |> `name`: `@libs/todos-backend`
 
   |> `type`: `module`
 
@@ -139,7 +136,9 @@
    - Les champs sensibles ou internes ne doivent pas apparaitre dans le schéma sérialisé
 
 5. Création du context de la librairie dans [src/context.ts](../@libs/todos-backend/src/context.ts)
-   - Interface `LibraryContext` avec: `fastifyInstance`, `em` (EntityManager), `configuration` (contient les éventuels secrets/config spécifiques au module)
+   - Interface `LibraryContext` avec: `em` (EntityManager), `configuration` (contient les éventuels secrets/config spécifiques au module, ex: `jwtSecret`)
+   - Le contexte contient tout ce dont la librairie a besoin pour fonctionner, et est passé à la méthode `Module.init(context)`
+   - Note: l'instance Fastify n'est PAS incluse dans le context, elle est passée à `setupRoutes(fastify)` lors de l'enregistrement
 
 6. Création de la classe `Module` dans [src/init.ts](../@libs/todos-backend/src/init.ts)
    - Implémente `ModuleInterface<FastifyInstanceTypeForModule>`
@@ -180,10 +179,11 @@
 
 11. Création du `TestModule` dans [tests/utils/setup-module.ts](../@libs/todos-backend/tests/utils/setup-module.ts)
     - Méthode statique `TestModule.init()` qui:
-      - Crée une connexion MikroORM vers la DB de test
+      - Crée une connexion MikroORM vers la DB de test via `process.env.TEST_DATABASE_URL`
       - Initialise une instance Fastify avec `ZodTypeProvider`, `validatorCompiler`, `serializerCompiler`
       - Crée et initialise le `Module` avec `setupRoutes()`
-    - Expose: `em`, `fastifyInstance`, `generateBearerToken()`, `createUser()`, `close()`
+    - Expose: `em`, `fastifyInstance`, `generateBearerToken(userId)`, `createTodo(data)`, `close()`
+    - Constantes statiques: `JWT_SECRET`, `TEST_USER_ID` (correspond au user seedé dans `global-setup.ts`)
     - Pattern d'isolation: `aroundEach` avec `em.begin()` / `em.rollback()`
 
 12. Création des tests d'intégration pour chaque route CRUD:
@@ -198,27 +198,30 @@
 13. Liaison de la librairie avec l'application backend
     - Enregistrement des entités dans `@apps/backend/src/app/database.connection.ts`:
       ```typescript
-      import { TodoEntity } from "@libs/todo-backend";
+      import { TodoEntity } from "@libs/todos-backend";
       // Ajouter TodoEntity au tableau entities de defineConfig
       ```
     - Initialisation du module dans `@apps/backend/src/app/app.ts`:
       ```typescript
-      import { Module as TodoModule } from "@libs/todo-backend";
+      import { Module as TodoModule } from "@libs/todos-backend";
 
-      const todoModule = TodoModule.init({
-        fastifyInstance: fastify,
+      const todosModule = TodoModule.init({
         em: context.orm.em.fork(),
-        configuration: { /* config spécifique si nécessaire */ },
+        configuration: {
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
       });
-
-      await app.setupRoutes([UserModule, todoModule]);
+      ```
+    - Enregistrement des routes via `appRouter` dans `@apps/backend/src/app/app.router.ts`:
+      ```typescript
+      await todosModule.setupRoutes(fastify);
       ```
     - Mise à jour du seeder de développement dans `@apps/backend/src/seeders/development.seeder.ts` si nécessaire
 
-14. Création de la configuration MikroORM locale (optionnel, pour les migrations en dev) dans `@libs/todo-backend/src/mikro-orm.config.ts`
+14. Création de la configuration MikroORM locale (optionnel, pour les migrations en dev) dans `@libs/todos-backend/src/mikro-orm.config.ts`
 
 15. Vérification que les tests passent:
-    - `pnpm test` dans `@libs/todo-backend` (unit + integration)
+    - `pnpm test` dans `@libs/todos-backend` (unit + integration)
     - `pnpm lint` pour la vérification du code (oxlint + oxfmt)
 
 16. Ingestion d'un Raffaello comme récompense pour ce dur labeur.
