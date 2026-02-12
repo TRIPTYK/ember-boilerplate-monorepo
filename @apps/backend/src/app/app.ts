@@ -19,10 +19,8 @@ import packageJson from "../../package.json" with { type: "json" };
 import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
-import { Module } from "@libs/users-backend";
+import { UserModule, AuthModule } from "@libs/users-backend";
 import { Module as TodoModule } from "@libs/todos-backend";
-import type { ModuleInterface } from "@libs/backend-shared";
-import { createJwtAuthMiddleware } from '@libs/users-backend';
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -44,13 +42,11 @@ export class App {
       loggerInstance,
     });
 
-
     fastifyInstance.addContentTypeParser(
       "application/vnd.api+json",
       // @ts-expect-error
-      fastifyInstance.getDefaultJsonParser('ignore', 'ignore')
-    )
-
+      fastifyInstance.getDefaultJsonParser("ignore", "ignore"),
+    );
 
     fastifyInstance.register(fastifySecureSession, {
       key: Buffer.from(context.configuration.SESSION_KEY, "hex"),
@@ -129,29 +125,12 @@ export class App {
 
     const app = new App(fastify, context);
 
-    const UserModule = Module.init({
-      fastifyInstance: fastify,
-      em: context.orm.em.fork(),
-      configuration: {
-        jwtSecret: context.configuration.JWT_SECRET,
-        jwtRefreshSecret: context.configuration.JWT_REFRESH_SECRET,
-      },
-    });
-
-    const TodosModule = TodoModule.init({
-      fastifyInstance: fastify,
-      em: context.orm.em.fork(),
-      configuration: {
-        jwtSecret: context.configuration.JWT_SECRET,
-      },
-    });
-
-    await app.setupRoutes([UserModule, TodosModule]);
+    await app.setupRoutes();
 
     return app;
   }
 
-  private async setupRoutes(modules: ModuleInterface[]) {
+  private async setupRoutes() {
     this.fastify.setErrorHandler((error: FastifyError, request, reply) => {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -162,14 +141,6 @@ export class App {
       });
     });
 
-    const jwtAuthMiddleware = createJwtAuthMiddleware(
-      this.context.orm.em,
-      this.context.configuration.JWT_REFRESH_SECRET,
-    );
-
-    this.fastify.addHook("preValidation", jwtAuthMiddleware);
-
-
     this.fastify.setNotFoundHandler((_request, reply) => {
       reply.send({
         message: "Not found",
@@ -178,7 +149,26 @@ export class App {
       });
     });
 
-    await appRouter(this.fastify, this.context, modules);
+
+    await appRouter(this.fastify, this.context, {
+      authModule: AuthModule.init({
+        configuration: {
+          jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
+        em: this.context.orm.em.fork(),
+      }),
+      userModule: UserModule.init({
+        configuration: {
+          jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
+        em: this.context.orm.em.fork(),
+      }),
+      todosModule: TodoModule.init({
+        em: this.context.orm.em.fork(),
+      }),
+    });
   }
 
   public async start() {

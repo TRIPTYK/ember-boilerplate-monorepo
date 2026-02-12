@@ -29,16 +29,14 @@ export type FastifyInstanceTypeForModule = FastifyInstance<
   ZodTypeProvider
 >;
 
-export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
+export class AuthModule implements ModuleInterface<FastifyInstanceTypeForModule> {
   private constructor(private context: LibraryContext) {}
 
-  public static init(context: LibraryContext): Module {
-    return new Module(context);
+  public static init(context: LibraryContext): AuthModule {
+    return new AuthModule(context);
   }
 
   public async setupRoutes(fastify: FastifyInstanceTypeForModule): Promise<void> {
-    const repository = this.context.em.getRepository(UserEntity);
-
     const authRoutes: Route<FastifyInstanceTypeForModule>[] = [
       new LoginRoute(
         this.context.em.getRepository(UserEntity),
@@ -62,8 +60,19 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
       },
       { prefix: "/auth" },
     );
+  }
+}
 
-    // User CRUD routes (under /users prefix)
+export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule> {
+  private constructor(private context: LibraryContext) {}
+
+  public static init(context: LibraryContext): UserModule {
+    return new UserModule(context);
+  }
+
+  public async setupRoutes(fastify: FastifyInstanceTypeForModule): Promise<void> {
+    const repository = this.context.em.getRepository(UserEntity);
+
     await fastify.register(
       async (f) => {
         f.setErrorHandler((error, request, reply) => {

@@ -1,4 +1,4 @@
-import { entities, Module, UserEntity, RefreshTokenEntity } from "#src/index.js";
+import { entities, UserModule, UserEntity, RefreshTokenEntity } from "#src/index.js";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -17,7 +17,7 @@ export class TestModule {
   public static TEST_USER_ID = "test-user-id";
 
   private constructor(
-    public module: Module,
+    public module: UserModule,
     private orm: MikroORM,
   ) {}
 
@@ -39,7 +39,7 @@ export class TestModule {
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
-    const module = Module.init({
+    const module = UserModule.init({
       fastifyInstance,
       em: orm.em.fork(),
       configuration: {
