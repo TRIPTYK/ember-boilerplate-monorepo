@@ -36,9 +36,9 @@ export default class UserService extends Service {
     return this.store.request(request);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async create(
     data: CreateUserData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedUser>
   ) {
     const user = this.store.createRecord<User>('users', data);
@@ -51,9 +51,9 @@ export default class UserService extends Service {
     await this.store.request(request);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async update(
     data: UpdateUserData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedUser>
   ) {
     const existingUser = this.store.peekRecord<User>({

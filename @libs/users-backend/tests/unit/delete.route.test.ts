@@ -7,6 +7,7 @@ describe("DeleteRoute", () => {
   let deleteRoute: DeleteRoute;
   let mockUserRepository: EntityRepository<UserEntityType>;
   let mockEm: EntityManager;
+  let mockFindOne: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     mockEm = {
@@ -14,8 +15,9 @@ describe("DeleteRoute", () => {
       flush: vi.fn(),
     } as unknown as EntityManager;
 
+    mockFindOne = vi.fn();
     mockUserRepository = {
-      findOne: vi.fn(),
+      findOne: mockFindOne,
       getEntityManager: vi.fn().mockReturnValue(mockEm),
     } as unknown as EntityRepository<UserEntityType>;
 
@@ -25,7 +27,7 @@ describe("DeleteRoute", () => {
   describe("404 when user not found (defensive check)", () => {
     it("should return 404 when user passes auth but is not found in database", async () => {
       // User exists for auth middleware but findOne returns null (deleted between auth and handler)
-      vi.mocked(mockUserRepository.findOne).mockResolvedValue(null);
+      mockFindOne.mockResolvedValue(null);
 
       const mockRequest = {
         params: { id: "target-user-id" },
@@ -38,11 +40,12 @@ describe("DeleteRoute", () => {
       };
 
       const mockFastify = {
-        delete: vi.fn((path, options, handler) => {
-          return handler(mockRequest, mockReply);
+        delete: vi.fn(async (path, options, handler) => {
+          await handler(mockRequest, mockReply);
         }),
       };
 
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await deleteRoute.routeDefinition(mockFastify as any);
 
       expect(mockReply.code).toHaveBeenCalledWith(404);
