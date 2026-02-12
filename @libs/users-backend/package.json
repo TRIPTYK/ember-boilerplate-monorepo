@@ -8,16 +8,6 @@
   "type": "module",
   "main": "dist/index.mjs",
   "types": "dist/index.d.mts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.mts"
-    },
-    "./*": {
-      "import": "./dist/*.mjs",
-      "types": "./dist/*.d.mts"
-    }
-  },
   "scripts": {
     "start": "vite-node --env-file-if-exists=.env src/app.bootstrap.ts",
     "start:production": "vite-node dist/app.bootstrap.js",

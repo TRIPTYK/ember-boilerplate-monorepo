@@ -7,7 +7,6 @@ import type {
 } from "fastify";
 import type { LibraryContext } from "./context.js";
 import {
-  hasZodFastifySchemaValidationErrors,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import { CreateRoute } from "#src/routes/create.route.js";
@@ -17,7 +16,6 @@ import { UpdateRoute } from "#src/routes/update.route.js";
 import { DeleteRoute } from "#src/routes/delete.route.js";
 import { TodoEntity } from "./entities/todo.entity.js";
 import { handleJsonApiErrors, type ModuleInterface, type Route } from "@libs/backend-shared";
-import { createJwtAuthMiddleware } from "@libs/users-backend";
 
 export type FastifyInstanceTypeForModule = FastifyInstance<
   RawServerDefault,
@@ -37,17 +35,8 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
   public async setupRoutes(fastify: FastifyInstanceTypeForModule): Promise<void> {
     const repository = this.context.em.getRepository(TodoEntity);
 
-    const jwtAuthMiddleware = createJwtAuthMiddleware(
-      this.context.em,
-      this.context.configuration.jwtSecret,
-    );
-
     await fastify.register(
       async (f) => {
-        f.addHook("preValidation", async (request, reply) => {
-          await jwtAuthMiddleware(request, reply);
-        });
-
         f.setErrorHandler((error, request, reply) => {
           handleJsonApiErrors(error, request, reply);
         });

@@ -1,9 +1,7 @@
 import { entities as todoEntities } from "#src/index.js";
-import { entities as userEntities, UserEntity } from "@libs/users-backend";
+// import { entities as userEntities, UserEntity } from "@libs/users-backend";
 import { MikroORM } from "@mikro-orm/postgresql";
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
-import { hash } from "argon2";
-import { TestModule } from "./utils/setup-module.js";
 
 let container: StartedPostgreSqlContainer;
 
@@ -17,20 +15,20 @@ export async function setup() {
   process.env.TEST_DATABASE_URL = container.getConnectionUri();
 
   const orm = await MikroORM.init({
-    entities: [...userEntities, ...todoEntities],
+    entities: [...todoEntities],
     clientUrl: process.env.TEST_DATABASE_URL,
   });
 
   await orm.schema.refreshDatabase();
 
-  const hashedPassword = await hash("testpassword");
-  await orm.em.getRepository(UserEntity).insert({
-    id: TestModule.TEST_USER_ID,
-    email: "a@test.com",
-    firstName: "Test",
-    lastName: "User",
-    password: hashedPassword,
-  });
+  // const hashedPassword = await hash("testpassword");
+  // await orm.em.getRepository(UserEntity).insert({
+  //   id: TestModule.TEST_USER_ID,
+  //   email: "a@test.com",
+  //   firstName: "Test",
+  //   lastName: "User",
+  //   password: hashedPassword,
+  // });
 
   await orm.close();
 }

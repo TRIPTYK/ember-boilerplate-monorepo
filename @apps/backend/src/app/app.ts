@@ -22,6 +22,7 @@ import { logger } from "./logger.js";
 import { Module } from "@libs/users-backend";
 import { Module as TodoModule } from "@libs/todos-backend";
 import type { ModuleInterface } from "@libs/backend-shared";
+import { createJwtAuthMiddleware } from '@libs/users-backend';
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -160,6 +161,14 @@ export class App {
         status: error.statusCode ?? 500,
       });
     });
+
+    const jwtAuthMiddleware = createJwtAuthMiddleware(
+      this.context.orm.em,
+      this.context.configuration.JWT_REFRESH_SECRET,
+    );
+
+    this.fastify.addHook("preValidation", jwtAuthMiddleware);
+
 
     this.fastify.setNotFoundHandler((_request, reply) => {
       reply.send({

@@ -9,7 +9,6 @@ import type { LibraryContext } from "./context.js";
 import {
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { createJwtAuthMiddleware } from "#src/middlewares/jwt-auth.middleware.js";
 import { LoginRoute } from "#src/routes/login.route.js";
 import { RefreshRoute } from "#src/routes/refresh.route.js";
 import { LogoutRoute } from "#src/routes/logout.route.js";
@@ -55,11 +54,6 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
       new LogoutRoute(this.context.em, this.context.configuration.jwtRefreshSecret),
     ];
 
-    const jwtAuthMiddleware = createJwtAuthMiddleware(
-      this.context.em,
-      this.context.configuration.jwtSecret,
-    );
-
     await fastify.register(
       async (f) => {
         for (const route of authRoutes) {
@@ -72,11 +66,6 @@ export class Module implements ModuleInterface<FastifyInstanceTypeForModule> {
     // User CRUD routes (under /users prefix)
     await fastify.register(
       async (f) => {
-        // Apply JWT authentication middleware to all routes
-        f.addHook("preValidation", async (request, reply) => {
-          await jwtAuthMiddleware(request, reply);
-        });
-
         f.setErrorHandler((error, request, reply) => {
           handleJsonApiErrors(error, request, reply);
         });
