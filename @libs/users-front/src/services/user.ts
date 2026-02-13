@@ -4,7 +4,11 @@ import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
 import { cacheKeyFor, type Store } from '@warp-drive/core';
-import { createRecord, deleteRecord, updateRecord } from '@warp-drive/utilities/json-api';
+import {
+  createRecord,
+  deleteRecord,
+  updateRecord,
+} from '@warp-drive/utilities/json-api';
 import type ImmerChangeset from 'ember-immer-changeset';
 
 type CreateUserData = ValidatedUser & { id: undefined };
@@ -32,7 +36,11 @@ export default class UserService extends Service {
     return this.store.request(request);
   }
 
-  private async create(data: CreateUserData, changeset: ImmerChangeset<ValidatedUser>) {
+  private async create(
+    data: CreateUserData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changeset?: ImmerChangeset<ValidatedUser>
+  ) {
     const user = this.store.createRecord<User>('users', data);
     const request = createRecord(user);
 
@@ -43,7 +51,11 @@ export default class UserService extends Service {
     await this.store.request(request);
   }
 
-  private async update(data: UpdateUserData, changeset: ImmerChangeset<ValidatedUser>) {
+  private async update(
+    data: UpdateUserData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changeset?: ImmerChangeset<ValidatedUser>
+  ) {
     const existingUser = this.store.peekRecord<User>({
       id: data.id,
       type: 'users',

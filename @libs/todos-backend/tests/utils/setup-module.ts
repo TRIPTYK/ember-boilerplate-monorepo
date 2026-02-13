@@ -1,4 +1,9 @@
-import { entities as todoEntities, Module, TodoEntity } from "#src/index.js";
+import {
+  entities as todoEntities,
+  Module,
+  TodoEntity,
+  type FastifyInstanceTypeForModule,
+} from "#src/index.js";
 import { entities as userEntities } from "@libs/users-backend";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
@@ -13,6 +18,8 @@ import { randomUUID } from "crypto";
 export class TestModule {
   public static JWT_SECRET = "testSecret";
   public static TEST_USER_ID = "test-user-id";
+
+  declare public fastifyInstance: FastifyInstanceTypeForModule;
 
   private constructor(
     public module: Module,
@@ -38,7 +45,6 @@ export class TestModule {
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
     const module = Module.init({
-      fastifyInstance,
       em: orm.em.fork(),
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
@@ -46,6 +52,7 @@ export class TestModule {
     });
 
     const testModule = new TestModule(module, orm);
+    testModule.fastifyInstance = fastifyInstance;
 
     await module.setupRoutes(fastifyInstance);
 
@@ -54,10 +61,6 @@ export class TestModule {
 
   get em() {
     return this.module["context"].em;
-  }
-
-  get fastifyInstance() {
-    return this.module["context"].fastifyInstance;
   }
 
   public generateBearerToken(userId: string) {

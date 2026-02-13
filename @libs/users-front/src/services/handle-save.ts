@@ -3,7 +3,6 @@ import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-
 interface HandleSaveOptions<T> {
   saveAction: () => Promise<T>;
   successMessage?: string;
@@ -13,10 +12,9 @@ interface HandleSaveOptions<T> {
 }
 
 interface JSONAPIError {
-  source: { pointer: string },
-  detail: string,
+  source: { pointer: string };
+  detail: string;
 }
-
 
 export default class HandleSaveService extends Service {
   @service declare flashMessages: FlashMessageService;
@@ -33,13 +31,11 @@ export default class HandleSaveService extends Service {
     try {
       await saveAction();
       if (successMessage) {
-        this.flashMessages.success(
-          successMessage
-        );
+        this.flashMessages.success(successMessage);
       }
       if (transitionOnSuccess)
         await this.router.transitionTo(
-          transitionOnSuccess!,
+          transitionOnSuccess,
           idForTransitionOnSuccess ?? undefined
         );
     } catch (error) {

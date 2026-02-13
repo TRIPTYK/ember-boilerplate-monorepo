@@ -31,14 +31,34 @@ backend:
     description: Fastify register() callbacks for scoped auth middleware
 
 frontend:
+  app-integration:
+    description: Steps to wire a new frontend lib into @apps/front
   auth-handler:
     description: WarpDrive auth handler for injecting JWT tokens into requests
   file-extensions:
     description: .gts for templates, .ts for logic-only files
-  forms:
-    description: Form state management using ImmerChangeset and TpkForm
-  route-templates:
-    description: Route template files colocated with route logic
+  form-pattern:
+    description: Zod + ImmerChangeset + TpkForm component pattern
+  helpers:
+    description: Pure function helpers with typed signatures for templates
+  http-mocks:
+    description: MSW mock handlers with openapi-msw
+  index-entry-point:
+    description: Required exports from src/index.ts (moduleRegistry, initialize, forRouter)
+  lib-structure:
+    description: Folder structure and config files for frontend libs
+  modifiers:
+    description: Function-based modifiers with typed signatures for DOM behavior
+  route-template:
+    description: Route handler and template file conventions
+  schema-changeset:
+    description: WarpDrive schema and ImmerChangeset definitions
+  service-crud:
+    description: Entity service CRUD operations via WarpDrive
+  testing-setup:
+    description: Vitest + ember-vitest test infrastructure and patterns
+  translations:
+    description: i18n key conventions and translation file locations
 
 global:
   feature-libraries:

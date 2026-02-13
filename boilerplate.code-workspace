@@ -2,6 +2,10 @@
     "settings": {},
     "folders": [
         {
+            "name": "ROOT",
+            "path": "."
+        },
+        {
             "name": "@apps/front",
             "path": "@apps/front"
         },
@@ -36,10 +40,6 @@
         {
             "name": "@libs/repo-utils",
             "path": "@libs/repo-utils"
-        },
-        {
-            "name": "ROOT",
-            "path": "."
         }
     ]
 }

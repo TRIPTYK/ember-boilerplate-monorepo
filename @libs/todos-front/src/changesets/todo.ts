@@ -7,4 +7,4 @@ export interface DraftTodo {
   completed?: boolean;
 }
 
-export class TodoChangeset extends ImmerChangeset<DraftTodo> { }
+export class TodoChangeset extends ImmerChangeset<DraftTodo> {}

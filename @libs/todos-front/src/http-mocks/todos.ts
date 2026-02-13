@@ -67,10 +67,7 @@ export default [
       results = results.filter((todo) => {
         const title = todo.attributes.title.toLowerCase();
         const description = todo.attributes.description.toLowerCase();
-        return (
-          title.includes(query) ||
-          description.includes(query)
-        );
+        return title.includes(query) || description.includes(query);
       });
     }
 
@@ -82,10 +79,7 @@ export default [
         let aValue: string | undefined;
         let bValue: string | undefined;
 
-        if (
-          field === 'title' ||
-          field === 'description'
-        ) {
+        if (field === 'title' || field === 'description') {
           aValue = a.attributes[field];
           bValue = b.attributes[field];
         }
@@ -143,7 +137,13 @@ export default [
     const { id } = req.params;
     const todo = mockTodos.find((todo) => todo.id === id);
     if (todo) {
-      return HttpResponse.json({ message: 'Todo deleted successfully', code: 'TODO_DELETED_SUCCESSFULLY' }, { status: 200 });
+      return HttpResponse.json(
+        {
+          message: 'Todo deleted successfully',
+          code: 'TODO_DELETED_SUCCESSFULLY',
+        },
+        { status: 200 }
+      );
     }
   }),
 ];

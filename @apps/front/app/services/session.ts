@@ -9,7 +9,9 @@ export default class MySession extends SessionService {
   async handleAuthentication(routeAfterAuthentication: string): Promise<void> {
     await this.currentUser.load();
     const route =
-      routeAfterAuthentication === 'index' ? 'dashboard' : routeAfterAuthentication;
+      routeAfterAuthentication === 'index'
+        ? 'dashboard'
+        : routeAfterAuthentication;
     super.handleAuthentication(route);
   }
 }

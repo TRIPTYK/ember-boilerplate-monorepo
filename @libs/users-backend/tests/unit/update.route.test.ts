@@ -7,14 +7,16 @@ describe("UpdateRoute", () => {
   let updateRoute: UpdateRoute;
   let mockUserRepository: EntityRepository<UserEntityType>;
   let mockEm: EntityManager;
+  let mockFindOne: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     mockEm = {
       flush: vi.fn(),
     } as unknown as EntityManager;
 
+    mockFindOne = vi.fn();
     mockUserRepository = {
-      findOne: vi.fn(),
+      findOne: mockFindOne,
       getEntityManager: vi.fn().mockReturnValue(mockEm),
     } as unknown as EntityRepository<UserEntityType>;
 
@@ -24,7 +26,7 @@ describe("UpdateRoute", () => {
   describe("404 when user not found (defensive check)", () => {
     it("should return 404 when user passes auth but is not found in database", async () => {
       // User exists for auth middleware but findOne returns null (deleted between auth and handler)
-      vi.mocked(mockUserRepository.findOne).mockResolvedValue(null);
+      mockFindOne.mockResolvedValue(null);
 
       const mockRequest = {
         params: { id: "user-id" },
@@ -48,11 +50,12 @@ describe("UpdateRoute", () => {
       };
 
       const mockFastify = {
-        patch: vi.fn((path, options, handler) => {
-          return handler(mockRequest, mockReply);
+        patch: vi.fn(async (_path, _options, handler) => {
+          await handler(mockRequest, mockReply);
         }),
       };
 
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await updateRoute.routeDefinition(mockFastify as any);
 
       expect(mockReply.code).toHaveBeenCalledWith(404);

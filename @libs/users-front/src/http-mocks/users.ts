@@ -142,7 +142,13 @@ export default [
     const { id } = req.params;
     const user = mockUsers.find((user) => user.id === id);
     if (user) {
-      return HttpResponse.json({ message: 'User deleted successfully', code: 'USER_DELETED_SUCCESSFULLY' }, { status: 200 });
+      return HttpResponse.json(
+        {
+          message: 'User deleted successfully',
+          code: 'USER_DELETED_SUCCESSFULLY',
+        },
+        { status: 200 }
+      );
     }
   }),
 ];

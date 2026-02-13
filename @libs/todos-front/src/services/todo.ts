@@ -4,7 +4,11 @@ import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
 import { cacheKeyFor, type Store } from '@warp-drive/core';
-import { createRecord, deleteRecord, updateRecord } from '@warp-drive/utilities/json-api';
+import {
+  createRecord,
+  deleteRecord,
+  updateRecord,
+} from '@warp-drive/utilities/json-api';
 import type ImmerChangeset from 'ember-immer-changeset';
 
 type CreateTodoData = ValidatedTodo & { id: undefined };
@@ -21,7 +25,11 @@ export default class TodoService extends Service {
     }
   }
 
-  public async create(data: CreateTodoData, changeset?: ImmerChangeset<ValidatedTodo>) {
+  public async create(
+    data: CreateTodoData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changeset?: ImmerChangeset<ValidatedTodo>
+  ) {
     const todo = this.store.createRecord<Todo>('todos', data);
     const request = createRecord(todo);
 
@@ -32,7 +40,11 @@ export default class TodoService extends Service {
     await this.store.request(request);
   }
 
-  public async update(data: UpdateTodoData, changeset?: ImmerChangeset<ValidatedTodo>) {
+  public async update(
+    data: UpdateTodoData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changeset?: ImmerChangeset<ValidatedTodo>
+  ) {
     const existingTodo = this.store.peekRecord<Todo>({
       id: data.id,
       type: 'todos',

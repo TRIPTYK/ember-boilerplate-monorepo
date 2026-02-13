@@ -63,25 +63,28 @@ class UsersTable extends Component<object> {
         },
       ],
       actionMenu: [
-      {
-        icon: <template><EditIcon class="size-4" /></template> as TOC<{
-          Element: SVGSVGElement;
-        }>,
-        action: (element: unknown) => {
-          this.router.transitionTo('dashboard.users.edit', (element as { id: string }).id);
+        {
+          icon: <template><EditIcon class="size-4" /></template> as TOC<{
+            Element: SVGSVGElement;
+          }>,
+          action: (element: unknown) => {
+            this.router.transitionTo(
+              'dashboard.users.edit',
+              (element as { id: string }).id
+            );
+          },
+          name: this.intl.t('users.table.actions.edit'),
         },
-        name: this.intl.t('users.table.actions.edit'),
-      },
-      {
-        icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
-          Element: SVGSVGElement;
-        }>,
-        action: (element: unknown) => {
-          this.openModalOnDelete(element as UpdateUserData);
+        {
+          icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
+            Element: SVGSVGElement;
+          }>,
+          action: (element: unknown) => {
+            this.openModalOnDelete(element as UpdateUserData);
+          },
+          name: this.intl.t('users.table.actions.delete'),
         },
-        name: this.intl.t('users.table.actions.delete'),
-      },
-    ],
+      ],
     };
   }
 
@@ -101,9 +104,13 @@ class UsersTable extends Component<object> {
     if (this.selectedUserForDelete) {
       try {
         await this.user.delete(this.selectedUserForDelete);
-        this.flashMessages.success(this.intl.t('users.forms.user.messages.deleteSuccess'));
+        this.flashMessages.success(
+          this.intl.t('users.forms.user.messages.deleteSuccess')
+        );
       } catch {
-        this.flashMessages.danger(this.intl.t('users.forms.user.messages.deleteError'));
+        this.flashMessages.danger(
+          this.intl.t('users.forms.user.messages.deleteError')
+        );
       }
       this.onCloseModal();
     }

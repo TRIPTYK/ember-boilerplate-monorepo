@@ -8,11 +8,28 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: backend_user
+          POSTGRES_PASSWORD: backend_user
+          POSTGRES_DB: database_dev
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
     - uses: actions/checkout@v4
     - uses: wyvox/action-setup-pnpm@v3
     - name: Build
       run: pnpm turbo build
+    - name: Setup database
+      working-directory: ./@apps/backend
+      run: pnpm e2e:setup
     - name: Install Playwright Browsers
       working-directory: ./@apps/e2e
       run: pnpm exec playwright install --with-deps

@@ -5,6 +5,9 @@ import type UserService from '#src/services/user.ts';
 import type { Store } from '@warp-drive/core';
 import { setupWorker } from 'msw/browser';
 import { http, HttpResponse } from 'msw';
+import { UserChangeset } from '#src/changesets/user.ts';
+import type ImmerChangeset from 'ember-immer-changeset';
+import type { ValidatedUser } from '#src/components/forms/user-validation.ts';
 
 const handlers = [
   http.post('/users', () => {
@@ -16,7 +19,7 @@ const handlers = [
       },
     });
   }),
-  http.put('/users/:id', (ctx) => {
+  http.patch('/users/:id', (ctx) => {
     return HttpResponse.json({
       data: {
         type: 'users',
@@ -44,12 +47,12 @@ describe('Service | User | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const userService = context.owner.lookup('service:user') as UserService;
-
-    await userService.save({
+    const changeset = new UserChangeset({
       firstName: 'John',
       lastName: 'Doe',
       email: 'email@example.com',
     });
+    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
   });
 
   test('if user already exists in store, it updates it with a PATCH request', async ({
@@ -65,12 +68,13 @@ describe('Service | User | Unit', () => {
       lastName: 'Doe',
       email: 'jane@example.com',
     });
-
-    await userService.save({
+    const changeset = new UserChangeset({
       id: '123',
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
     });
+
+    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
   });
 });

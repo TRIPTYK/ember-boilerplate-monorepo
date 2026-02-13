@@ -6,25 +6,29 @@ import type { RefreshTokenEntityType } from "#src/index.js";
 describe("cleanupExpiredTokens", () => {
   let mockEm: EntityManager;
   let mockRefreshTokenRepo: EntityRepository<RefreshTokenEntityType>;
+  let mockNativeDelete: ReturnType<typeof vi.fn>;
+  let mockGetRepository: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    mockNativeDelete = vi.fn();
     mockRefreshTokenRepo = {
-      nativeDelete: vi.fn(),
+      nativeDelete: mockNativeDelete,
     } as unknown as EntityRepository<RefreshTokenEntityType>;
 
+    mockGetRepository = vi.fn().mockReturnValue(mockRefreshTokenRepo);
     mockEm = {
-      getRepository: vi.fn().mockReturnValue(mockRefreshTokenRepo),
+      getRepository: mockGetRepository,
     } as unknown as EntityManager;
   });
 
   it("should delete expired tokens and return count", async () => {
-    vi.mocked(mockRefreshTokenRepo.nativeDelete).mockResolvedValue(5);
+    mockNativeDelete.mockResolvedValue(5);
 
     const result = await cleanupExpiredTokens(mockEm);
 
     expect(result).toBe(5);
-    expect(mockEm.getRepository).toHaveBeenCalled();
-    expect(mockRefreshTokenRepo.nativeDelete).toHaveBeenCalledWith(
+    expect(mockGetRepository).toHaveBeenCalled();
+    expect(mockNativeDelete).toHaveBeenCalledWith(
       expect.objectContaining({
         $or: expect.arrayContaining([
           expect.objectContaining({ expiresAt: expect.any(Object) }),
@@ -35,7 +39,7 @@ describe("cleanupExpiredTokens", () => {
   });
 
   it("should return 0 when no tokens to delete", async () => {
-    vi.mocked(mockRefreshTokenRepo.nativeDelete).mockResolvedValue(0);
+    mockNativeDelete.mockResolvedValue(0);
 
     const result = await cleanupExpiredTokens(mockEm);
 

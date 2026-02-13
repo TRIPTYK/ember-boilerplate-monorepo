@@ -22,7 +22,8 @@ export async function setup() {
 
   await orm.schema.refreshDatabase();
 
-  const hashedPassword = '$argon2id$v=19$m=65536,t=3,p=4$ETHkx8pEQN6qQwlIR+vUTQ$+QC4JBKJCQUL1dyCHzRMBNjbk+QaJi3PV+HkPY00kcc';
+  const hashedPassword =
+    "$argon2id$v=19$m=65536,t=3,p=4$ETHkx8pEQN6qQwlIR+vUTQ$+QC4JBKJCQUL1dyCHzRMBNjbk+QaJi3PV+HkPY00kcc";
   await orm.em.getRepository(UserEntity).insert({
     id: TestModule.TEST_USER_ID,
     email: "a@test.com",

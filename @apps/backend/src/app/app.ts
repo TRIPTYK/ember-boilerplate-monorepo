@@ -149,7 +149,6 @@ export class App {
       });
     });
 
-
     await appRouter(this.fastify, {
       authModule: AuthModule.init({
         configuration: {
@@ -162,13 +161,13 @@ export class App {
         em: this.context.orm.em.fork(),
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
-        }
+        },
       }),
       todosModule: TodoModule.init({
         em: this.context.orm.em.fork(),
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
-        }
+        },
       }),
     });
   }

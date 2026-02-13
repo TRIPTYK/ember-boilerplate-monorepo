@@ -22,18 +22,14 @@ import TpkCheckboxComponent from '@triptyk/ember-input/components/tpk-checkbox';
 interface TodoCheckboxComponentArgs {
   Args: {
     row: Todo;
-  },
+  };
   Blocks: {
-    default: [],
-  },
+    default: [];
+  };
 }
 
 const TodoCheckboxComponent: TOC<TodoCheckboxComponentArgs> = <template>
-  <TpkCheckboxComponent
-    @label="123"
-    @checked={{@row.completed}}
-    as |C|
-  >
+  <TpkCheckboxComponent @label="123" @checked={{@row.completed}} as |C|>
     <C.Input class="checkbox disabled" />
   </TpkCheckboxComponent>
 </template>;
@@ -80,39 +76,42 @@ class TodosTable extends Component<object> {
           field: 'completed',
           headerName: this.intl.t('todos.table.headers.completed'),
           sortable: false,
-          component: "todoCheckbox"
+          component: 'todoCheckbox',
         },
       ],
       actionMenu: [
-      {
-        icon: <template><EditIcon class="size-4" /></template> as TOC<{
-          Element: SVGSVGElement;
-        }>,
-        action: (element: unknown) => {
-          this.router.transitionTo('dashboard.todos.edit', (element as { id: string }).id);
+        {
+          icon: <template><EditIcon class="size-4" /></template> as TOC<{
+            Element: SVGSVGElement;
+          }>,
+          action: (element: unknown) => {
+            this.router.transitionTo(
+              'dashboard.todos.edit',
+              (element as { id: string }).id
+            );
+          },
+          name: this.intl.t('todos.table.actions.edit'),
         },
-        name: this.intl.t('todos.table.actions.edit'),
-      },
-      {
-        icon: <template><CompletedIcon class="size-4" /></template> as TOC<{
-          Element: SVGSVGElement;
-        }>,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        action: async (element: unknown) => {
-          await this.onChangeCompleted(element as UpdateTodoData);
+        {
+          icon: <template><CompletedIcon class="size-4" /></template> as TOC<{
+            Element: SVGSVGElement;
+          }>,
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          action: async (element: unknown) => {
+            await this.onChangeCompleted(element as UpdateTodoData);
+          },
+          name: this.intl.t('todos.table.actions.changeCompleted'),
         },
-        name: this.intl.t('todos.table.actions.changeCompleted'),
-      },
-      {
-        icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
-          Element: SVGSVGElement;
-        }>,
-        action: (element: unknown) => {
-          this.openModalOnDelete(element as UpdateTodoData);
+        {
+          icon: <template><DeleteIcon class="size-4" /></template> as TOC<{
+            Element: SVGSVGElement;
+          }>,
+          action: (element: unknown) => {
+            this.openModalOnDelete(element as UpdateTodoData);
+          },
+          name: this.intl.t('todos.table.actions.delete'),
         },
-        name: this.intl.t('todos.table.actions.delete'),
-      },
-    ],
+      ],
     };
   }
 
@@ -137,9 +136,13 @@ class TodosTable extends Component<object> {
     if (this.selectedTodoForDelete) {
       try {
         await this.todo.delete(this.selectedTodoForDelete);
-        this.flashMessages.success(this.intl.t('todos.forms.todo.messages.deleteSuccess'));
+        this.flashMessages.success(
+          this.intl.t('todos.forms.todo.messages.deleteSuccess')
+        );
       } catch {
-        this.flashMessages.danger(this.intl.t('todos.forms.todo.messages.deleteError'));
+        this.flashMessages.danger(
+          this.intl.t('todos.forms.todo.messages.deleteError')
+        );
       }
       this.onCloseModal();
     }
@@ -155,11 +158,7 @@ class TodosTable extends Component<object> {
     </div>
     <TableGenericPrefab
       @tableParams={{this.tableParams}}
-      @columnsComponent={{hash
-        todoCheckbox=(component
-          TodoCheckboxComponent
-        )
-      }}
+      @columnsComponent={{hash todoCheckbox=(component TodoCheckboxComponent)}}
     />
     <TpkConfirmModalPrefab
       @onClose={{this.onCloseModal}}
