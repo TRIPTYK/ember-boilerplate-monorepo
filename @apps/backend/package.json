@@ -12,7 +12,7 @@
     "dev": "pnpm build:deps && concurrently \"pnpm turbo build:watch --filter ...\" \"vite-node --watch --env-file=.env src/app.bootstrap.ts\"",
     "dev:e2e": "pnpm build:deps && concurrently \"pnpm turbo build:watch --filter ...\" \"vite-node --watch --env-file=.env.e2e src/app.bootstrap.ts\"",
     "start": "pnpm build:deps && vite-node --env-file=.env src/app.bootstrap.ts",
-    "e2e:setup": "pnpm --env-file=.env.e2e --node-options=--loader=ts-node/esm mikro-orm schema:fresh --seed E2ESeeder --run",
+    "e2e:setup": "vite-node --env-file=.env.e2e node_modules/@mikro-orm/cli/cli.js schema:fresh --seed E2ESeeder --run",
     "test": "pnpm vitest run",
     "build": "pnpm vite build",
     "build:deps": "pnpm turbo build --filter ...",
