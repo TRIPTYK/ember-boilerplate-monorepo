@@ -13,8 +13,8 @@ jobs:
         run: pnpm turbo build --filter='@libs/*'
       - name: Install Playwright Browsers
         working-directory: ./@apps/e2e
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
       - name: Lint
         run: pnpm turbo lint
       - name: Run tests
-        run: pnpm turbo test --filter='!@apps/e2e' --concurrency=1
+        run: pnpm turbo test --filter='!@apps/e2e' --filter='@apps/*'
