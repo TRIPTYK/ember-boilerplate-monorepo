@@ -21,6 +21,7 @@ export default defineConfig({
   test: {
     include: ['tests/**/*-test.{gjs,gts}'],
     maxConcurrency: 1,
+    globalSetup: './tests/global-setup.ts',
     browser: {
       provider: playwright(),
       enabled: true,

@@ -14,6 +14,7 @@ export default defineConfig({
   test: {
     setupFiles: ['./tests/test-helper.ts'],
     include: ['tests/**/*-test.{gjs,gts}'],
+    globalSetup: './tests/global-setup.ts',
     maxConcurrency: 1,
     testTimeout: 10000,
     browser: {

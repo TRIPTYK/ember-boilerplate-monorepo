@@ -6,7 +6,7 @@ import { TestModule } from "./utils/setup-module.js";
 
 let container: StartedPostgreSqlContainer;
 
-async function setup() {
+export async function setup() {
   container = await new PostgreSqlContainer("postgres:16-alpine")
     .withDatabase("test_db")
     .withUsername("test_user")
@@ -35,15 +35,6 @@ async function setup() {
   await orm.close();
 }
 
-async function teardown() {
-  if (container) {
-    await container.stop();
-  }
-}
-
-export default async function () {
-  return {
-    setup,
-    teardown,
-  };
+export async function teardown() {
+  await container?.stop();
 }
