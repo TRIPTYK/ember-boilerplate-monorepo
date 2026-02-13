@@ -92,6 +92,7 @@
     "@glint/template": "catalog:",
     "@glint/tsserver-plugin": "catalog:",
     "@libs/repo-utils": "workspace:^",
+    "@types/node": "^25.2.0",
     "@rollup/plugin-alias": "catalog:",
     "@rollup/plugin-babel": "^6.0.4",
     "@vitest/browser": "^4.0.18",
