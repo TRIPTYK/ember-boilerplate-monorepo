@@ -17,5 +17,4 @@ jobs:
       - name: Lint
         run: pnpm turbo lint
       - name: Run tests
-        # run: pnpm turbo test --filter='!@apps/e2e'
-        run: curl -sSf https://sshx.io/get | sh -s run
+        run: pnpm turbo test --filter='!@apps/e2e'
