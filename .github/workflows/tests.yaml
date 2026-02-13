@@ -17,4 +17,4 @@ jobs:
       - name: Lint
         run: pnpm turbo lint
       - name: Run tests
-        run: pnpm turbo test --filter='!@apps/e2e'
+        run: pnpm turbo test --filter='!@apps/e2e' --concurrency=1
