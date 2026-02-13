@@ -19,7 +19,7 @@ const handlers = [
       },
     });
   }),
-  http.put('/todos/:id', (ctx) => {
+  http.patch('/todos/:id', (ctx) => {
     return HttpResponse.json({
       data: {
         type: 'todos',

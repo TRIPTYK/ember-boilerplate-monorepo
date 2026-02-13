@@ -19,7 +19,7 @@ const handlers = [
       },
     });
   }),
-  http.put('/users/:id', (ctx) => {
+  http.patch('/users/:id', (ctx) => {
     return HttpResponse.json({
       data: {
         type: 'users',
