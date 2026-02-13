@@ -9,14 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: wyvox/action-setup-pnpm@v3
-      # - name: Cache for Turbo
-      #   uses: rharkor/caching-for-turbo@v2.2.1
       - name: Build
         run: pnpm turbo build --filter='@libs/*'
       - name: Install Playwright Browsers
         working-directory: ./@apps/e2e
         run: pnpm exec playwright install --with-deps chromium
-      # - run: curl -sSf https://sshx.io/get | sh -s run
       - name: Lint
         run: pnpm turbo lint
       - name: Run frontend tests

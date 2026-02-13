@@ -10,7 +10,7 @@
 - Chaque route est une **classe** qui implémente l'interface `Route` de `@libs/backend-shared`.
 - Les tests d'intégration utilisent une **vraie base de données PostgreSQL** via `@testcontainers/postgresql` (conteneur Docker éphémère).
 - Les tests unitaires sont isolés et ne nécessitent pas de base de données.
-- L'isolation des tests d'intégration est assurée par des **transactions rollback** (`em.begin()` / `em.rollback()` autour de chaque test).
+- L'isolation des tests d'intégration est assurée par des **transactions rollback** (`em.begin()` / `em.rollback()` autour de chaque test). Avec aroundEach() de Vitest.
 - Les entités de chaque librairie sont exportées et enregistrées dans la configuration MikroORM de l'application principale (`@apps/backend/src/app/database.connection.ts`).
 
 ## Librairies
@@ -172,7 +172,7 @@
    - Vérifie que les champs internes ne sont pas exposés
 
 10. Création du `global-setup.ts` pour les tests d'intégration dans [tests/global-setup.ts](../@libs/todos-backend/tests/global-setup.ts)
-    - Lance un conteneur PostgreSQL (`postgres:16-alpine`)
+    - Lance un conteneur PostgreSQL
     - Initialise le schéma de la DB avec toutes les entités du module
     - Insère un user de test (seed) si les routes nécessitent une authentification
     - Exporte `setup()` et `teardown()`
@@ -224,4 +224,6 @@
     - `pnpm test` dans `@libs/todos-backend` (unit + integration)
     - `pnpm lint` pour la vérification du code (oxlint + oxfmt)
 
-16. Ingestion d'un Raffaello comme récompense pour ce dur labeur.
+16. Génération des types apis avec openapi-typescript en utilisant `pnpm run api:types` pour générer les types openapi.
+
+17. Ingestion d'un Raffaello comme récompense pour ce dur labeur.

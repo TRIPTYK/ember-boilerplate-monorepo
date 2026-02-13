@@ -23,7 +23,7 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc",
-    "start": "concurrently \"pnpm turbo build:watch --filter '@libs/*'\" \"vite dev\"",
+    "start": "concurrently \"pnpm turbo build:watch --filter=...\" \"vite dev\"",
     "start:turbo": "turbo watch start",
     "test": "pnpm vitest run",
     "test:watch": "pnpm vitest",

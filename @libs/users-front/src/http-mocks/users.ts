@@ -53,8 +53,14 @@ export default [
     } else {
       return HttpResponse.json(
         {
-          message: 'Not Found',
-          code: 'USER_NOT_FOUND',
+          errors: [
+            {
+              status: '404',
+              title: 'User Not Found',
+              code: 'USER_NOT_FOUND',
+              detail: `User with id ${id} not found`,
+            },
+          ],
         },
         { status: 404 }
       );
@@ -144,10 +150,23 @@ export default [
     if (user) {
       return HttpResponse.json(
         {
-          message: 'User deleted successfully',
-          code: 'USER_DELETED_SUCCESSFULLY',
+          data: null,
         },
-        { status: 200 }
+        { status: 204 }
+      );
+    } else {
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              status: '404',
+              title: 'User Not Found',
+              code: 'USER_NOT_FOUND',
+              detail: `User with id ${id} not found`,
+            },
+          ],
+        },
+        { status: 404 }
       );
     }
   }),

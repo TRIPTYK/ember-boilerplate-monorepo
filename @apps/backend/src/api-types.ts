@@ -63,6 +63,7 @@ export interface paths {
             /** Format: email */
             email: string;
             password: string;
+            deviceInfo?: string;
           };
         };
       };
@@ -88,8 +89,177 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/auth/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            refreshToken: string;
+          };
+        };
+      };
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                accessToken: string;
+                refreshToken: string;
+              };
+            };
+          };
+        };
+        /** @description Default Response */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/auth/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            refreshToken: string;
+            /** @default false */
+            allDevices?: boolean;
+          };
+        };
+      };
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                success: boolean;
+                message: string;
+              };
+            };
+          };
+        };
+        /** @description Default Response */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };
@@ -155,16 +325,17 @@ export interface paths {
         content: {
           "application/json": {
             data: {
-              id?: string;
-              /** @enum {string} */
-              type: "users";
+              id?: string | null;
               attributes: {
                 /** Format: email */
                 email: string;
-                password: string;
                 firstName: string;
                 lastName: string;
+                password: string;
               };
+            };
+            meta?: {
+              [key: string]: unknown;
             };
           };
         };
@@ -187,6 +358,9 @@ export interface paths {
                   firstName: string;
                   lastName: string;
                 };
+              };
+              meta?: {
+                [key: string]: unknown;
               };
             };
           };
@@ -292,8 +466,25 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };
@@ -317,7 +508,15 @@ export interface paths {
           headers: {
             [name: string]: unknown;
           };
-          content?: never;
+          content: {
+            "application/json": {
+              /** @enum {null} */
+              data: null;
+              meta?: {
+                [key: string]: unknown;
+              };
+            };
+          };
         };
         /** @description Default Response */
         403: {
@@ -326,8 +525,25 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };
@@ -338,8 +554,25 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };
@@ -370,6 +603,9 @@ export interface paths {
                 lastName: string;
               };
             };
+            meta?: {
+              [key: string]: unknown;
+            };
           };
         };
       };
@@ -392,6 +628,9 @@ export interface paths {
                   lastName: string;
                 };
               };
+              meta?: {
+                [key: string]: unknown;
+              };
             };
           };
         };
@@ -402,8 +641,25 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };
@@ -414,8 +670,348 @@ export interface paths {
           };
           content: {
             "application/json": {
-              message: string;
-              code: string;
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
+            };
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  "/api/v1/todos/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                id: string;
+                /** @enum {string} */
+                type: "todos";
+                attributes: {
+                  title: string;
+                  description: string | null;
+                  completed: boolean;
+                  createdAt: string;
+                  updatedAt: string;
+                };
+              }[];
+              meta: {
+                total: number;
+              };
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            data: {
+              id?: string | null;
+              attributes: {
+                title: string;
+                description?: string | null;
+                completed?: boolean;
+              };
+            };
+            meta?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      };
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                id: string;
+                /** @enum {string} */
+                type: "todos";
+                attributes: {
+                  title: string;
+                  description: string | null;
+                  completed: boolean;
+                  createdAt: string;
+                  updatedAt: string;
+                };
+              };
+              meta?: {
+                [key: string]: unknown;
+              };
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/todos/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                id: string;
+                /** @enum {string} */
+                type: "todos";
+                attributes: {
+                  title: string;
+                  description: string | null;
+                  completed: boolean;
+                  createdAt: string;
+                  updatedAt: string;
+                };
+              };
+            };
+          };
+        };
+        /** @description Default Response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Default Response */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @enum {null} */
+              data: null;
+              meta?: {
+                [key: string]: unknown;
+              };
+            };
+          };
+        };
+        /** @description Default Response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
+            };
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            data: {
+              id: string;
+              /** @enum {string} */
+              type: "todos";
+              attributes: {
+                title: string;
+                description: string | null;
+                completed: boolean;
+                createdAt: string;
+                updatedAt: string;
+              };
+            };
+            meta?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      };
+      responses: {
+        /** @description Default Response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              data: {
+                id: string;
+                /** @enum {string} */
+                type: "todos";
+                attributes: {
+                  title: string;
+                  description: string | null;
+                  completed: boolean;
+                  createdAt: string;
+                  updatedAt: string;
+                };
+              };
+              meta?: {
+                [key: string]: unknown;
+              };
+            };
+          };
+        };
+        /** @description Default Response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors: {
+                id?: string;
+                links?: {
+                  about?: string;
+                  type?: string;
+                };
+                status: string;
+                code?: string;
+                title: string;
+                detail?: string;
+                source?: {
+                  pointer?: string;
+                  parameter?: string;
+                  header?: string;
+                };
+                meta?: {
+                  [key: string]: unknown;
+                };
+              }[];
             };
           };
         };

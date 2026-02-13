@@ -2,7 +2,12 @@ import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { literal, object, string } from "zod";
 import type { TodoEntityType } from "#src/entities/todo.entity.js";
-import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
+import {
+  jsonApiErrorDocumentSchema,
+  makeJsonApiError,
+  makeSingleJsonApiTopDocument,
+  type Route,
+} from "@libs/backend-shared";
 
 export class DeleteRoute implements Route {
   public constructor(private todoRepository: EntityRepository<TodoEntityType>) {}
@@ -17,7 +22,7 @@ export class DeleteRoute implements Route {
           }),
           response: {
             404: jsonApiErrorDocumentSchema,
-            204: literal(null),
+            204: makeSingleJsonApiTopDocument(literal(null)),
           },
         },
       },
@@ -38,7 +43,9 @@ export class DeleteRoute implements Route {
 
         await this.todoRepository.getEntityManager().remove(todo).flush();
 
-        return reply.code(204).send(null);
+        return reply.code(204).send({
+          data: null,
+        });
       },
     );
   }

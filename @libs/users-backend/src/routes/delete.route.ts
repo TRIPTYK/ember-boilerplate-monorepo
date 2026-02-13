@@ -2,7 +2,12 @@ import type { FastifyInstanceTypeForModule } from "#src/init.js";
 import type { EntityRepository } from "@mikro-orm/core";
 import { literal, object, string } from "zod";
 import type { UserEntityType } from "#src/entities/user.entity.js";
-import { jsonApiErrorDocumentSchema, makeJsonApiError, type Route } from "@libs/backend-shared";
+import {
+  jsonApiErrorDocumentSchema,
+  makeJsonApiError,
+  makeSingleJsonApiTopDocument,
+  type Route,
+} from "@libs/backend-shared";
 
 export class DeleteRoute implements Route {
   public constructor(private userRepository: EntityRepository<UserEntityType>) {}
@@ -18,7 +23,7 @@ export class DeleteRoute implements Route {
           response: {
             403: jsonApiErrorDocumentSchema,
             404: jsonApiErrorDocumentSchema,
-            204: literal(null),
+            204: makeSingleJsonApiTopDocument(literal(null)),
           },
         },
       },
@@ -48,7 +53,9 @@ export class DeleteRoute implements Route {
 
         await this.userRepository.getEntityManager().remove(user).flush();
 
-        return reply.code(204).send(null);
+        return reply.code(204).send({
+          data: null,
+        });
       },
     );
   }

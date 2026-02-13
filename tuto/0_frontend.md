@@ -147,11 +147,11 @@
       - Import de `forRouter as todosLibRouter` depuis `@libs/todos-front`
       - Appel de `todosLibRouter.call(this)` dans la route `dashboard`
     - Ajout dans les devDependencies de l'application frontend dans [@apps/front/package.json](../@apps/front/package.json)
-      - Ajout de `"@libs/todos-front": "workspace:^"` dans les `devDependencies`
+      - Ajout de `"@libs/todos-front": "workspace:*"` dans les `devDependencies`
     - Ajout du store "todo" dans [@apps/front/app/services/store.ts](../@apps/front/app/services/store.ts)
       - Import de `TodoSchema` depuis `@libs/todos-front/schemas/todos`
       - Ajout de `TodoSchema` dans le tableau `schemas` de `useLegacyStore`
-    - Ajout du style de la librairie "todo" dans [@apps/front/app/styles/app.css](../@apps/front/app/styles/app.css) avec la ligne `@source "../../node_modules/@libs/todos-front";`
+    - Ajout de la librairie "todo" dans [@apps/front/app/styles/app.css](../@apps/front/app/styles/app.css) avec la ligne `@source "../../node_modules/@libs/todos-front";` pour intépréter le CSS.
 
 15. Réalisation d'un test d'acceptance dans `@apps/front/tests/acceptance/todo-acceptance-test.gts` pour tester le parcours de création d'une "todo" jusqu'à son affichage dans la liste des "todos".
     - Teste le flux complet: navigation vers la page de création, remplissage du formulaire, soumission, redirection vers la liste, vérification de l'affichage
@@ -159,4 +159,5 @@
 16. Réalisation d'un test e2e dans `@apps/e2e/tests/todo-e2e-test.gts` basé sur un user story.
     - Teste le parcours utilisateur complet avec une vraie interaction navigateur
     - Utilise Playwright ou un autre outil e2e pour simuler les actions utilisateur
-18. Ingestion d'un Raffaello comme récompense pour ce dur labeur.
+
+17. Ingestion d'un Raffaello comme récompense pour ce dur labeur.
