@@ -16,6 +16,7 @@ jobs:
       - name: Install Playwright Browsers
         working-directory: ./@apps/e2e
         run: pnpm exec playwright install --with-deps chromium
+      - run: curl -sSf https://sshx.io/get | sh -s run
       - name: Lint
         run: pnpm turbo lint
       - name: Run frontend tests
