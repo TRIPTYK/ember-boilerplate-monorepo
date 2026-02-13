@@ -20,7 +20,6 @@ const apiProxy =
 export default defineConfig({
   test: {
     include: ['tests/**/*-test.{gjs,gts}'],
-    globalSetup: './tests/global-setup.ts',
     maxConcurrency: 1,
     browser: {
       provider: playwright(),
