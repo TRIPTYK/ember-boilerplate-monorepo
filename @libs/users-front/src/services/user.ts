@@ -61,6 +61,13 @@ export default class UserService extends Service {
       type: 'users',
     });
     assert('User must exist to be updated', existingUser);
+
+    Object.assign(existingUser, {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+    });
+
     const request = updateRecord(existingUser, { patch: true });
 
     request.body = JSON.stringify({

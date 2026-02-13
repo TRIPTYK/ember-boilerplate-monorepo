@@ -50,8 +50,14 @@ export default class TodoService extends Service {
       type: 'todos',
     });
     assert('Todo must exist to be updated', existingTodo);
-    const request = updateRecord(existingTodo, { patch: true });
 
+    Object.assign(existingTodo, {
+      title: data.title,
+      description: data.description,
+      completed: data.completed ?? false,
+    });
+
+    const request = updateRecord(existingTodo, { patch: true });
     request.body = JSON.stringify({
       data: this.store.cache.peek(cacheKeyFor(existingTodo)),
     });

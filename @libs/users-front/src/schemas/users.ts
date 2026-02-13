@@ -7,6 +7,8 @@ import type { Type } from '@warp-drive/core/types/symbols';
 const UserSchema = withDefaults({
   type: 'users',
   fields: [
+    { name: 'createdAt', kind: 'attribute' },
+    { name: 'updatedAt', kind: 'attribute' },
     { name: 'firstName', kind: 'attribute' },
     { name: 'lastName', kind: 'attribute' },
     { name: 'email', kind: 'attribute' },
@@ -17,6 +19,8 @@ const UserSchema = withDefaults({
 export default UserSchema;
 
 export type User = WithLegacy<{
+  createdAt: string;
+  updatedAt: string;
   firstName: string;
   lastName: string;
   email: string;
