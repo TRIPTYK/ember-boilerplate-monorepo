@@ -41,4 +41,9 @@ async function teardown() {
   }
 }
 
-export default { setup, teardown };
+export default async function () {
+  return {
+    setup,
+    teardown,
+  };
+}
