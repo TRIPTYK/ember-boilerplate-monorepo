@@ -101,9 +101,11 @@ catalog:
   fastify-type-provider-zod: ^6.1.0
   fastify-zod: ^1.4.0
   flatpickr: ^4.6.13
+  git-conventional-commits: ^2.6.7
   globals: ^17.1.0
   handlebars: ^4.7.8
   jsonwebtoken: 9.0.2
+  lefthook: ^2.0.16
   mailgen: ^2.0.29
   msw: ^2.12.8
   nodemailer: ^7.0.13

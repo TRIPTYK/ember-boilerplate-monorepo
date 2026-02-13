@@ -39,7 +39,9 @@
     ]
   },
   "devDependencies": {
-    "turbo": "catalog:"
+    "git-conventional-commits": "catalog:",
+    "turbo": "catalog:",
+    "lefthook": "catalog:"
   },
   "volta": {
     "node": "24.13.0",
