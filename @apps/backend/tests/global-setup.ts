@@ -5,7 +5,7 @@ import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers
 
 let container: StartedPostgreSqlContainer;
 
-export async function setup() {
+async function setup() {
   container = await new PostgreSqlContainer("postgres:16-alpine")
     .withDatabase("test_db")
     .withUsername("test_user")
@@ -25,6 +25,10 @@ export async function setup() {
   await orm.close();
 }
 
-export async function teardown() {
-  await container?.stop();
+async function teardown() {
+  if (container) {
+    await container.stop();
+  }
 }
+
+export default { setup, teardown };
