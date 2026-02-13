@@ -16,7 +16,7 @@ jobs:
           POSTGRES_PASSWORD: backend_user
           POSTGRES_DB: database_dev
         options: >-
-          --health-cmd pg_isready -U backend_user
+          --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
