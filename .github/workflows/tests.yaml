@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: wyvox/action-setup-pnpm@v3
+      - name: Cache for Turbo
+        uses: rharkor/caching-for-turbo@v2.2.1
       - name: Build
         run: pnpm turbo build --filter='@libs/*'
       - name: Install Playwright Browsers

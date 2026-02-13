@@ -32,6 +32,7 @@
       "edgedriver",
       "esbuild",
       "geckodriver",
+      "lefthook",
       "msw",
       "protobufjs",
       "sqlite3",
@@ -40,8 +41,8 @@
   },
   "devDependencies": {
     "git-conventional-commits": "catalog:",
-    "turbo": "catalog:",
-    "lefthook": "catalog:"
+    "lefthook": "catalog:",
+    "turbo": "catalog:"
   },
   "volta": {
     "node": "24.13.0",
