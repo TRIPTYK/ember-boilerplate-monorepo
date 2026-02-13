@@ -1,8 +1,7 @@
 pre-push:
   commands:
-    lintfix:
-      run: pnpm lint:fix
-      stage_fixed: true
+    lint:
+      run: pnpm lint
 
 commit-msg:
   commands:
