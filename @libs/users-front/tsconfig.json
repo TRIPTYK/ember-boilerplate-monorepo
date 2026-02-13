@@ -18,8 +18,7 @@
       "vite/client",
       "vitest/importMeta",
       "@embroider/core/virtual",
-      "@glint/ember-tsc/types",
-      "node"
+      "@glint/ember-tsc/types"
     ]
   }
 }

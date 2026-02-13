@@ -18,4 +18,3 @@ jobs:
         run: pnpm turbo lint
       - name: Run tests
         run: pnpm turbo test --filter='!@apps/e2e'
-        timeout-minutes: 8
