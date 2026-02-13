@@ -28,7 +28,9 @@ export default defineConfig({
   /* Start both backend and frontend servers */
   webServer: [
     {
-      command: "pnpm --filter @apps/backend dev:e2e",
+      command: process.env.CI
+        ? "pnpm --filter @apps/backend start:e2e"
+        : "pnpm --filter @apps/backend dev:e2e",
       url: "http://localhost:8000/api/v1/status",
       timeout: 240_000,
       reuseExistingServer: !process.env.CI,
