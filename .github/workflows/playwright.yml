@@ -35,7 +35,7 @@ jobs:
       run: pnpm exec playwright install --with-deps
     - name: Run Playwright tests
       working-directory: ./@apps/e2e
-      run: curl -sSf https://sshx.io/get | sh -s run
+      run: pnpm test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
