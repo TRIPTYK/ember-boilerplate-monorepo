@@ -36,5 +36,7 @@ export async function setup() {
 }
 
 export async function teardown() {
-  await container?.stop();
+  if (container) {
+    await container.stop();
+  }
 }

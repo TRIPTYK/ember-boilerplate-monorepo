@@ -28,9 +28,9 @@ export default defineConfig({
   /* Start both backend and frontend servers */
   webServer: [
     {
-      command: "pnpm --filter @apps/backend dev:e2e",
+      command: "pnpm --filter @apps/backend start:e2e",
       url: "http://localhost:8000/api/v1/status",
-      timeout: 120_000,
+      timeout: 240_000,
       reuseExistingServer: !process.env.CI,
       cwd: "../..",
     },
@@ -38,7 +38,7 @@ export default defineConfig({
       command:
         "pnpm vite build --mode e2e && pnpm vite preview --mode e2e --port 4200",
       url: "http://localhost:4200",
-      timeout: 120_000,
+      timeout: 240_000,
       reuseExistingServer: !process.env.CI,
       cwd: "../front",
       env: {
