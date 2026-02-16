@@ -5,9 +5,16 @@ import type { UsersEditRouteSignature } from './edit.gts';
 import { editUserValidationSchema } from '#src/components/forms/user-validation.ts';
 import type { IntlService } from 'ember-intl';
 import { service } from '@ember/service';
+import type Owner from '@ember/owner';
 
 export default class UsersEditRouteTemplate extends Component<UsersEditRouteSignature> {
   @service declare intl: IntlService;
+  validationSchema: ReturnType<typeof editUserValidationSchema>;
+
+  constructor(owner: Owner, args: UsersEditRouteSignature) {
+    super(owner, args);
+    this.validationSchema = editUserValidationSchema(this.intl);
+  }
 
   changeset = new UserChangeset({
     id: this.args.model.user.id,
@@ -16,10 +23,6 @@ export default class UsersEditRouteTemplate extends Component<UsersEditRouteSign
     password: undefined,
     email: this.args.model.user.email,
   });
-
-  get validationSchema() {
-    return editUserValidationSchema(this.intl);
-  }
 
   <template>
     <UsersForm

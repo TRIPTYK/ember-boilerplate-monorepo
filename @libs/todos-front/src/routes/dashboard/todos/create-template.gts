@@ -9,14 +9,12 @@ import { createTodoValidationSchema } from '#src/components/forms/todo-validatio
 
 export default class TodosCreateRouteTemplate extends Component<TodosCreateRouteSignature> {
   @service declare intl: IntlService;
+  validationSchema: ReturnType<typeof createTodoValidationSchema>;
   changeset = new TodoChangeset({});
 
-  get validationSchema() {
-    return createTodoValidationSchema(this.intl);
-  }
-
-  public constructor(owner: Owner, args: TodosCreateRouteSignature) {
+  constructor(owner: Owner, args: TodosCreateRouteSignature) {
     super(owner, args);
+    this.validationSchema = createTodoValidationSchema(this.intl);
   }
 
   <template>

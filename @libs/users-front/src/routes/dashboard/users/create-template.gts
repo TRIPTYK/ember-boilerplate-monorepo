@@ -9,14 +9,12 @@ import { createUserValidationSchema } from '#src/components/forms/user-validatio
 
 export default class UsersCreateRouteTemplate extends Component<UsersCreateRouteSignature> {
   @service declare intl: IntlService;
+  validationSchema: ReturnType<typeof createUserValidationSchema>;
 
   changeset = new UserChangeset({});
-  get validationSchema() {
-    return createUserValidationSchema(this.intl);
-  }
-
-  public constructor(owner: Owner, args: UsersCreateRouteSignature) {
+  constructor(owner: Owner, args: UsersCreateRouteSignature) {
     super(owner, args);
+    this.validationSchema = createUserValidationSchema(this.intl);
   }
 
   <template>
