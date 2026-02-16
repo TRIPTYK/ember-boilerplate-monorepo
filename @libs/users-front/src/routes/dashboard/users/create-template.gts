@@ -3,13 +3,26 @@ import UsersForm from '#src/components/forms/user-form.gts';
 import Component from '@glimmer/component';
 import type { UsersCreateRouteSignature } from './create.gts';
 import type Owner from '@ember/owner';
+import type { IntlService } from 'ember-intl';
+import { service } from '@ember/service';
+import { createUserValidationSchema } from '#src/components/forms/user-validation.ts';
 
 export default class UsersCreateRouteTemplate extends Component<UsersCreateRouteSignature> {
+  @service declare intl: IntlService;
+
   changeset = new UserChangeset({});
+  get validationSchema() {
+    return createUserValidationSchema(this.intl);
+  }
 
   public constructor(owner: Owner, args: UsersCreateRouteSignature) {
     super(owner, args);
   }
 
-  <template><UsersForm @changeset={{this.changeset}} /></template>
+  <template>
+    <UsersForm
+      @changeset={{this.changeset}}
+      @validationSchema={{this.validationSchema}}
+    />
+  </template>
 }

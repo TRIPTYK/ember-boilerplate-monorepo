@@ -5,6 +5,7 @@ export interface DraftUser {
   firstName?: string;
   lastName?: string;
   email?: string;
+  password?: string | null;
 }
 
 export class UserChangeset extends ImmerChangeset<DraftUser> {}

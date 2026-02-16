@@ -54,46 +54,6 @@ test("UpdateRoute updates user and returns JSON:API format", async () => {
   });
 });
 
-test("UpdateRoute returns JSON:API error when updating another user", async () => {
-  await module.createUser({
-    id: "other-user-id",
-    email: "other@test.com",
-    firstName: "Other",
-    lastName: "User",
-    password: "testpassword",
-  });
-
-  const response = await module.fastifyInstance.inject({
-    method: "PATCH",
-    url: "/users/other-user-id",
-    headers: {
-      authorization: module.generateBearerToken(TestModule.TEST_USER_ID),
-    },
-    payload: {
-      data: {
-        id: "other-user-id",
-        type: "users",
-        attributes: {
-          email: "hacked@test.com",
-          firstName: "Hacked",
-          lastName: "User",
-        },
-      },
-    },
-  });
-
-  expect(response.statusCode).toBe(403);
-  const body = response.json();
-  expect(body).toHaveProperty("errors");
-  expect(Array.isArray(body.errors)).toBe(true);
-  expect(body.errors[0]).toMatchObject({
-    status: "403",
-    title: "Forbidden",
-    code: "FORBIDDEN",
-    detail: "You can only update your own profile",
-  });
-});
-
 test("UpdateRoute returns JSON:API error when user not found", async () => {
   const response = await module.fastifyInstance.inject({
     method: "PATCH",

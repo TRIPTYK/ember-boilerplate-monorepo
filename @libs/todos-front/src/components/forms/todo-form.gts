@@ -1,10 +1,14 @@
 import Component from '@glimmer/component';
-import z from 'zod';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import { service } from '@ember/service';
 import type TodoService from '#src/services/todo.ts';
 import type { TodoChangeset } from '#src/changesets/todo.ts';
-import { createTodoValidationSchema } from '#src/components/forms/todo-validation.ts';
+import {
+  createTodoValidationSchema,
+  editTodoValidationSchema,
+  type UpdatedTodo,
+  type ValidatedTodo,
+} from '#src/components/forms/todo-validation.ts';
 import type RouterService from '@ember/routing/router-service';
 import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
@@ -14,6 +18,9 @@ import type ImmerChangeset from 'ember-immer-changeset';
 
 interface TodosFormArgs {
   changeset: TodoChangeset;
+  validationSchema:
+    | ReturnType<typeof createTodoValidationSchema>
+    | ReturnType<typeof editTodoValidationSchema>;
 }
 
 export default class TodosForm extends Component<TodosFormArgs> {
@@ -22,13 +29,9 @@ export default class TodosForm extends Component<TodosFormArgs> {
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
 
-  get validationSchema() {
-    return createTodoValidationSchema(this.intl);
-  }
-
   onSubmit = async (
-    data: z.infer<ReturnType<typeof createTodoValidationSchema>>,
-    c: ImmerChangeset<z.infer<ReturnType<typeof createTodoValidationSchema>>>
+    _data: ValidatedTodo | UpdatedTodo,
+    c: ImmerChangeset<ValidatedTodo | UpdatedTodo>
   ) => {
     await this.todo.save(c);
     await this.router.transitionTo('dashboard.todos');
@@ -43,7 +46,7 @@ export default class TodosForm extends Component<TodosFormArgs> {
     <TpkForm
       @changeset={{@changeset}}
       @onSubmit={{this.onSubmit}}
-      @validationSchema={{this.validationSchema}}
+      @validationSchema={{@validationSchema}}
       data-test-todos-form
       as |F|
     >

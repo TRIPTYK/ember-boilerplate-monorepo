@@ -1,5 +1,8 @@
 import type { User } from '#src/schemas/users.ts';
-import { type ValidatedUser } from '#src/components/forms/user-validation.ts';
+import {
+  type UpdatedUser,
+  type ValidatedUser,
+} from '#src/components/forms/user-validation.ts';
 import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
@@ -11,21 +14,24 @@ import {
 } from '@warp-drive/utilities/json-api';
 import type ImmerChangeset from 'ember-immer-changeset';
 
-type CreateUserData = ValidatedUser & { id: undefined };
-type UpdateUserData = ValidatedUser & { id: string };
-
 export default class UserService extends Service {
   @service declare store: Store;
 
-  public async save(changeset: ImmerChangeset<ValidatedUser>) {
+  public async save(changeset: ImmerChangeset<ValidatedUser | UpdatedUser>) {
     if (changeset.data.id) {
-      return this.update(changeset.data as UpdateUserData, changeset);
+      return this.update(
+        changeset.data as UpdatedUser,
+        changeset as ImmerChangeset<UpdatedUser>
+      );
     } else {
-      return this.create(changeset.data as CreateUserData, changeset);
+      return this.create(
+        changeset.data as ValidatedUser,
+        changeset as ImmerChangeset<ValidatedUser>
+      );
     }
   }
 
-  public async delete(data: UpdateUserData) {
+  public async delete(data: UpdatedUser) {
     const existingUser = this.store.peekRecord<User>({
       id: data.id,
       type: 'users',
@@ -37,7 +43,7 @@ export default class UserService extends Service {
   }
 
   private async create(
-    data: CreateUserData,
+    data: ValidatedUser,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedUser>
   ) {
@@ -52,9 +58,9 @@ export default class UserService extends Service {
   }
 
   private async update(
-    data: UpdateUserData,
+    data: UpdatedUser,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changeset?: ImmerChangeset<ValidatedUser>
+    changeset?: ImmerChangeset<UpdatedUser>
   ) {
     const existingUser = this.store.peekRecord<User>({
       id: data.id,

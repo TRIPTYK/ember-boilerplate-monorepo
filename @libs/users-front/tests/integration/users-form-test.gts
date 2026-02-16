@@ -6,6 +6,10 @@ import UsersForm, { pageObject } from '#src/components/forms/user-form.gts';
 import { initializeTestApp, TestApp } from '../app.ts';
 import type UserService from '#src/services/user.ts';
 import { stubRouter } from '../utils.ts';
+import {
+  createUserValidationSchema,
+  editUserValidationSchema,
+} from '#src/components/forms/user-validation.ts';
 
 const expect = hardExpect.soft;
 
@@ -29,10 +33,19 @@ describe('tpk-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const userService = context.owner.lookup('service:user') as UserService;
+      const intl = context.owner.lookup('service:intl');
       const router = stubRouter(context.owner);
       const changeset = new UserChangeset({});
+      const validationSchema = createUserValidationSchema(intl);
 
-      await render(<template><UsersForm @changeset={{changeset}} /></template>);
+      await render(
+        <template>
+          <UsersForm
+            @changeset={{changeset}}
+            @validationSchema={{validationSchema}}
+          />
+        </template>
+      );
 
       await pageObject.firstName('John');
       await pageObject.lastName('Doe');
@@ -53,13 +66,22 @@ describe('tpk-form', function () {
       await initializeTestApp(context.owner, 'en-us');
 
       const userService = context.owner.lookup('service:user') as UserService;
+      const intl = context.owner.lookup('service:intl');
       const router = stubRouter(context.owner);
 
       router.transitionTo = vi.fn().mockResolvedValue(undefined);
 
       const changeset = new UserChangeset({});
+      const validationSchema = createUserValidationSchema(intl);
 
-      await render(<template><UsersForm @changeset={{changeset}} /></template>);
+      await render(
+        <template>
+          <UsersForm
+            @changeset={{changeset}}
+            @validationSchema={{validationSchema}}
+          />
+        </template>
+      );
 
       await pageObject.firstName('');
       await pageObject.lastName('');
@@ -70,6 +92,34 @@ describe('tpk-form', function () {
       expect(userService.save).not.toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(router.transitionTo).not.toHaveBeenCalled();
+    }
+  );
+
+  renderingTest(
+    'Should not show password field when updating a user',
+    async function ({ context }) {
+      await initializeTestApp(context.owner, 'en-us');
+
+      const intl = context.owner.lookup('service:intl');
+      const changeset = new UserChangeset({
+        id: '123',
+        firstName: 'John',
+        lastName: 'Doe',
+        password: 'password123',
+        email: 'john.doe@example.com',
+      });
+      const validationSchema = editUserValidationSchema(intl);
+
+      await render(
+        <template>
+          <UsersForm
+            @changeset={{changeset}}
+            @validationSchema={{validationSchema}}
+          />
+        </template>
+      );
+
+      expect(pageObject.isPasswordVisible).toBe(false);
     }
   );
 });

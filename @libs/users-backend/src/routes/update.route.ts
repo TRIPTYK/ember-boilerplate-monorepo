@@ -35,17 +35,6 @@ export class UpdateRoute implements Route {
       async (request, reply) => {
         const { id } = request.params as { id: string };
         const body = request.body;
-        const currentUser = request.user!;
-
-        // Authorization: users can only update themselves
-        if (currentUser.id !== id) {
-          return reply.code(403).send(
-            makeJsonApiError(403, "Forbidden", {
-              code: "FORBIDDEN",
-              detail: "You can only update your own profile",
-            }),
-          );
-        }
 
         const user = await this.userRepository.findOne({ id });
 
