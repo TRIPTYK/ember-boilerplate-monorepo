@@ -1,5 +1,8 @@
 import type { Todo } from '#src/schemas/todos.ts';
-import { type ValidatedTodo } from '#src/components/forms/todo-validation.ts';
+import {
+  type UpdatedTodo,
+  type ValidatedTodo,
+} from '#src/components/forms/todo-validation.ts';
 import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
@@ -11,22 +14,19 @@ import {
 } from '@warp-drive/utilities/json-api';
 import type ImmerChangeset from 'ember-immer-changeset';
 
-type CreateTodoData = ValidatedTodo & { id: undefined };
-type UpdateTodoData = ValidatedTodo & { id: string };
-
 export default class TodoService extends Service {
   @service declare store: Store;
 
-  public async save(changeset: ImmerChangeset<ValidatedTodo>) {
+  public async save(changeset: ImmerChangeset<ValidatedTodo | UpdatedTodo>) {
     if (changeset.data.id) {
-      return this.update(changeset.data as UpdateTodoData, changeset);
+      return this.update(changeset.data as UpdatedTodo, changeset);
     } else {
-      return this.create(changeset.data as CreateTodoData, changeset);
+      return this.create(changeset.data as ValidatedTodo, changeset);
     }
   }
 
   public async create(
-    data: CreateTodoData,
+    data: ValidatedTodo,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedTodo>
   ) {
@@ -41,7 +41,7 @@ export default class TodoService extends Service {
   }
 
   public async update(
-    data: UpdateTodoData,
+    data: UpdatedTodo,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedTodo>
   ) {
@@ -65,7 +65,7 @@ export default class TodoService extends Service {
     await this.store.request(request);
   }
 
-  public async delete(data: UpdateTodoData) {
+  public async delete(data: UpdatedTodo) {
     const existingTodo = this.store.peekRecord<Todo>({
       id: data.id,
       type: 'todos',

@@ -12,7 +12,7 @@ import DeleteIcon from '#src/assets/icons/delete.gts';
 import CompletedIcon from '#src/assets/icons/completed.gts';
 import type { TOC } from '@ember/component/template-only';
 import type TodoService from '#src/services/todo.ts';
-import type { UpdateTodoData } from './forms/todo-validation';
+import type { UpdatedTodo } from './forms/todo-validation';
 import { tracked } from '@glimmer/tracking';
 import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
 import { hash } from '@ember/helper';
@@ -40,7 +40,7 @@ class TodosTable extends Component<object> {
   @service declare todo: TodoService;
   @service declare flashMessages: FlashMessagesService;
 
-  @tracked selectedTodoForDelete: UpdateTodoData | null = null;
+  @tracked selectedTodoForDelete: UpdatedTodo | null = null;
 
   get isModalOpen(): boolean {
     return this.selectedTodoForDelete !== null;
@@ -98,7 +98,7 @@ class TodosTable extends Component<object> {
           }>,
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           action: async (element: unknown) => {
-            await this.onChangeCompleted(element as UpdateTodoData);
+            await this.onChangeCompleted(element as UpdatedTodo);
           },
           name: this.intl.t('todos.table.actions.changeCompleted'),
         },
@@ -107,7 +107,7 @@ class TodosTable extends Component<object> {
             Element: SVGSVGElement;
           }>,
           action: (element: unknown) => {
-            this.openModalOnDelete(element as UpdateTodoData);
+            this.openModalOnDelete(element as UpdatedTodo);
           },
           name: this.intl.t('todos.table.actions.delete'),
         },
@@ -115,7 +115,7 @@ class TodosTable extends Component<object> {
     };
   }
 
-  onChangeCompleted = async (element: UpdateTodoData) => {
+  onChangeCompleted = async (element: UpdatedTodo) => {
     element.completed = !element.completed;
     await this.todo.update(element);
   };
@@ -124,7 +124,7 @@ class TodosTable extends Component<object> {
     this.router.transitionTo('dashboard.todos.create');
   };
 
-  openModalOnDelete = (element: UpdateTodoData) => {
+  openModalOnDelete = (element: UpdatedTodo) => {
     this.selectedTodoForDelete = element;
   };
 

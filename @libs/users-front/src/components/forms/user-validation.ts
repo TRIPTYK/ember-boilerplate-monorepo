@@ -17,8 +17,21 @@ export const createUserValidationSchema = (intl: IntlService) =>
     id: string().optional().nullable(),
   });
 
+export const editUserValidationSchema = (intl: IntlService) =>
+  object({
+    firstName: string(
+      intl.t('users.forms.user.validation.firstNameRequired')
+    ).min(1, intl.t('users.forms.user.validation.firstNameRequired')),
+    lastName: string(
+      intl.t('users.forms.user.validation.lastNameRequired')
+    ).min(1, intl.t('users.forms.user.validation.lastNameRequired')),
+    password: string().optional().nullable(),
+    email: email(intl.t('users.forms.user.validation.invalidEmail')),
+    id: string(),
+  });
+
 export type ValidatedUser = z.infer<
   ReturnType<typeof createUserValidationSchema>
 >;
 
-export type UpdateUserData = ValidatedUser & { id: string };
+export type UpdatedUser = z.infer<ReturnType<typeof editUserValidationSchema>>;

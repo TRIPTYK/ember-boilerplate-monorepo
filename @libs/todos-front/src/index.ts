@@ -3,6 +3,7 @@ import type Owner from '@ember/owner';
 import type { DSL } from '@ember/routing/lib/dsl';
 import { buildRegistry } from 'ember-strict-application-resolver/build-registry';
 import IntlService from 'ember-intl/services/intl';
+import type { Store } from '@warp-drive/core';
 
 export function moduleRegistry() {
   return buildRegistry({
@@ -19,6 +20,8 @@ export function moduleRegistry() {
 
 export function initialize(owner: Owner) {
   const intlService = owner.lookup('service:intl') as IntlService | undefined;
+  const storeService = owner.lookup('service:store') as Store | undefined;
+  assert('Store service must be available', storeService);
   assert('Intl service must be available', intlService);
 }
 

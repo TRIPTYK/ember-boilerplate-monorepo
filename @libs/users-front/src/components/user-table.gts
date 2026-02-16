@@ -11,7 +11,7 @@ import EditIcon from '#src/assets/icons/edit.gts';
 import DeleteIcon from '#src/assets/icons/delete.gts';
 import type { TOC } from '@ember/component/template-only';
 import type UserService from '#src/services/user.ts';
-import type { UpdateUserData } from './forms/user-validation';
+import type { UpdatedUser } from './forms/user-validation';
 import { tracked } from '@glimmer/tracking';
 import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
 
@@ -21,7 +21,7 @@ class UsersTable extends Component<object> {
   @service declare user: UserService;
   @service declare flashMessages: FlashMessagesService;
 
-  @tracked selectedUserForDelete: UpdateUserData | null = null;
+  @tracked selectedUserForDelete: UpdatedUser | null = null;
 
   get isModalOpen(): boolean {
     return this.selectedUserForDelete !== null;
@@ -80,7 +80,7 @@ class UsersTable extends Component<object> {
             Element: SVGSVGElement;
           }>,
           action: (element: unknown) => {
-            this.openModalOnDelete(element as UpdateUserData);
+            this.openModalOnDelete(element as UpdatedUser);
           },
           name: this.intl.t('users.table.actions.delete'),
         },
@@ -92,7 +92,7 @@ class UsersTable extends Component<object> {
     this.router.transitionTo('dashboard.users.create');
   };
 
-  openModalOnDelete = (element: UpdateUserData) => {
+  openModalOnDelete = (element: UpdatedUser) => {
     this.selectedUserForDelete = element;
   };
 

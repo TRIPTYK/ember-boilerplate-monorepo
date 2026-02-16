@@ -6,6 +6,7 @@ import TodoForm, { pageObject } from '#src/components/forms/todo-form.gts';
 import { initializeTestApp, TestApp } from '../app.ts';
 import { stubRouter } from '../utils.ts';
 import type TodoService from '#src/services/todo.ts';
+import { createTodoValidationSchema } from '#src/components/forms/todo-validation.ts';
 
 const expect = hardExpect.soft;
 
@@ -29,10 +30,19 @@ describe('tpk-form', function () {
       initializeTestApp(context.owner, 'en-us');
 
       const todoService = context.owner.lookup('service:todo') as TodoService;
+      const intl = context.owner.lookup('service:intl');
       const router = stubRouter(context.owner);
       const changeset = new TodoChangeset({});
+      const validationSchema = createTodoValidationSchema(intl);
 
-      await render(<template><TodoForm @changeset={{changeset}} /></template>);
+      await render(
+        <template>
+          <TodoForm
+            @changeset={{changeset}}
+            @validationSchema={{validationSchema}}
+          />
+        </template>
+      );
 
       await pageObject.title('Test Todo');
       await pageObject.description('Test Description');
@@ -52,13 +62,22 @@ describe('tpk-form', function () {
       initializeTestApp(context.owner, 'en-us');
 
       const todoService = context.owner.lookup('service:todo') as TodoService;
+      const intl = context.owner.lookup('service:intl');
       const router = stubRouter(context.owner);
 
       router.transitionTo = vi.fn().mockResolvedValue(undefined);
 
       const changeset = new TodoChangeset({});
+      const validationSchema = createTodoValidationSchema(intl);
 
-      await render(<template><TodoForm @changeset={{changeset}} /></template>);
+      await render(
+        <template>
+          <TodoForm
+            @changeset={{changeset}}
+            @validationSchema={{validationSchema}}
+          />
+        </template>
+      );
 
       await pageObject.title('');
       await pageObject.description('');
