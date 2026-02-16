@@ -32,7 +32,9 @@ Asserts required services exist. Can be `async` if setup requires awaiting:
 ```typescript
 export function initialize(owner: Owner) {
   const intlService = owner.lookup('service:intl') as IntlService | undefined;
+  const storeService = owner.lookup('service:store') as Store | undefined;
   assert('Intl service must be available', intlService);
+  assert('Store service must be available', storeService);
 }
 ```
 

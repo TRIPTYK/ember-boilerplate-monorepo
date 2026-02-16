@@ -109,7 +109,7 @@ export default class DashboardTemplate extends Component {
     return {
       fullName:
         this.currentUser.currentUser.firstName +
-        ' debug ' +
+        ' ' +
         this.currentUser.currentUser.lastName,
     };
   }
