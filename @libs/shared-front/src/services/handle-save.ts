@@ -43,12 +43,16 @@ export default class HandleSaveService extends Service {
         );
       }
       if (transitionOnSuccess)
-        await this.router.transitionTo(
-          transitionOnSuccess,
-          ...(Array.isArray(idForTransitionOnSuccess)
-            ? idForTransitionOnSuccess
-            : [idForTransitionOnSuccess])
-        );
+        if (idForTransitionOnSuccess) {
+          await this.router.transitionTo(
+            transitionOnSuccess,
+            ...(Array.isArray(idForTransitionOnSuccess)
+              ? idForTransitionOnSuccess
+              : [idForTransitionOnSuccess])
+          );
+        } else {
+          await this.router.transitionTo(transitionOnSuccess);
+        }
     } catch (error) {
       let handled = false;
 

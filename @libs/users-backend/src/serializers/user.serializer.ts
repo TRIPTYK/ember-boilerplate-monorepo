@@ -7,7 +7,7 @@ export const SerializedUserSchema = makeJsonApiDocumentSchema(
   "users",
   object({
     email: email(),
-    firstName: string().min(5),
+    firstName: string(),
     lastName: string(),
   }),
 );

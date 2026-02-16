@@ -19,15 +19,9 @@ export default class UserService extends Service {
 
   public async save(changeset: ImmerChangeset<ValidatedUser | UpdatedUser>) {
     if (changeset.data.id) {
-      return this.update(
-        changeset.data as UpdatedUser,
-        changeset as ImmerChangeset<UpdatedUser>
-      );
+      return this.update(changeset.data as UpdatedUser);
     } else {
-      return this.create(
-        changeset.data as ValidatedUser,
-        changeset as ImmerChangeset<ValidatedUser>
-      );
+      return this.create(changeset.data as ValidatedUser);
     }
   }
 
@@ -42,11 +36,7 @@ export default class UserService extends Service {
     return this.store.request(request);
   }
 
-  private async create(
-    data: ValidatedUser,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changeset?: ImmerChangeset<ValidatedUser>
-  ) {
+  private async create(data: ValidatedUser) {
     const user = this.store.createRecord<User>('users', data);
     const request = createRecord(user);
 
@@ -57,11 +47,7 @@ export default class UserService extends Service {
     await this.store.request(request);
   }
 
-  private async update(
-    data: UpdatedUser,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changeset?: ImmerChangeset<UpdatedUser>
-  ) {
+  private async update(data: UpdatedUser) {
     const existingUser = this.store.peekRecord<User>({
       id: data.id,
       type: 'users',

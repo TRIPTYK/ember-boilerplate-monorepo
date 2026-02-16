@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import type { IntlService } from 'ember-intl';
-import translationsForEnUs from 'virtual:ember-intl/translations/en-us';
-import translationsForFrFr from 'virtual:ember-intl/translations/fr-fr';
 import { setupWorker } from 'msw/browser';
 import { initialize as initializeUserLib } from '@libs/users-front';
 import { initialize as initializeTodoLib } from '@libs/todos-front';
@@ -20,8 +18,6 @@ export default class ApplicationRoute extends Route {
   async beforeModel() {
     setTheme();
     this.intl.setLocale('en-us');
-    this.intl.addTranslations('en-us', translationsForEnUs);
-    this.intl.addTranslations('fr-fr', translationsForFrFr);
 
     // Skip MSW when running against real backend (e2e tests)
     if (import.meta.env.VITE_MOCK_API !== 'false') {

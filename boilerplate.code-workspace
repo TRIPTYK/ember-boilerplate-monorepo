@@ -1,5 +1,7 @@
 {
-    "settings": {},
+    "settings": {
+        "glint2.emberTscSource": "workspace"
+    },
     "folders": [
         {
             "name": "ROOT",

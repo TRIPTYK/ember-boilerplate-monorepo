@@ -24,7 +24,14 @@ interface UsersFormArgs {
     | ReturnType<typeof editUserValidationSchema>;
 }
 
-export default class UsersForm extends Component<UsersFormArgs> {
+interface UserFormSignature {
+  Args: UsersFormArgs;
+  Blocks: {
+    default: [];
+  };
+}
+
+export default class UsersForm extends Component<UserFormSignature> {
   @service declare user: UserService;
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
