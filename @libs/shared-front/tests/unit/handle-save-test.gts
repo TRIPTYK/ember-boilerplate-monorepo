@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { describe, expect, vi } from 'vitest';
 import { test } from 'ember-vitest';
 import { initializeTestApp, TestApp } from '../app';
 import { stubRouter } from '../utils';
-import type HandleSaveService from '#src/services/handle-save.ts';
 
 describe('Service | HandleSave | Unit', () => {
   // eslint-disable-next-line no-empty-pattern
@@ -12,9 +12,7 @@ describe('Service | HandleSave | Unit', () => {
     context,
   }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const successSpy = vi.spyOn(service.flashMessages, 'success');
     const saveAction = vi.fn().mockResolvedValue(undefined);
@@ -30,9 +28,7 @@ describe('Service | HandleSave | Unit', () => {
 
   test('transitions on success', async ({ context }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const router = stubRouter(context.owner);
     const saveAction = vi.fn().mockResolvedValue(undefined);
@@ -50,9 +46,7 @@ describe('Service | HandleSave | Unit', () => {
 
   test('transitions on success with id', async ({ context }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const router = stubRouter(context.owner);
     const saveAction = vi.fn().mockResolvedValue(undefined);
@@ -63,19 +57,14 @@ describe('Service | HandleSave | Unit', () => {
       idForTransitionOnSuccess: '123',
     });
 
-    expect(router.transitionTo).toHaveBeenCalledWith(
-      'dashboard.users',
-      '123'
-    );
+    expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users', '123');
   });
 
   test('no flash or transition when options not provided', async ({
     context,
   }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const router = stubRouter(context.owner);
     const successSpy = vi.spyOn(service.flashMessages, 'success');
@@ -92,9 +81,7 @@ describe('Service | HandleSave | Unit', () => {
 
   test('adds JSON-API errors to changeset', async ({ context }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const changeset = { addError: vi.fn() };
     const saveAction = vi.fn().mockRejectedValue(
@@ -119,13 +106,9 @@ describe('Service | HandleSave | Unit', () => {
     });
   });
 
-  test('strips //data/attributes/ prefix from pointer', async ({
-    context,
-  }) => {
+  test('strips //data/attributes/ prefix from pointer', async ({ context }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const changeset = { addError: vi.fn() };
     const saveAction = vi.fn().mockRejectedValue(
@@ -149,9 +132,7 @@ describe('Service | HandleSave | Unit', () => {
 
   test('multiple errors are all added to changeset', async ({ context }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const changeset = { addError: vi.fn() };
     const saveAction = vi.fn().mockRejectedValue(
@@ -201,14 +182,12 @@ describe('Service | HandleSave | Unit', () => {
     context,
   }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const dangerSpy = vi.spyOn(service.flashMessages, 'danger');
-    const intlSpy = vi.spyOn(service.intl, 't').mockReturnValue(
-      'An error occurred' as never
-    );
+    const intlSpy = vi
+      .spyOn(service.intl, 't')
+      .mockReturnValue('An error occurred' as never);
     const saveAction = vi.fn().mockRejectedValue(
       new AggregateError([
         {
@@ -230,9 +209,7 @@ describe('Service | HandleSave | Unit', () => {
     context,
   }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const router = stubRouter(context.owner);
     const saveAction = vi.fn().mockRejectedValue(
@@ -257,9 +234,7 @@ describe('Service | HandleSave | Unit', () => {
     context,
   }) => {
     await initializeTestApp(context.owner, 'en-us');
-    const service = context.owner.lookup(
-      'service:handle-save'
-    ) as HandleSaveService;
+    const service = context.owner.lookup('service:handle-save');
 
     const router = stubRouter(context.owner);
     const changeset = { addError: vi.fn() };

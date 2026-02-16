@@ -4,9 +4,7 @@ import type { IntlService } from 'ember-intl';
 
 export const createUserValidationSchema = (intl: IntlService) =>
   object({
-    firstName: string(
-      intl.t('users.forms.user.validation.firstNameRequired')
-    ).min(1, intl.t('users.forms.user.validation.firstNameRequired')),
+    firstName: string(),
     lastName: string(
       intl.t('users.forms.user.validation.lastNameRequired')
     ).min(1, intl.t('users.forms.user.validation.lastNameRequired')),
@@ -19,9 +17,7 @@ export const createUserValidationSchema = (intl: IntlService) =>
 
 export const editUserValidationSchema = (intl: IntlService) =>
   object({
-    firstName: string(
-      intl.t('users.forms.user.validation.firstNameRequired')
-    ).min(1, intl.t('users.forms.user.validation.firstNameRequired')),
+    firstName: string(),
     lastName: string(
       intl.t('users.forms.user.validation.lastNameRequired')
     ).min(1, intl.t('users.forms.user.validation.lastNameRequired')),

@@ -40,7 +40,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
     c: ImmerChangeset<ValidatedUser | UpdatedUser>
   ) => {
     await this.handleSave.handleSave({
-      saveAction: () => this.user.create(data),
+      saveAction: () => this.user.save(c),
       changeset: c,
       successMessage: 'users.forms.user.messages.createSuccess',
       transitionOnSuccess: 'dashboard.users',

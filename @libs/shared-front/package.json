@@ -140,6 +140,7 @@
     "type": "addon",
     "main": "addon-main.cjs",
     "app-js": {
+      "./services/error-reporter.js": "./dist/_app_/services/error-reporter.js",
       "./services/handle-save.js": "./dist/_app_/services/handle-save.js"
     }
   }

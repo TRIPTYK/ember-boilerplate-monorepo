@@ -3,6 +3,7 @@ import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type { ImmerChangeset } from 'ember-immer-changeset';
+import type ErrorReporterService from './error-reporter';
 
 interface HandleSaveOptions<T> {
   saveAction: () => Promise<T>;
@@ -10,7 +11,7 @@ interface HandleSaveOptions<T> {
   successMessage?: string;
   transitionOnSuccess?: string;
   transitionOnError?: string;
-  idForTransitionOnSuccess?: string;
+  idForTransitionOnSuccess?: string | string[];
 }
 
 interface JSONAPIError {
@@ -22,6 +23,7 @@ export default class HandleSaveService extends Service {
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
   @service declare router: RouterService;
+  @service declare errorReporter: ErrorReporterService;
 
   public async handleSave<T>({
     saveAction,
@@ -34,34 +36,68 @@ export default class HandleSaveService extends Service {
     try {
       await saveAction();
       if (successMessage) {
-        this.flashMessages.success(this.intl.exists(successMessage) ? this.intl.t(successMessage) : successMessage);
+        this.flashMessages.success(
+          this.intl.exists(successMessage)
+            ? this.intl.t(successMessage)
+            : successMessage
+        );
       }
       if (transitionOnSuccess)
         await this.router.transitionTo(
           transitionOnSuccess,
-          idForTransitionOnSuccess ?? undefined
+          ...(Array.isArray(idForTransitionOnSuccess)
+            ? idForTransitionOnSuccess
+            : [idForTransitionOnSuccess])
         );
     } catch (error) {
+      let handled = false;
+
       if (error instanceof AggregateError) {
-        if (changeset) {
-          for (const singleError of error.errors as JSONAPIError[]) {
-            changeset.addError({
-              message: singleError.detail,
-              key: singleError.source.pointer.replace('//data/attributes/', ''),
-              value: undefined,
-              originalValue: undefined
-            });
-          }
-        } else {
-          this.flashMessages.danger(
-            this.intl.t('shared.handle-save.generic-error-message')
-          );
-        }
+        this.handleAggregateError(error, changeset);
+        handled = true;
       }
+
+      // probably a fatal error ?
+      if (!handled) {
+        this.errorReporter.report(error);
+      }
+
       if (transitionOnError) {
         await this.router.transitionTo(transitionOnError);
       }
     }
+  }
+
+  private handleAggregateError(
+    error: AggregateError,
+    changeset?: ImmerChangeset
+  ) {
+    if (changeset) {
+      this.addErrorsToChangeset(error, changeset);
+    } else {
+      this.reportAggregateError(error);
+    }
+  }
+
+  private addErrorsToChangeset(
+    error: AggregateError,
+    changeset: ImmerChangeset
+  ) {
+    for (const singleError of error.errors as JSONAPIError[]) {
+      changeset.addError({
+        message: singleError.detail,
+        key: singleError.source.pointer.replace('//data/attributes/', ''),
+        value: undefined,
+        originalValue: undefined,
+      });
+    }
+  }
+
+  private reportAggregateError(error: AggregateError) {
+    this.errorReporter.report(error);
+    this.flashMessages.danger(
+      this.intl.t('shared.handle-save.generic-error-message')
+    );
   }
 }
 

@@ -21,7 +21,7 @@
             "name": "@libs/backend-shared",
             "path": "@libs/backend-shared"
         },
-    {
+        {
             "name": "@libs/shared-front",
             "path": "@libs/shared-front"
         },

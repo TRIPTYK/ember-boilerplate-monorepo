@@ -3,7 +3,7 @@ import { buildRegistry } from 'ember-strict-application-resolver/build-registry'
 import type { DSL } from '@ember/routing/lib/dsl';
 
 export function moduleRegistry() {
- return buildRegistry({
+  return buildRegistry({
     ...import.meta.glob('./routes/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./templates/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./helpers/**/*.{js,ts}', { eager: true }),
@@ -12,14 +12,9 @@ export function moduleRegistry() {
   })();
 }
 
-export async function initialize(owner: Owner) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function initialize(_owner: Owner) {}
 
-}
+export function forRouter(this: DSL) {}
 
-export function forRouter(this: DSL) {
-
-}
-
-export function authRoutes(this: DSL) {
-
-}
+export function authRoutes(this: DSL) {}
