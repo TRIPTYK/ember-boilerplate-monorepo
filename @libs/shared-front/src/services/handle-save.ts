@@ -2,9 +2,11 @@ import Service, { service } from '@ember/service';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
+import type { ImmerChangeset } from 'ember-immer-changeset';
 
 interface HandleSaveOptions<T> {
   saveAction: () => Promise<T>;
+  changeset?: ImmerChangeset;
   successMessage?: string;
   transitionOnSuccess?: string;
   transitionOnError?: string;
@@ -27,11 +29,12 @@ export default class HandleSaveService extends Service {
     transitionOnError,
     transitionOnSuccess,
     idForTransitionOnSuccess,
+    changeset,
   }: HandleSaveOptions<T>) {
     try {
       await saveAction();
       if (successMessage) {
-        this.flashMessages.success(successMessage);
+        this.flashMessages.success(this.intl.exists(successMessage) ? this.intl.t(successMessage) : successMessage);
       }
       if (transitionOnSuccess)
         await this.router.transitionTo(
@@ -40,14 +43,19 @@ export default class HandleSaveService extends Service {
         );
     } catch (error) {
       if (error instanceof AggregateError) {
-        for (const singleError of error.errors as JSONAPIError[]) {
-          console.error(singleError);
-          // changeset.addError({
-          //   message: singleError.detail ,
-          //   key: singleError.source.pointer.replace('//data/attributes/', ''),
-          //   value: undefined,
-          //   originalValue: undefined
-          // });
+        if (changeset) {
+          for (const singleError of error.errors as JSONAPIError[]) {
+            changeset.addError({
+              message: singleError.detail,
+              key: singleError.source.pointer.replace('//data/attributes/', ''),
+              value: undefined,
+              originalValue: undefined
+            });
+          }
+        } else {
+          this.flashMessages.danger(
+            this.intl.t('shared.handle-save.generic-error-message')
+          );
         }
       }
       if (transitionOnError) {

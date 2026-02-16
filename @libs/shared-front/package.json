@@ -1,5 +1,5 @@
 {
-  "name": "@libs/users-front",
+  "name": "@libs/shared-front",
   "version": "0.0.0",
   "description": "The default blueprint for Embroider v2 addons.",
   "keywords": [
@@ -67,7 +67,6 @@
     "ember-strict-application-resolver": "catalog:",
     "msw": "catalog:",
     "openapi-msw": "catalog:",
-    "@libs/shared-front": "workspace:^",
     "zod": "~4.3.6"
   },
   "devDependencies": {
@@ -141,24 +140,7 @@
     "type": "addon",
     "main": "addon-main.cjs",
     "app-js": {
-      "./components/forms/login-form.js": "./dist/_app_/components/forms/login-form.js",
-      "./components/forms/user-form.js": "./dist/_app_/components/forms/user-form.js",
-      "./handlers/auth.js": "./dist/_app_/handlers/auth.js",
-      "./routes/dashboard/users/create.js": "./dist/_app_/routes/dashboard/users/create.js",
-      "./routes/dashboard/users/edit.js": "./dist/_app_/routes/dashboard/users/edit.js",
-      "./routes/dashboard/users/index.js": "./dist/_app_/routes/dashboard/users/index.js",
-      "./routes/forgot-password.js": "./dist/_app_/routes/forgot-password.js",
-      "./routes/login.js": "./dist/_app_/routes/login.js",
-      "./routes/logout.js": "./dist/_app_/routes/logout.js",
-      "./schemas/users.js": "./dist/_app_/schemas/users.js",
-      "./services/current-user.js": "./dist/_app_/services/current-user.js",
-      "./services/handle-save.js": "./dist/_app_/services/handle-save.js",
-      "./services/user.js": "./dist/_app_/services/user.js",
-      "./templates/dashboard/users/create.js": "./dist/_app_/templates/dashboard/users/create.js",
-      "./templates/dashboard/users/edit.js": "./dist/_app_/templates/dashboard/users/edit.js",
-      "./templates/dashboard/users/index.js": "./dist/_app_/templates/dashboard/users/index.js",
-      "./templates/forgot-password.js": "./dist/_app_/templates/forgot-password.js",
-      "./templates/login.js": "./dist/_app_/templates/login.js"
+      "./services/handle-save.js": "./dist/_app_/services/handle-save.js"
     }
   }
 }

@@ -15,6 +15,7 @@ import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
 import { LinkTo } from '@ember/routing';
 import type ImmerChangeset from 'ember-immer-changeset';
+import HandleSaveService from '@libs/shared-front/services/handle-save';
 
 interface UsersFormArgs {
   changeset: UserChangeset;
@@ -28,6 +29,7 @@ export default class UsersForm extends Component<UsersFormArgs> {
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
+  @service declare handleSave: HandleSaveService;
 
   get isCreate() {
     return !this.args.changeset.get('id');
@@ -37,11 +39,12 @@ export default class UsersForm extends Component<UsersFormArgs> {
     _data: ValidatedUser | UpdatedUser,
     c: ImmerChangeset<ValidatedUser | UpdatedUser>
   ) => {
-    await this.user.save(c);
-    await this.router.transitionTo('dashboard.users');
-    this.flashMessages.success(
-      this.intl.t('users.forms.user.messages.saveSuccess')
-    );
+    await this.handleSave.handleSave({
+      saveAction: () => this.user.create(data),
+      changeset: c,
+      successMessage: 'users.forms.user.messages.createSuccess',
+      transitionOnSuccess: 'dashboard.users',
+    });
   };
 
   <template>
