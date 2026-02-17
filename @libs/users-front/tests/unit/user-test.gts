@@ -1,13 +1,12 @@
-import { beforeAll, describe } from 'vitest';
+import { beforeAll, describe, expect } from 'vitest';
 import { test } from 'ember-vitest';
 import { initializeTestApp, TestApp } from '../app';
 import type UserService from '#src/services/user.ts';
 import type { Store } from '@warp-drive/core';
 import { setupWorker } from 'msw/browser';
 import { http, HttpResponse } from 'msw';
-import { UserChangeset } from '#src/changesets/user.ts';
-import type ImmerChangeset from 'ember-immer-changeset';
 import type { ValidatedUser } from '#src/components/forms/user-validation.ts';
+import type { User } from '#src/schemas/users.ts';
 
 const handlers = [
   http.post('/users', () => {
@@ -47,12 +46,20 @@ describe('Service | User | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const userService = context.owner.lookup('service:user') as UserService;
-    const changeset = new UserChangeset({
+    const store = context.owner.lookup('service:store') as Store;
+    const data = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'email@example.com',
+    } as ValidatedUser;
+
+    await expect(userService.save(data)).resolves.not.toThrow();
+
+    const createdUser = store.peekRecord<User>({
+      type: 'users',
+      id: 'new-user-id',
     });
-    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
+    expect(createdUser).not.toBeNull();
   });
 
   test('if user already exists in store, it updates it with a PATCH request', async ({
@@ -68,13 +75,16 @@ describe('Service | User | Unit', () => {
       lastName: 'Doe',
       email: 'jane@example.com',
     });
-    const changeset = new UserChangeset({
+    const data = {
       id: '123',
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
-    });
+    };
 
-    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
+    await expect(userService.save(data)).resolves.not.toThrow();
+
+    const updatedUser = store.peekRecord<User>({ type: 'users', id: '123' });
+    expect(updatedUser).not.toBeNull();
   });
 });

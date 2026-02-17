@@ -15,6 +15,7 @@ import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import { t, type IntlService } from 'ember-intl';
 import { LinkTo } from '@ember/routing';
 import type ImmerChangeset from 'ember-immer-changeset';
+import HandleSaveService from '@libs/shared-front/services/handle-save';
 
 interface TodosFormArgs {
   changeset: TodoChangeset;
@@ -28,16 +29,18 @@ export default class TodosForm extends Component<TodosFormArgs> {
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
+  @service declare handleSave: HandleSaveService;
 
   onSubmit = async (
-    _data: ValidatedTodo | UpdatedTodo,
+    data: ValidatedTodo | UpdatedTodo,
     c: ImmerChangeset<ValidatedTodo | UpdatedTodo>
   ) => {
-    await this.todo.save(c);
-    await this.router.transitionTo('dashboard.todos');
-    this.flashMessages.success(
-      this.intl.t('todos.forms.todo.messages.saveSuccess')
-    );
+    await this.handleSave.handleSave({
+      saveAction: () => this.todo.save(data),
+      changeset: c,
+      successMessage: 'todos.forms.todo.messages.saveSuccess',
+      transitionOnSuccess: 'dashboard.todos',
+    });
   };
 
   tpkButton = () => {};

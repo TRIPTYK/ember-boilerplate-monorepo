@@ -8,6 +8,7 @@ import LocalStorage from 'ember-simple-auth/session-stores/local-storage';
 import type CurrentUserService from './services/current-user';
 import type { Store } from '@warp-drive/core';
 import IntlService from 'ember-intl/services/intl';
+import { moduleRegistry as sharedModuleRegistry } from '@libs/shared-front';
 
 export function moduleRegistry() {
   return buildRegistry({
@@ -16,6 +17,7 @@ export function moduleRegistry() {
     ...import.meta.glob('./helpers/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./components/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./services/**/*.{js,ts}', { eager: true }),
+    ...sharedModuleRegistry(),
     './services/session': {
       default: SessionService,
     },

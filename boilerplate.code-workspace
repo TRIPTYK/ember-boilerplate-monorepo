@@ -1,5 +1,7 @@
 {
-    "settings": {},
+    "settings": {
+        "glint2.emberTscSource": "workspace"
+    },
     "folders": [
         {
             "name": "ROOT",
@@ -20,6 +22,10 @@
         {
             "name": "@libs/backend-shared",
             "path": "@libs/backend-shared"
+        },
+        {
+            "name": "@libs/shared-front",
+            "path": "@libs/shared-front"
         },
         {
             "name": "@libs/users-front",

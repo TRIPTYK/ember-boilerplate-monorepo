@@ -17,19 +17,15 @@ import type ImmerChangeset from 'ember-immer-changeset';
 export default class TodoService extends Service {
   @service declare store: Store;
 
-  public async save(changeset: ImmerChangeset<ValidatedTodo | UpdatedTodo>) {
-    if (changeset.data.id) {
-      return this.update(changeset.data as UpdatedTodo, changeset);
+  public async save(data: ValidatedTodo | UpdatedTodo) {
+    if (data.id) {
+      return this.update(data as UpdatedTodo);
     } else {
-      return this.create(changeset.data as ValidatedTodo, changeset);
+      return this.create(data as ValidatedTodo);
     }
   }
 
-  public async create(
-    data: ValidatedTodo,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changeset?: ImmerChangeset<ValidatedTodo>
-  ) {
+  public async create(data: ValidatedTodo) {
     const todo = this.store.createRecord<Todo>('todos', data);
     const request = createRecord(todo);
 

@@ -7,7 +7,10 @@
     "lint": "pnpm turbo run lint",
     "lint:fix": "pnpm turbo run lint:fix",
     "format": "pnpm turbo run format",
-    "lint:format": "pnpm turbo run lint:format"
+    "lint:format": "pnpm turbo run lint:format",
+    "dev:front": "pnpm --filter run --filter=@apps/front start",
+    "dev:back": "pnpm --filter run --filter=@apps/backend dev",
+    "dev": "concurrently \"pnpm:dev:*\" --names \"dev:\" --prefixColors auto"
   },
   "keywords": [],
   "author": "",

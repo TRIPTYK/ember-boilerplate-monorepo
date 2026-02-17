@@ -5,8 +5,6 @@ import type { Store } from '@warp-drive/core';
 import { setupWorker } from 'msw/browser';
 import { http, HttpResponse } from 'msw';
 import type TodoService from '#src/services/todo.ts';
-import { TodoChangeset } from '#src/changesets/todo.ts';
-import type ImmerChangeset from 'ember-immer-changeset';
 import type { ValidatedTodo } from '#src/components/forms/todo-validation.ts';
 
 const handlers = [
@@ -47,12 +45,12 @@ describe('Service | Todo | Unit', () => {
   }) => {
     initializeTestApp(context.owner, 'en-us');
     const todoService = context.owner.lookup('service:todo') as TodoService;
-    const changeset = new TodoChangeset({
+    const data = {
       title: 'Test Todo',
       description: 'Test Description',
       completed: false,
-    });
-    await todoService.save(changeset as ImmerChangeset<ValidatedTodo>);
+    } as ValidatedTodo;
+    await todoService.save(data);
   });
 
   test('if todo already exists in store, it updates it with a PATCH request', async ({
@@ -66,10 +64,9 @@ describe('Service | Todo | Unit', () => {
       title: 'Test Todo',
       description: 'Test Description',
       completed: false,
-    };
+    } as ValidatedTodo;
     store.createRecord('todos', data);
 
-    const changeset = new TodoChangeset(data);
-    await todoService.save(changeset as ImmerChangeset<ValidatedTodo>);
+    await todoService.save(data);
   });
 });
