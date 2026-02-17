@@ -11,6 +11,9 @@ export default defineConfig({
       extensions,
     }),
   ],
+  optimizeDeps: {
+    exclude: ['ember-basic-dropdown'],
+  },
   test: {
     setupFiles: ['./tests/test-helper.ts'],
     include: ['tests/**/*-test.{gjs,gts}'],
