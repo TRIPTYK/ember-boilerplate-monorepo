@@ -1,0 +1,10 @@
+{
+  "extends": "@libs/repo-utils/configs/backend-lib/tsconfig.base.json",
+  "include": ["src", "tests", "vite-runner.ts"],
+  "compilerOptions": {
+    "paths": {
+      "#src/*": ["./src/*"],
+      "#tests/*": ["./tests/*"]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "ember-boilerplate-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "pnpm turbo run lint",
+    "lint:fix": "pnpm turbo run lint:fix",
+    "format": "pnpm turbo run format",
+    "lint:format": "pnpm turbo run lint:format",
+    "dev:front": "pnpm --filter run --filter=@apps/front start",
+    "dev:back": "pnpm --filter run --filter=@apps/backend dev",
+    "dev": "concurrently \"pnpm:dev:*\" --names \"dev:\" --prefixColors auto"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "pnpm": {
+    "overrides": {
+      "zod": "^4.0.0",
+      "ember-basic-dropdown": "git+https://github.com/cibernox/ember-basic-dropdown/tree/dist"
+    },
+    "patchedDependencies": {
+      "@embroider/vite": "patches/@embroider__vite.patch",
+      "ember-power-select-with-create": "patches/ember-power-select-with-create.patch"
+    },
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "argon2",
+      "better-sqlite3",
+      "core-js",
+      "core-js-pure",
+      "cpu-features",
+      "edgedriver",
+      "esbuild",
+      "geckodriver",
+      "lefthook",
+      "msw",
+      "protobufjs",
+      "sqlite3",
+      "ssh2"
+    ]
+  },
+  "devDependencies": {
+    "git-conventional-commits": "catalog:",
+    "lefthook": "catalog:",
+    "turbo": "catalog:"
+  },
+  "volta": {
+    "node": "24.13.0",
+    "pnpm": "10.28.1"
+  }
+}

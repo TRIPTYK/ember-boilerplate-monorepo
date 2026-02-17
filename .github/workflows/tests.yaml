@@ -1,0 +1,22 @@
+name: Tests
+
+on: [push, release]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wyvox/action-setup-pnpm@v3
+      - name: Build
+        run: pnpm turbo build --filter='@libs/*'
+      - name: Install Playwright Browsers
+        working-directory: ./@apps/e2e
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Lint
+        run: pnpm turbo lint
+      - name: Run frontend tests
+        run: pnpm turbo test --filter='@apps/front' --filter='@libs/*-front' --concurrency=1
+      - name: Run backend tests
+        run: pnpm turbo test --filter='@libs/*-backend' --filter='@apps/backend'

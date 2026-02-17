@@ -1,0 +1,30 @@
+table:
+  confirmModal:
+    question: 'Êtes-vous sûr de vouloir supprimer cette tâche ?'
+  headers:
+    title: 'Titre'
+    description: 'Description'
+    completed: 'Complété'
+  actions:
+    addTodo: 'Ajouter une tâche'
+    changeCompleted: 'Changer le statut de la tâche'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+
+forms:
+  todo:
+    labels:
+      title: 'Titre'
+      description: 'Description'
+      completed: 'Complété'
+    actions:
+      submit: 'Soumettre'
+      back: 'Retour à la liste des tâches'
+    messages:
+      saveSuccess: 'Tâche enregistrée avec succès.'
+      deleteSuccess: 'Tâche supprimée avec succès.'
+      deleteError: 'Erreur lors de la suppression de la tâche.'
+
+pages:
+  list:
+    title: 'Liste des tâches'

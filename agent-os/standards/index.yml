@@ -1,0 +1,87 @@
+# Agent OS Standards Index
+
+backend:
+  app-wiring:
+    description: Steps to register a new module in @apps/backend (entities, init, router, seeder)
+  application-context:
+    description: Top-level app container for config, logger, ORM
+  barrel-exports:
+    description: index.ts barrel re-exports and entities array for MikroORM registration
+  configuration:
+    description: Environment variable validation using Zod schemas
+  entity-definitions:
+    description: MikroORM defineEntity API, inferred types, ISO string dates
+  error-format:
+    description: JSON:API error format via makeJsonApiError and handleJsonApiErrors
+  json-api-serialization:
+    description: Manual serializer functions with Zod schemas for type-safe JSON:API responses
+  jwt-authentication:
+    description: JWT tokens, generation, verification middleware, and auth flow
+  library-context:
+    description: LibraryContext interface in context.ts — em + configuration, no Fastify instance
+  module-system:
+    description: Class-based module pattern with static init(), forked EntityManager, and setupRoutes()
+  naming-conventions:
+    description: File suffixes, class/type names, #src imports, variable conventions
+  password-hashing:
+    description: Argon2 password hashing utilities
+  route-structure:
+    description: Class-based routes with Route interface, DI via constructor, array registration
+  scoped-middleware:
+    description: Fastify register() callbacks for scoped auth middleware
+
+frontend:
+  app-integration:
+    description: Steps to wire a new frontend lib into @apps/front
+  auth-handler:
+    description: WarpDrive auth handler for injecting JWT tokens into requests
+  file-extensions:
+    description: .gts for templates, .ts for logic-only files
+  form-pattern:
+    description: Zod + ImmerChangeset + TpkForm component pattern
+  helpers:
+    description: Pure function helpers with typed signatures for templates
+  http-mocks:
+    description: MSW mock handlers with openapi-msw
+  index-entry-point:
+    description: Required exports from src/index.ts (moduleRegistry, initialize, forRouter)
+  lib-structure:
+    description: Folder structure and config files for frontend libs
+  modifiers:
+    description: Function-based modifiers with typed signatures for DOM behavior
+  route-template:
+    description: Route handler and template file conventions
+  schema-changeset:
+    description: WarpDrive schema and ImmerChangeset definitions
+  service-crud:
+    description: Entity service CRUD operations via WarpDrive
+  testing-setup:
+    description: Vitest + ember-vitest test infrastructure and patterns
+  translations:
+    description: i18n key conventions and translation file locations
+
+global:
+  feature-libraries:
+    description: Paired [feature]-front and [feature]-backend libraries
+  folder-structure:
+    description: Standard folder organization for frontend and backend
+  import-alias:
+    description: Use #src/ import alias instead of relative paths
+  monorepo-packages:
+    description: "@apps for deployables, @libs for shared packages"
+  post-implementation-checks:
+    description: Run lint globally and tests on modified packages after implementation
+
+testing:
+  backend-integration:
+    description: Testcontainers PostgreSQL, TestModule pattern, transaction rollback isolation
+  e2e-playwright:
+    description: Playwright E2E tests with role-based selectors
+  msw-mocking:
+    description: Type-safe API mocking with openapi-msw
+  page-objects:
+    description: Page object exports from component files for testing
+  rendering-tests:
+    description: Component testing with renderingTest, TestApp, and initializeTestApp
+  soft-expectations:
+    description: Use expect.soft for better test failure reporting

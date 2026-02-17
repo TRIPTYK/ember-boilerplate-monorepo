@@ -1,0 +1,35 @@
+.alerts {
+  @apply toast;
+}
+
+.alert {
+  @apply flex items-center justify-center mb-2 py-4 px-4 rounded-field break-words;
+
+  opacity: 0;
+  transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.alert.active {
+  @apply opacity-100 right-0;
+}
+
+.alert-info {
+  @apply bg-info text-info-content;
+}
+
+.alert-success {
+  @apply bg-success text-success-content;
+}
+
+.alert-warning {
+  @apply bg-warning text-warning-content;
+}
+
+.alert-danger {
+  @apply bg-error text-error-content;
+}
+
+.active.exiting {
+  opacity: 0;
+  right: -100px;
+}

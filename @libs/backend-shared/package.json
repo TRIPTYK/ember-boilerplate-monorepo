@@ -1,0 +1,38 @@
+{
+  "name": "@libs/backend-shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest watch",
+    "build": "tsdown",
+    "build:watch": "tsdown --watch",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix",
+    "lint:format": "oxfmt check src",
+    "format": "oxfmt fix src"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "volta": {
+    "extends": "../../package.json"
+  },
+  "dependencies": {
+    "fastify": "catalog:",
+    "fastify-type-provider-zod": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@libs/repo-utils": "workspace:^",
+    "@typescript/native-preview": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "tsdown": "^0.20.1",
+    "vite": "^7.3.1",
+    "vitest": "catalog:"
+  }
+}

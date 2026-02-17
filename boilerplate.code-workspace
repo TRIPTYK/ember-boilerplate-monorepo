@@ -1,0 +1,51 @@
+{
+    "settings": {
+        "glint2.emberTscSource": "workspace"
+    },
+    "folders": [
+        {
+            "name": "ROOT",
+            "path": "."
+        },
+        {
+            "name": "@apps/front",
+            "path": "@apps/front"
+        },
+        {
+            "name": "@apps/backend",
+            "path": "@apps/backend"
+        },
+        {
+            "name": "@apps/e2e",
+            "path": "@apps/e2e"
+        },
+        {
+            "name": "@libs/backend-shared",
+            "path": "@libs/backend-shared"
+        },
+        {
+            "name": "@libs/shared-front",
+            "path": "@libs/shared-front"
+        },
+        {
+            "name": "@libs/users-front",
+            "path": "@libs/users-front"
+        },
+        {
+            "name": "@libs/users-backend",
+            "path": "@libs/users-backend"
+        },
+        {
+            "name": "@libs/todos-front",
+            "path": "@libs/todos-front"
+        },
+        {
+            "name": "@libs/todos-backend",
+            "path": "@libs/todos-backend"
+        },
+        {
+            "name": "@libs/repo-utils",
+            "path": "@libs/repo-utils"
+        }
+    ]
+}

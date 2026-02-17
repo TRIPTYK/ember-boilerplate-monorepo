@@ -1,0 +1,9 @@
+pre-push:
+  commands:
+    lint:
+      run: pnpm lint
+
+commit-msg:
+  commands:
+    git-conventional-commits:
+      run: pnpm git-conventional-commits commit-msg-hook {1}

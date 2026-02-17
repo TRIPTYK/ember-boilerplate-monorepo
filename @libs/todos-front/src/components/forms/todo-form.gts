@@ -1,0 +1,98 @@
+import Component from '@glimmer/component';
+import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import { service } from '@ember/service';
+import type TodoService from '#src/services/todo.ts';
+import type { TodoChangeset } from '#src/changesets/todo.ts';
+import {
+  createTodoValidationSchema,
+  editTodoValidationSchema,
+  type UpdatedTodo,
+  type ValidatedTodo,
+} from '#src/components/forms/todo-validation.ts';
+import type RouterService from '@ember/routing/router-service';
+import { create, fillable, clickable } from 'ember-cli-page-object';
+import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
+import { t, type IntlService } from 'ember-intl';
+import { LinkTo } from '@ember/routing';
+import type ImmerChangeset from 'ember-immer-changeset';
+import HandleSaveService from '@libs/shared-front/services/handle-save';
+
+interface TodosFormArgs {
+  changeset: TodoChangeset;
+  validationSchema:
+    | ReturnType<typeof createTodoValidationSchema>
+    | ReturnType<typeof editTodoValidationSchema>;
+}
+
+export default class TodosForm extends Component<TodosFormArgs> {
+  @service declare todo: TodoService;
+  @service declare router: RouterService;
+  @service declare flashMessages: FlashMessageService;
+  @service declare intl: IntlService;
+  @service declare handleSave: HandleSaveService;
+
+  onSubmit = async (
+    data: ValidatedTodo | UpdatedTodo,
+    c: ImmerChangeset<ValidatedTodo | UpdatedTodo>
+  ) => {
+    await this.handleSave.handleSave({
+      saveAction: () => this.todo.save(data),
+      changeset: c,
+      successMessage: 'todos.forms.todo.messages.saveSuccess',
+      transitionOnSuccess: 'dashboard.todos',
+    });
+  };
+
+  tpkButton = () => {};
+
+  <template>
+    <TpkForm
+      @changeset={{@changeset}}
+      @onSubmit={{this.onSubmit}}
+      @validationSchema={{@validationSchema}}
+      data-test-todos-form
+      as |F|
+    >
+      <div class="grid grid-cols-12 gap-x-6 gap-y-3 max-w-4xl">
+        <F.TpkInputPrefab
+          @label={{t "todos.forms.todo.labels.title"}}
+          @validationField="title"
+          class="col-span-12 md:col-span-4"
+        />
+        <F.TpkTextareaPrefab
+          @label={{t "todos.forms.todo.labels.description"}}
+          @validationField="description"
+          class="col-span-12 md:col-span-5"
+        />
+        <F.TpkCheckboxPrefab
+          @label={{t "todos.forms.todo.labels.completed"}}
+          @validationField="completed"
+          class="col-span-12 md:col-span-3"
+        />
+        <div class="col-span-12 flex items-center justify-between gap-2">
+          <button type="submit" class="btn btn-primary">
+            {{t "todos.forms.todo.actions.submit"}}
+          </button>
+          <LinkTo
+            @route="dashboard.todos"
+            class="text-sm text-primary underline text-center mt-2"
+          >
+            {{t "todos.forms.todo.actions.back"}}
+          </LinkTo>
+        </div>
+      </div>
+    </TpkForm>
+  </template>
+}
+
+export const pageObject = create({
+  scope: '[data-test-todos-form]',
+  title: fillable('[data-test-tpk-prefab-input-container="title"] input'),
+  description: fillable(
+    '[data-test-tpk-prefab-textarea-container="description"] textarea'
+  ),
+  completed: clickable(
+    '[data-test-tpk-prefab-checkbox-container="completed"] input'
+  ),
+  submit: clickable('button[type="submit"]'),
+});
