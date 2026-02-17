@@ -32,11 +32,11 @@ export default class TodosForm extends Component<TodosFormArgs> {
   @service declare handleSave: HandleSaveService;
 
   onSubmit = async (
-    _data: ValidatedTodo | UpdatedTodo,
+    data: ValidatedTodo | UpdatedTodo,
     c: ImmerChangeset<ValidatedTodo | UpdatedTodo>
   ) => {
     await this.handleSave.handleSave({
-      saveAction: () => this.todo.save(c),
+      saveAction: () => this.todo.save(data),
       changeset: c,
       successMessage: 'todos.forms.todo.messages.saveSuccess',
       transitionOnSuccess: 'dashboard.todos',

@@ -43,11 +43,11 @@ export default class UsersForm extends Component<UserFormSignature> {
   }
 
   onSubmit = async (
-    _data: ValidatedUser | UpdatedUser,
+    data: ValidatedUser | UpdatedUser,
     c: ImmerChangeset<ValidatedUser | UpdatedUser>
   ) => {
     await this.handleSave.handleSave({
-      saveAction: () => this.user.save(c),
+      saveAction: () => this.user.save(data),
       changeset: c,
       successMessage: 'users.forms.user.messages.createSuccess',
       transitionOnSuccess: 'dashboard.users',

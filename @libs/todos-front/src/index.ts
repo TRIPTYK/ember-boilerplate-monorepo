@@ -4,6 +4,7 @@ import type { DSL } from '@ember/routing/lib/dsl';
 import { buildRegistry } from 'ember-strict-application-resolver/build-registry';
 import IntlService from 'ember-intl/services/intl';
 import type { Store } from '@warp-drive/core';
+import { moduleRegistry as sharedModuleRegistry } from '@libs/shared-front';
 
 export function moduleRegistry() {
   return buildRegistry({
@@ -12,6 +13,7 @@ export function moduleRegistry() {
     ...import.meta.glob('./helpers/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./components/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./services/**/*.{js,ts}', { eager: true }),
+    ...sharedModuleRegistry(),
     './services/intl': {
       default: IntlService,
     },

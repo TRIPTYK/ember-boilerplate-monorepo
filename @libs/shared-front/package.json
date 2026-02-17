@@ -49,9 +49,6 @@
   },
   "dependencies": {
     "@embroider/addon-shim": "catalog:",
-    "@triptyk/ember-input": "catalog:",
-    "@triptyk/ember-input-validation": "catalog:",
-    "@triptyk/ember-ui": "catalog:",
     "@warp-drive/core": "catalog:",
     "@warp-drive/ember": "catalog:",
     "@warp-drive/experiments": "catalog:",
@@ -60,14 +57,9 @@
     "@warp-drive/utilities": "catalog:",
     "decorator-transforms": "catalog:",
     "ember-auto-import": "2.12.0",
-    "ember-cli-page-object": "catalog:",
     "ember-immer-changeset": "catalog:",
     "ember-intl": "catalog:",
-    "ember-simple-auth": "catalog:",
-    "ember-strict-application-resolver": "catalog:",
-    "msw": "catalog:",
-    "openapi-msw": "catalog:",
-    "zod": "~4.3.6"
+    "ember-strict-application-resolver": "catalog:"
   },
   "devDependencies": {
     "@apps/backend": "workspace:^",

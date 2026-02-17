@@ -38,10 +38,7 @@ describe('Service | HandleSave | Unit', () => {
       transitionOnSuccess: 'dashboard.users',
     });
 
-    expect(router.transitionTo).toHaveBeenCalledWith(
-      'dashboard.users',
-      undefined
-    );
+    expect(router.transitionTo).toHaveBeenCalledWith('dashboard.users');
   });
 
   test('transitions on success with id', async ({ context }) => {

@@ -5,8 +5,6 @@ import type UserService from '#src/services/user.ts';
 import type { Store } from '@warp-drive/core';
 import { setupWorker } from 'msw/browser';
 import { http, HttpResponse } from 'msw';
-import { UserChangeset } from '#src/changesets/user.ts';
-import type ImmerChangeset from 'ember-immer-changeset';
 import type { ValidatedUser } from '#src/components/forms/user-validation.ts';
 
 const handlers = [
@@ -47,12 +45,12 @@ describe('Service | User | Unit', () => {
   }) => {
     await initializeTestApp(context.owner, 'en-us');
     const userService = context.owner.lookup('service:user') as UserService;
-    const changeset = new UserChangeset({
+    const data = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'email@example.com',
-    });
-    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
+    } as ValidatedUser;
+    await userService.save(data);
   });
 
   test('if user already exists in store, it updates it with a PATCH request', async ({
@@ -68,13 +66,13 @@ describe('Service | User | Unit', () => {
       lastName: 'Doe',
       email: 'jane@example.com',
     });
-    const changeset = new UserChangeset({
+    const data = {
       id: '123',
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
-    });
+    };
 
-    await userService.save(changeset as ImmerChangeset<ValidatedUser>);
+    await userService.save(data);
   });
 });

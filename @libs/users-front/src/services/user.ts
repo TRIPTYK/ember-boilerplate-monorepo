@@ -12,16 +12,15 @@ import {
   deleteRecord,
   updateRecord,
 } from '@warp-drive/utilities/json-api';
-import type ImmerChangeset from 'ember-immer-changeset';
 
 export default class UserService extends Service {
   @service declare store: Store;
 
-  public async save(changeset: ImmerChangeset<ValidatedUser | UpdatedUser>) {
-    if (changeset.data.id) {
-      return this.update(changeset.data as UpdatedUser);
+  public async save(data: ValidatedUser | UpdatedUser) {
+    if (data.id) {
+      return this.update(data as UpdatedUser);
     } else {
-      return this.create(changeset.data as ValidatedUser);
+      return this.create(data as ValidatedUser);
     }
   }
 
