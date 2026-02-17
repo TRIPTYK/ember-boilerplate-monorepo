@@ -1,10 +1,5 @@
 import Application from 'ember-strict-application-resolver';
-import {
-  authRoutes,
-  forRouter,
-  initialize,
-  moduleRegistry,
-} from '#src/index.js';
+import { forRouter, initialize, moduleRegistry } from '#src/index.js';
 import { moduleRegistry as inputValidationRegistry } from '@triptyk/ember-input-validation';
 import IntlService from 'ember-intl/services/intl';
 import compatModules from '@embroider/virtual/compat-modules';
@@ -29,7 +24,6 @@ Router.map(function () {
   this.route('dashboard', function () {
     forRouter.call(this);
   });
-  authRoutes.call(this);
 });
 
 export class TestApp extends Application {

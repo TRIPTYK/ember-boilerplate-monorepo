@@ -5,11 +5,8 @@ import type {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
-import type { AuthLibraryContext, UserLibraryContext } from "./context.js";
+import type { UserLibraryContext } from "./context.js";
 import { type ZodTypeProvider } from "fastify-type-provider-zod";
-import { LoginRoute } from "#src/routes/login.route.js";
-import { RefreshRoute } from "#src/routes/refresh.route.js";
-import { LogoutRoute } from "#src/routes/logout.route.js";
 import { CreateRoute } from "#src/routes/create.route.js";
 import { ProfileRoute } from "#src/routes/profile.route.js";
 import { ListRoute } from "#src/routes/list.route.js";
@@ -19,7 +16,7 @@ import { DeleteRoute } from "#src/routes/delete.route.js";
 import { UserEntity } from "./entities/user.entity.js";
 import { type ModuleInterface, type Route } from "@libs/backend-shared";
 import { handleJsonApiErrors } from "@libs/backend-shared";
-import { createJwtAuthMiddleware } from "./index.ts";
+import { createJwtAuthMiddleware } from "@libs/auth-backend";
 
 export type FastifyInstanceTypeForModule = FastifyInstance<
   RawServerDefault,
@@ -28,44 +25,6 @@ export type FastifyInstanceTypeForModule = FastifyInstance<
   FastifyBaseLogger,
   ZodTypeProvider
 >;
-
-export class AuthModule implements ModuleInterface<FastifyInstanceTypeForModule> {
-  private constructor(private context: AuthLibraryContext) {}
-
-  public static init(context: AuthLibraryContext): AuthModule {
-    return new AuthModule(context);
-  }
-
-  public async setupRoutes(fastify: FastifyInstanceTypeForModule): Promise<void> {
-    const authRoutes: Route<FastifyInstanceTypeForModule>[] = [
-      new LoginRoute(
-        this.context.em.getRepository(UserEntity),
-        this.context.em,
-        this.context.configuration.jwtSecret,
-        this.context.configuration.jwtRefreshSecret,
-      ),
-      new RefreshRoute(
-        this.context.em,
-        this.context.configuration.jwtSecret,
-        this.context.configuration.jwtRefreshSecret,
-      ),
-      new LogoutRoute(this.context.em, this.context.configuration.jwtRefreshSecret),
-    ];
-
-    await fastify.register(
-      async (f) => {
-        f.setErrorHandler((error, request, reply) => {
-          handleJsonApiErrors(error, request, reply);
-        });
-
-        for (const route of authRoutes) {
-          route.routeDefinition(f);
-        }
-      },
-      { prefix: "/auth" },
-    );
-  }
-}
 
 export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule> {
   private constructor(private context: UserLibraryContext) {}
@@ -95,6 +54,7 @@ export class UserModule implements ModuleInterface<FastifyInstanceTypeForModule>
         const jwtAuthMiddleware = createJwtAuthMiddleware(
           this.context.em,
           this.context.configuration.jwtSecret,
+          repository,
         );
 
         f.addHook("preValidation", jwtAuthMiddleware);

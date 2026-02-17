@@ -4,7 +4,7 @@ import {
   TodoEntity,
   type FastifyInstanceTypeForModule,
 } from "#src/index.js";
-import { entities as userEntities } from "@libs/users-backend";
+import { entities as userEntities, UserEntity } from "@libs/users-backend";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -44,8 +44,11 @@ export class TestModule {
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
+    const sharedEm = orm.em.fork();
+
     const module = Module.init({
-      em: orm.em.fork(),
+      em: sharedEm,
+      userRepository: sharedEm.getRepository(UserEntity),
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
       },

@@ -37,6 +37,7 @@
     "@fastify/session": "catalog:",
     "@fastify/swagger": "catalog:",
     "@fastify/swagger-ui": "catalog:",
+    "@libs/auth-backend": "workspace:*",
     "@libs/backend-shared": "workspace:*",
     "@libs/todos-backend": "workspace:*",
     "@libs/users-backend": "workspace:*",

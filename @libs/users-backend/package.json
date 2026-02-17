@@ -60,6 +60,7 @@
     "@fastify/flash": "catalog:",
     "@fastify/secure-session": "catalog:",
     "@fastify/static": "catalog:",
+    "@libs/auth-backend": "workspace:*",
     "@libs/backend-shared": "workspace:*",
     "@libs/repo-utils": "workspace:*",
     "@mikro-orm/cli": "catalog:",

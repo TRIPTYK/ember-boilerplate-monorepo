@@ -11,6 +11,9 @@ export default defineConfig(({ command }) => ({
       outputFormat: "esm",
     }) : []),
   ],
+  resolve: {
+    preserveSymlinks: true,
+  },
   build: {
     target: "esnext",
     minify: true,

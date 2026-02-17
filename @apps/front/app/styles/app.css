@@ -20,4 +20,5 @@
 @source "../../node_modules/@triptyk/ember-input";
 @source "../../node_modules/@triptyk/ember-input-validation";
 @source "../../node_modules/@libs/users-front";
+@source "../../node_modules/@libs/auth-front";
 @source "../../node_modules/@libs/todos-front";

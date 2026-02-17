@@ -13,17 +13,18 @@ const schema = object({
   JWT_SECRET: string(),
   JWT_REFRESH_SECRET: string(),
   SEED: string().default("42").optional(),
-  // Email configuration
-  APP_NAME: string().default("Registr"),
-  APP_URL: string().default("http://localhost:3000"),
+  APP_NAME: string().default("Triptyk"),
+  APP_URL: string().default("http://localhost:4200"),
   APP_LOGO_URL: string().optional(),
   SMTP_HOST: string(),
   SMTP_PORT: string(),
   SMTP_USER: string(),
   SMTP_PASSWORD: string(),
   SMTP_SECURE: string().transform((v) => v === "true"),
-  EMAIL_FROM_NAME: string().default("Registr Support"),
-  EMAIL_FROM_ADDRESS: string().default("support@example.com"),
+  EMAIL_FROM_NAME: string(),
+  EMAIL_FROM_ADDRESS: string(),
+  EMAIL_MODE: string().default("development").optional(),
+  EMAIL_TEST_RECIPIENT: string().default("test@triptyk.eu").optional(),
 });
 
 export type AppConfiguration = z.infer<typeof schema>;

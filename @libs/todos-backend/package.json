@@ -26,10 +26,11 @@
     "vitest": "catalog:",
     "zod": "^3.24.1",
     "@libs/backend-shared": "workspace:*",
-    "@libs/users-backend": "workspace:*"
+    "@libs/auth-backend": "workspace:*"
   },
   "devDependencies": {
     "@libs/repo-utils": "workspace:*",
+    "@libs/users-backend": "workspace:*",
     "@ngneat/falso": "catalog:",
     "@swc/core": "catalog:",
     "@testcontainers/postgresql": "^11.11.0",

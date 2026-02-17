@@ -28,6 +28,14 @@
             "path": "@libs/shared-front"
         },
         {
+            "name": "@libs/auth-front",
+            "path": "@libs/auth-front"
+        },
+        {
+            "name": "@libs/auth-backend",
+            "path": "@libs/auth-backend"
+        },
+        {
             "name": "@libs/users-front",
             "path": "@libs/users-front"
         },

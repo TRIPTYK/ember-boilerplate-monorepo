@@ -1,11 +1,5 @@
-import {
-  entities,
-  UserModule,
-  UserEntity,
-  RefreshTokenEntity,
-  type FastifyInstanceTypeForModule,
-  AuthModule,
-} from "#src/index.js";
+import { entities, UserModule, UserEntity, type FastifyInstanceTypeForModule } from "#src/index.js";
+import { AuthModule, RefreshTokenEntity, hashToken, generateFamilyId } from "@libs/auth-backend";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -16,7 +10,6 @@ import {
 import { sign } from "jsonwebtoken";
 import { hash } from "argon2";
 import { randomUUID } from "crypto";
-import { hashToken, generateFamilyId } from "#src/utils/token.utils.js";
 
 export class TestModule {
   public static JWT_SECRET = "testSecret";
@@ -59,9 +52,13 @@ export class TestModule {
     });
     const authModule = AuthModule.init({
       em: sharedEm,
+      userRepository: sharedEm.getRepository(UserEntity),
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
         jwtRefreshSecret: TestModule.JWT_REFRESH_SECRET,
+        appUrl: "http://localhost:5173",
+        appName: "Test App",
+        emailFromAddress: "test@example.com",
       },
     });
 

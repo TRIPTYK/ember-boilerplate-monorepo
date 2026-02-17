@@ -6,11 +6,3 @@ export interface UserLibraryContext {
     jwtSecret: string;
   };
 }
-
-export interface AuthLibraryContext {
-  em: EntityManager;
-  configuration: {
-    jwtRefreshSecret: string;
-    jwtSecret: string;
-  };
-}

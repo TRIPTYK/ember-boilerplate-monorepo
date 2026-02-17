@@ -1,4 +1,5 @@
-import { type AuthModule, type UserModule } from "@libs/users-backend";
+import { type AuthModule } from "@libs/auth-backend";
+import { type UserModule } from "@libs/users-backend";
 import type { FastifyInstanceType } from "./app.js";
 import { statusRoute } from "./status.route.js";
 import { Module as TodoModule } from "@libs/todos-backend";

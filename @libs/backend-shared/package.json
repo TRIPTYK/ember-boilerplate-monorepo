@@ -24,10 +24,13 @@
   "dependencies": {
     "fastify": "catalog:",
     "fastify-type-provider-zod": "catalog:",
+    "mailgen": "catalog:",
+    "nodemailer": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@libs/repo-utils": "workspace:^",
+    "@types/nodemailer": "catalog:",
     "@typescript/native-preview": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",

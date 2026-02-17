@@ -1,0 +1,54 @@
+{
+  "name": "@libs/auth-backend",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "scripts": {
+    "test": "pnpm vitest run",
+    "build": "tsdown",
+    "build:watch": "tsdown --watch",
+    "lint": "pnpm concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:js": "oxlint --type-aware --type-check",
+    "lint:format": "oxfmt check src tests",
+    "lint:format:fix": "oxfmt fix src tests",
+    "format": "pnpm lint:format:fix"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "catalog:",
+    "@mikro-orm/postgresql": "catalog:",
+    "argon2": "catalog:",
+    "fastify": "catalog:",
+    "fastify-type-provider-zod": "catalog:",
+    "jsonwebtoken": "catalog:",
+    "vitest": "catalog:",
+    "zod": "^3.24.1",
+    "@libs/backend-shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@libs/repo-utils": "workspace:*",
+    "@ngneat/falso": "catalog:",
+    "@swc/core": "catalog:",
+    "@testcontainers/postgresql": "^11.11.0",
+    "@types/jsonwebtoken": "catalog:",
+    "@types/node": "^25.2.0",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "concurrently": "~9.2.1",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "tsdown": "^0.20.1",
+    "type-fest": "catalog:",
+    "vite": "8.0.0-beta.11",
+    "vite-node": "^5.3.0",
+    "vite-tsconfig-paths": "catalog:"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

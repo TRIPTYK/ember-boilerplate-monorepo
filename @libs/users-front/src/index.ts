@@ -56,10 +56,3 @@ export function forRouter(this: DSL) {
     this.route('edit', { path: '/:user_id/edit' });
   });
 }
-
-export function authRoutes(this: DSL) {
-  this.route('login');
-  this.route('forgot-password');
-  this.route('reset-password');
-  this.route('logout');
-}

@@ -19,7 +19,8 @@ import packageJson from "../../package.json" with { type: "json" };
 import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
-import { UserModule, AuthModule } from "@libs/users-backend";
+import { UserModule, UserEntity } from "@libs/users-backend";
+import { AuthModule } from "@libs/auth-backend";
 import { Module as TodoModule } from "@libs/todos-backend";
 
 export type FastifyInstanceType = FastifyInstance<
@@ -134,11 +135,18 @@ export class App {
     this.fastify.setErrorHandler((error: FastifyError, request, reply) => {
       // eslint-disable-next-line no-console
       console.error(error);
-      reply.send({
-        message: error.message,
-        code: error.code,
-        status: error.statusCode ?? 500,
-      });
+      const statusCode = error.statusCode ?? 500;
+      const errorResponse = {
+        errors: [
+          {
+            status: statusCode.toString(),
+            title: error.name || "Internal Server Error",
+            detail: error.message,
+            code: error.code || "INTERNAL_ERROR",
+          },
+        ],
+      };
+      reply.code(statusCode).send(errorResponse);
     });
 
     this.fastify.setNotFoundHandler((_request, reply) => {
@@ -152,10 +160,29 @@ export class App {
     await appRouter(this.fastify, {
       authModule: AuthModule.init({
         configuration: {
+          smtp: {
+            host: this.context.configuration.SMTP_HOST,
+            port: Number(this.context.configuration.SMTP_PORT),
+            secure: this.context.configuration.SMTP_SECURE,
+            auth: {
+              user: this.context.configuration.SMTP_USER,
+              pass: this.context.configuration.SMTP_PASSWORD,
+            },
+          },
+          emailFromAddress: this.context.configuration.EMAIL_FROM_ADDRESS,
+          appName: this.context.configuration.EMAIL_FROM_NAME,
+          emailMode: this.context.configuration.EMAIL_MODE as
+            | "production"
+            | "development"
+            | "test"
+            | undefined,
+          emailTestRecipient: this.context.configuration.EMAIL_TEST_RECIPIENT,
           jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
           jwtSecret: this.context.configuration.JWT_SECRET,
+          appUrl: this.context.configuration.APP_URL,
         },
         em: this.context.orm.em.fork(),
+        userRepository: this.context.orm.em.fork().getRepository(UserEntity),
       }),
       userModule: UserModule.init({
         em: this.context.orm.em.fork(),
@@ -165,6 +192,7 @@ export class App {
       }),
       todosModule: TodoModule.init({
         em: this.context.orm.em.fork(),
+        userRepository: this.context.orm.em.fork().getRepository(UserEntity),
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
         },

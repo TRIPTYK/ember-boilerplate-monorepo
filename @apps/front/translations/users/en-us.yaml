@@ -11,15 +11,6 @@ table:
     delete: 'Delete'
 
 forms:
-  login:
-    title: 'Login'
-    validation:
-      invalidEmail: 'Please enter a valid email address'
-      passwordTooShort: 'Password must be at least 8 characters'
-  forgotPassword:
-    title: 'Forgot Password'
-    validation:
-      invalidEmail: 'Please enter a valid email address'
   user:
     labels:
       firstName: 'First Name'

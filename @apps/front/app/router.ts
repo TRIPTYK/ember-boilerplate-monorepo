@@ -1,6 +1,7 @@
 import EmberRouter from '@embroider/router';
 import config from '@apps/front/config/environment';
-import { forRouter as userLibRouter, authRoutes } from '@libs/users-front';
+import { forRouter as userLibRouter } from '@libs/users-front';
+import { forRouter as authRoutes } from '@libs/auth-front';
 import { forRouter as todosLibRouter } from '@libs/todos-front';
 
 export default class Router extends EmberRouter {

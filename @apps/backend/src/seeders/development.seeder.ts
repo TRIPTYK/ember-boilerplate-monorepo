@@ -1,4 +1,5 @@
-import { hashPassword, UserEntity } from "@libs/users-backend";
+import { UserEntity } from "@libs/users-backend";
+import { hashPassword } from "@libs/auth-backend";
 import type { EntityManager } from "@mikro-orm/core";
 import { Seeder } from "@mikro-orm/seeder";
 

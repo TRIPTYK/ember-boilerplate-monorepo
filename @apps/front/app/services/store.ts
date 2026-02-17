@@ -6,7 +6,7 @@ import { CacheHandler, Fetch, RequestManager } from '@warp-drive/core';
 import type Owner from '@ember/owner';
 import { LegacyNetworkHandler } from '@warp-drive/legacy/compat';
 import { setOwner } from '@ember/owner';
-import AuthHandler from '@libs/users-front/handlers/auth';
+import AuthHandler from '@libs/auth-front/handlers/auth';
 import { getOwner } from '@ember/owner';
 import TodoSchema from '@libs/todos-front/schemas/todos';
 

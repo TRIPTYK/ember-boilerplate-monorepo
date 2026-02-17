@@ -58,6 +58,7 @@
     "@glimmer/component": "catalog:",
     "@glint/ember-tsc": "~1.1.1",
     "@glint/template": "catalog:",
+    "@libs/auth-front": "workspace:^",
     "@libs/users-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
     "@playwright/test": "catalog:",

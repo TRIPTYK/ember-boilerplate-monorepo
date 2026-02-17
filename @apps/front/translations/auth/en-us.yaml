@@ -1,0 +1,35 @@
+forms:
+  login:
+    title: 'Login'
+    actions:
+      forgotPassword: 'Forgot password?'
+    validation:
+      invalidEmail: 'Please enter a valid email address'
+      passwordTooShort: 'Password must be at least 8 characters'
+    messages:
+      error: 'Invalid email or password. Please try again.'
+  forgotPassword:
+    title: 'Forgot Password'
+    actions:
+      backToLogin: 'Back to login'
+    validation:
+      invalidEmail: 'Please enter a valid email address'
+    messages:
+      checkEmail: 'A reset email has been sent. Please check your inbox.'
+      error: 'Error sending email. Please try again.'
+  resetPassword:
+    title: 'Reset Password'
+    labels:
+      password: 'New Password'
+      confirmPassword: 'Confirm Password'
+    actions:
+      submit: 'Reset'
+      backToLogin: 'Back to login'
+    messages:
+      success: 'Your password has been reset successfully. You can now log in.'
+      invalidToken: 'The reset link is invalid or has expired.'
+    validation:
+      passwordTooShort: 'Password must be at least 8 characters'
+      passwordUppercase: 'Password must contain at least one uppercase letter'
+      passwordNumber: 'Password must contain at least one number'
+      passwordsDontMatch: 'Passwords do not match'

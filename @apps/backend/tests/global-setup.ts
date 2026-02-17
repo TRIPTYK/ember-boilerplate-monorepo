@@ -1,5 +1,6 @@
 import { entities as todoEntities } from "@libs/todos-backend";
 import { entities as usersEntities } from "@libs/users-backend";
+import { entities as authEntities } from "@libs/auth-backend";
 import { MikroORM } from "@mikro-orm/postgresql";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
@@ -15,7 +16,7 @@ export async function setup() {
   process.env.TEST_DATABASE_URL = container.getConnectionUri();
 
   const orm = await MikroORM.init({
-    entities: [...usersEntities, ...todoEntities],
+    entities: [...usersEntities, ...authEntities, ...todoEntities],
     clientUrl: process.env.TEST_DATABASE_URL,
     driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
   });
