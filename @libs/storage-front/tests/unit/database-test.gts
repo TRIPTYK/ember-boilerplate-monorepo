@@ -1,10 +1,10 @@
 import { afterEach, describe, expect } from 'vitest';
 import { test } from 'ember-vitest';
-import { Database } from '#src/core/database.ts';
+import { DatabaseWorkerClient } from '#src/core/database-worker-client.ts';
 import { TreatmentEntity } from '#src/entities/treatment.entity.ts';
 
 describe('Unit | Core | Database', () => {
-  let db: Database;
+  let db: DatabaseWorkerClient;
 
   afterEach(async () => {
     if (db) {
@@ -13,14 +13,14 @@ describe('Unit | Core | Database', () => {
   });
 
   test('initializes successfully with IndexedDB VFS', async () => {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize('test-db-init');
     // If no error thrown, initialization succeeded
     expect(true).toBe(true);
   });
 
   test('creates a table from entity definition', async () => {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize('test-db-create-table');
     await db.createTable(TreatmentEntity);
 
@@ -32,7 +32,7 @@ describe('Unit | Core | Database', () => {
   });
 
   test('executes INSERT and returns change count', async () => {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize('test-db-execute');
     await db.createTable(TreatmentEntity);
 
@@ -44,7 +44,7 @@ describe('Unit | Core | Database', () => {
   });
 
   test('queries rows and returns typed results', async () => {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize('test-db-query');
     await db.createTable(TreatmentEntity);
 
@@ -65,7 +65,7 @@ describe('Unit | Core | Database', () => {
   });
 
   test('returns empty array for queries with no results', async () => {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize('test-db-empty-query');
     await db.createTable(TreatmentEntity);
 
@@ -74,7 +74,7 @@ describe('Unit | Core | Database', () => {
   });
 
   test('throws when operating on uninitialized database', async () => {
-    db = new Database();
-    await expect(db.exec('SELECT 1')).rejects.toThrow('Database is not initialized');
+    db = new DatabaseWorkerClient();
+    await expect(db.exec('SELECT 1')).rejects.toThrow('Database not initialized');
   });
 });

@@ -1,4 +1,4 @@
-import type { Database } from "#src/core/database.ts";
+import type { DatabaseInterface } from "#src/core/database-worker-client.ts";
 import type {
   Treatment,
   TreatmentStatus,
@@ -7,7 +7,7 @@ import { TreatmentEntity } from "#src/entities/treatment.entity.ts";
 import { BaseRepository } from "#src/repositories/base-repository.ts";
 
 export class TreatmentRepository extends BaseRepository<Treatment> {
-  constructor(db: Database) {
+  constructor(db: DatabaseInterface) {
     super(db, TreatmentEntity);
   }
 

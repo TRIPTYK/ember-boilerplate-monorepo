@@ -1,6 +1,7 @@
-declare module "wa-sqlite/src/examples/IDBBatchAtomicVFS.js" {
-  export class IDBBatchAtomicVFS {
-    constructor(idbDatabaseName?: string, options?: Record<string, unknown>);
+declare module "wa-sqlite/src/examples/OPFSCoopSyncVFS.js" {
+  export class OPFSCoopSyncVFS {
+    constructor(name: string, module: unknown);
+    static create(name: string, module: unknown): Promise<OPFSCoopSyncVFS>;
     name: string;
     close(): Promise<void>;
   }

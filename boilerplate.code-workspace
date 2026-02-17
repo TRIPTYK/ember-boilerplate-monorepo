@@ -32,6 +32,10 @@
             "path": "@libs/storage-front"
         },
         {
+            "name": "@libs/treatment-front",
+            "path": "@libs/treatment-front"
+        },
+        {
             "name": "@libs/auth-front",
             "path": "@libs/auth-front"
         },

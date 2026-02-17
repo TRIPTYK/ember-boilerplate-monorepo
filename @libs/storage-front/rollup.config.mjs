@@ -40,6 +40,7 @@ export default {
         "handlers/**/*.js",
         "templates/**/*.js",
         "schemas/**/*.js",
+        "worker/**/*.js",
       ],
       {
         mapFilename: fileNameMapper,

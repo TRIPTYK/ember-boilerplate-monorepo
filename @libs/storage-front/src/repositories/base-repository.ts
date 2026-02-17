@@ -1,10 +1,10 @@
-import type { Database } from "#src/core/database.ts";
+import type { DatabaseInterface } from "#src/core/database-worker-client.ts";
 import type { EntityDefinition } from "#src/entities/define-entity.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export class BaseRepository<T extends {}> {
   constructor(
-    protected db: Database,
+    protected db: DatabaseInterface,
     protected entity: EntityDefinition<T>,
   ) {}
 

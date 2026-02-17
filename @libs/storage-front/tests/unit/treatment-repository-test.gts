@@ -1,11 +1,11 @@
 import { afterEach, describe, expect } from 'vitest';
 import { test } from 'ember-vitest';
-import { Database } from '#src/core/database.ts';
+import { DatabaseWorkerClient } from '#src/core/database-worker-client.ts';
 import { TreatmentEntity } from '#src/entities/treatment.entity.ts';
 import { TreatmentRepository } from '#src/repositories/treatment-repository.ts';
 
 describe('Unit | Repository | TreatmentRepository', () => {
-  let db: Database;
+  let db: DatabaseWorkerClient;
   let repo: TreatmentRepository;
 
   afterEach(async () => {
@@ -15,7 +15,7 @@ describe('Unit | Repository | TreatmentRepository', () => {
   });
 
   async function setupRepo(dbName: string) {
-    db = new Database();
+    db = new DatabaseWorkerClient();
     await db.initialize(dbName);
     await db.createTable(TreatmentEntity);
     repo = new TreatmentRepository(db);

@@ -50,7 +50,7 @@
     "@embroider/addon-shim": "catalog:",
     "decorator-transforms": "catalog:",
     "ember-strict-application-resolver": "catalog:",
-    "wa-sqlite": "^1.0.0"
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#master"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
@@ -112,7 +112,8 @@
     "main": "addon-main.cjs",
     "app-js": {
       "./services/storage.js": "./dist/_app_/services/storage.js",
-      "./services/treatment.js": "./dist/_app_/services/treatment.js"
+      "./services/treatment.js": "./dist/_app_/services/treatment.js",
+      "./worker/sqlite-worker.js": "./dist/_app_/worker/sqlite-worker.js"
     }
   }
 }

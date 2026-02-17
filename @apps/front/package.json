@@ -23,8 +23,8 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc",
-    "start": "concurrently \"pnpm turbo build:watch --filter=...\" \"vite dev\"",
-    "start:with-back": "VITE_MOCK_API=false concurrently \"pnpm turbo build:watch --filter=...\" \"vite dev\"",
+    "start": "concurrently \"pnpm turbo build:watch --filter=... --concurrency=20\" \"vite dev\"",
+    "start:with-back": "VITE_MOCK_API=false concurrently \"pnpm turbo build:watch --filter=... --concurrency=20\" \"vite dev\"",
     "test": "pnpm vitest run",
     "test:watch": "pnpm vitest",
     "test:playwright": "playwright test"
@@ -62,6 +62,7 @@
     "@libs/users-front": "workspace:^",
     "@libs/storage-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
+    "@libs/treatments-front": "workspace:^",
     "@playwright/test": "catalog:",
     "@rollup/plugin-babel": "^6.1.0",
     "@tailwindcss/vite": "catalog:",
