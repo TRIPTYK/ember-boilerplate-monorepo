@@ -60,6 +60,7 @@
     "@glint/template": "catalog:",
     "@libs/auth-front": "workspace:^",
     "@libs/users-front": "workspace:^",
+    "@libs/storage-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
     "@playwright/test": "catalog:",
     "@rollup/plugin-babel": "^6.1.0",

@@ -28,6 +28,10 @@
             "path": "@libs/shared-front"
         },
         {
+            "name": "@libs/storage-front",
+            "path": "@libs/storage-front"
+        },
+        {
             "name": "@libs/auth-front",
             "path": "@libs/auth-front"
         },
