@@ -88,7 +88,7 @@ Document the shaping conversation and key decisions:
 
 **Decisions Section:**
 - New feature (not modifying existing)
-- **Create new `@libs/treatments-front` library** following established patterns
+- **Create new `@libs/treatment-front` library** following established patterns
 - Client-side storage via SQLite WASM
 - No backend entity needed initially (offline-first)
 - Step-by-step validation with blocking navigation
@@ -164,7 +164,7 @@ Document the project structure patterns to follow (since there's no existing tre
 
 **Project Structure Patterns:**
 
-1. **Frontend Library Pattern** (`@libs/treatments-front/`)
+1. **Frontend Library Pattern** (`@libs/treatment-front/`)
    - Based on existing `@libs/users-front/` and `@libs/todos-front/` structure
    - Folder structure to follow
    - Key exports from index.ts

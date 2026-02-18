@@ -5,7 +5,7 @@
 This document describes the project structure patterns to follow when implementing the treatment wizard.
 
 **IMPORTANT**: You will need to create one new library:
-- `@libs/treatments-front` — Frontend wizard components, routes, and services
+- `@libs/treatment-front` — Frontend wizard components, routes, and services
 - **No backend library needed** — treatment data stays entirely client-side (SQLite WASM)
 
 Since there is no existing treatment management code, we reference the patterns established by `@libs/users-front` and `@libs/todos-front` as templates for structuring this new library.
@@ -14,10 +14,10 @@ Since there is no existing treatment management code, we reference the patterns 
 
 ## 1. Frontend Library Pattern
 
-### Expected Structure: `@libs/treatments-front/`
+### Expected Structure: `@libs/treatment-front/`
 
 ```
-@libs/treatments-front/
+@libs/treatment-front/
 ├── src/
 │   ├── components/
 │   │   ├── forms/
@@ -139,7 +139,7 @@ export function forRouter(this: DSL) {
 
 ### MSW Mocks Still Needed
 
-Even without a backend, you'll still create MSW mock handlers in `@libs/treatments-front/http-mocks/` for:
+Even without a backend, you'll still create MSW mock handlers in `@libs/treatment-front/http-mocks/` for:
 - Development mode consistency (matches pattern from users/todos)
 - Potential future export/import features
 - Testing purposes
@@ -170,7 +170,7 @@ Router.map(function () {
 
 **Add for treatments**:
 ```typescript
-import { forRouter as treatmentsLibRouter } from '@libs/treatments-front';
+import { forRouter as treatmentsLibRouter } from '@libs/treatment-front';
 
 Router.map(function () {
   this.route('dashboard', { path: '/' }, function () {
@@ -211,8 +211,8 @@ export default class ApplicationRoute extends Route {
 
 **Add for treatments**:
 ```typescript
-import { initialize as initializeTreatmentsLib } from '@libs/treatments-front';
-import allTreatmentsHandlers from '@libs/treatments-front/http-mocks/all';
+import { initialize as initializeTreatmentsLib } from '@libs/treatment-front';
+import allTreatmentsHandlers from '@libs/treatment-front/http-mocks/all';
 
 // In beforeModel():
 await initializeTreatmentsLib(getOwner(this)!);
@@ -246,7 +246,7 @@ export default class StoreService extends BaseStoreService {
 
 **Add for treatments**:
 ```typescript
-import TreatmentSchema from '@libs/treatments-front/schemas/treatments';
+import TreatmentSchema from '@libs/treatment-front/schemas/treatments';
 
 // In schemas array:
 schemas: [UserSchema, TodoSchema, TreatmentSchema],

@@ -2,6 +2,7 @@ import type { Treatment } from '#src/schemas/treatments.ts';
 import {
   type UpdatedTreatment,
   type ValidatedTreatment,
+  type DraftTreatmentData,
 } from '#src/components/forms/treatment-validation.ts';
 import { assert } from '@ember/debug';
 import Service from '@ember/service';
@@ -14,19 +15,49 @@ import {
 } from '@warp-drive/utilities/json-api';
 import type ImmerChangeset from 'ember-immer-changeset';
 
+type TreatmentWithId = DraftTreatmentData & { id: string };
+
 export default class treatmentService extends Service {
   @service declare store: Store;
 
-  public async save(data: ValidatedTreatment | UpdatedTreatment) {
+  public async save(data: DraftTreatmentData & { id?: string | null }) {
     if (data.id) {
-      return this.update(data as UpdatedTreatment);
+      return this.update(data as TreatmentWithId);
     } else {
-      return this.create(data as ValidatedTreatment);
+      return this.create(data);
     }
   }
 
-  public async create(data: ValidatedTreatment) {
-    const treatment = this.store.createRecord<Treatment>('treatments', data);
+  public async create(data: DraftTreatmentData) {
+    const treatmentData = {
+      title: data.title ?? '',
+      description: data.description,
+      treatmentType: data.treatmentType,
+      responsible: data.responsible,
+      hasDPO: data.hasDPO,
+      DPO: data.DPO,
+      hasExternalDPO: data.hasExternalDPO,
+      externalOrganizationDPO: data.externalOrganizationDPO,
+      reasons: data.reasons,
+      subReasons: data.subReasons,
+      legalBase: data.legalBase,
+      dataSubjectCategories: data.dataSubjectCategories,
+      personalData: data.personalData,
+      financialData: data.financialData,
+      dataSource: data.dataSource,
+      retentionPeriod: data.retentionPeriod,
+      hasAccessByThirdParty: data.hasAccessByThirdParty,
+      thirdPartyAccess: data.thirdPartyAccess,
+      areDataExportedOutsideEU: data.areDataExportedOutsideEU,
+      recipient: data.recipient,
+      securityMeasures: data.securityMeasures,
+    };
+
+    const treatment = this.store.createRecord<Treatment>('treatments', {
+      data: treatmentData,
+      status: 'draft',
+      creationDate: new Date().toISOString(),
+    });
     const request = createRecord(treatment);
 
     request.body = JSON.stringify({
@@ -37,7 +68,7 @@ export default class treatmentService extends Service {
   }
 
   public async update(
-    data: UpdatedTreatment,
+    data: TreatmentWithId,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changeset?: ImmerChangeset<ValidatedTreatment>
   ) {
@@ -47,9 +78,32 @@ export default class treatmentService extends Service {
     });
     assert('Treatment must exist to be updated', existingTreatment);
 
-    Object.assign(existingTreatment, {
-      title: data.title,
+    const treatmentData = {
+      title: data.title ?? '',
       description: data.description,
+      treatmentType: data.treatmentType,
+      responsible: data.responsible,
+      hasDPO: data.hasDPO,
+      DPO: data.DPO,
+      hasExternalDPO: data.hasExternalDPO,
+      externalOrganizationDPO: data.externalOrganizationDPO,
+      reasons: data.reasons,
+      subReasons: data.subReasons,
+      legalBase: data.legalBase,
+      dataSubjectCategories: data.dataSubjectCategories,
+      personalData: data.personalData,
+      financialData: data.financialData,
+      dataSource: data.dataSource,
+      retentionPeriod: data.retentionPeriod,
+      hasAccessByThirdParty: data.hasAccessByThirdParty,
+      thirdPartyAccess: data.thirdPartyAccess,
+      areDataExportedOutsideEU: data.areDataExportedOutsideEU,
+      recipient: data.recipient,
+      securityMeasures: data.securityMeasures,
+    };
+
+    Object.assign(existingTreatment, {
+      data: treatmentData,
     });
 
     const request = updateRecord(existingTreatment, { patch: true });
@@ -60,7 +114,7 @@ export default class treatmentService extends Service {
     await this.store.request(request);
   }
 
-  public async delete(data: UpdatedTreatment) {
+  public async delete(data: TreatmentWithId) {
     const existingTreatment = this.store.peekRecord<Treatment>({
       id: data.id,
       type: 'treatments',

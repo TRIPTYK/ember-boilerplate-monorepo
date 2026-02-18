@@ -62,7 +62,7 @@ A 2-step wizard for creating and editing GDPR treatment records. This is the ini
 ### Architecture Decisions
 
 **Library Structure:**
-- `@libs/treatment-front` (package: `@libs/treatments-front`) already exists with basic CRUD
+- `@libs/treatment-front` (package: `@libs/treatment-front`) already exists with basic CRUD
 - Transform existing simple form into 2-step wizard
 - Follow the established library pattern from `@libs/users-front` and `@libs/todos-front`
 - **No backend library needed** — treatments stay entirely client-side

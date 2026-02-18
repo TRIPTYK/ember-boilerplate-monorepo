@@ -10,24 +10,160 @@ const mocktreatments = [
     id: '1',
     type: 'treatments' as const,
     attributes: {
-      title: 'Eat 100 Raffaello',
-      description: 'I need to eat 100 Raffaello to be happy',
+      creationDate: '2026-01-15',
+      updateDate: '2026-02-10',
+      status: 'draft',
+      order: '1',
+      isOverDueDate: false,
+      data: {
+        title: 'Gestion des ressources humaines',
+        description: 'Traitement des données RH pour le recrutement',
+        treatmentType: 'Ressources Humaines',
+        responsible: {
+          fullName: 'Servais SA',
+          entityNumber: 'BE 0412.589.401',
+          address: {
+            streetAndNumber: 'Rue de la Loi 42',
+            postalCode: '1000',
+            city: 'Bruxelles',
+            country: 'Belgique',
+            phone: '+32 2 123 45 67',
+            email: 'contact@servais.be',
+          },
+        },
+        hasDPO: true,
+        DPO: {
+          fullName: 'Jean Dupont',
+          address: {
+            streetAndNumber: 'Avenue Louise 100',
+            postalCode: '1050',
+            city: 'Ixelles',
+            country: 'Belgique',
+            phone: '+32 2 987 65 43',
+            email: 'dpo@servais.be',
+          },
+        },
+        hasExternalDPO: false,
+        reasons: [],
+        subReasons: [],
+        legalBase: [],
+        dataSubjectCategories: [],
+        personalData: [],
+        financialData: [],
+        dataSource: [],
+        retentionPeriod: '',
+        hasAccessByThirdParty: false,
+        thirdPartyAccess: [],
+        areDataExportedOutsideEU: false,
+        securityMeasures: [],
+      },
     },
   },
   {
     id: '2',
     type: 'treatments' as const,
     attributes: {
-      title: 'Eat a Durum with Stephane',
-      description: 'Restaurant La Macchina, 18:00',
+      creationDate: '2026-01-20',
+      updateDate: '2026-02-12',
+      status: 'draft',
+      order: '2',
+      isOverDueDate: false,
+      data: {
+        title: 'Gestion de la paie',
+        description: 'Traitement des données de paie des employés',
+        treatmentType: 'Finance',
+        responsible: {
+          fullName: 'Servais SA',
+          entityNumber: 'BE 0412.589.401',
+          address: {
+            streetAndNumber: 'Rue de la Loi 42',
+            postalCode: '1000',
+            city: 'Bruxelles',
+            country: 'Belgique',
+            phone: '+32 2 123 45 67',
+            email: 'contact@servais.be',
+          },
+        },
+        hasDPO: true,
+        DPO: {
+          fullName: 'Jean Dupont',
+          address: {
+            streetAndNumber: 'Avenue Louise 100',
+            postalCode: '1050',
+            city: 'Ixelles',
+            country: 'Belgique',
+            phone: '+32 2 987 65 43',
+            email: 'dpo@servais.be',
+          },
+        },
+        hasExternalDPO: true,
+        externalOrganizationDPO: {
+          fullName: 'DPO Consulting SPRL',
+          entityNumber: 'BE 0678.123.456',
+          address: {
+            streetAndNumber: 'Boulevard Anspach 25',
+            postalCode: '1000',
+            city: 'Bruxelles',
+            country: 'Belgique',
+            phone: '+32 2 555 66 77',
+            email: 'contact@dpoconsulting.be',
+          },
+        },
+        reasons: [],
+        subReasons: [],
+        legalBase: [],
+        dataSubjectCategories: [],
+        personalData: [],
+        financialData: [],
+        dataSource: [],
+        retentionPeriod: '',
+        hasAccessByThirdParty: false,
+        thirdPartyAccess: [],
+        areDataExportedOutsideEU: false,
+        securityMeasures: [],
+      },
     },
   },
   {
     id: '3',
     type: 'treatments' as const,
     attributes: {
-      title: 'Call my mom',
-      description: 'I need to call my mom to wish her happy birthday',
+      creationDate: '2026-02-01',
+      updateDate: '2026-02-15',
+      status: 'draft',
+      order: '3',
+      isOverDueDate: false,
+      data: {
+        title: 'Campagne marketing email',
+        description: 'Envoi de newsletters aux clients',
+        treatmentType: 'Marketing',
+        responsible: {
+          fullName: 'Servais SA',
+          entityNumber: 'BE 0412.589.401',
+          address: {
+            streetAndNumber: 'Rue de la Loi 42',
+            postalCode: '1000',
+            city: 'Bruxelles',
+            country: 'Belgique',
+            phone: '+32 2 123 45 67',
+            email: 'contact@servais.be',
+          },
+        },
+        hasDPO: false,
+        hasExternalDPO: false,
+        reasons: [],
+        subReasons: [],
+        legalBase: [],
+        dataSubjectCategories: [],
+        personalData: [],
+        financialData: [],
+        dataSource: [],
+        retentionPeriod: '',
+        hasAccessByThirdParty: false,
+        thirdPartyAccess: [],
+        areDataExportedOutsideEU: false,
+        securityMeasures: [],
+      },
     },
   },
 ];
@@ -62,8 +198,8 @@ export default [
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       results = results.filter((treatment) => {
-        const title = treatment.attributes.title.toLowerCase();
-        const description = treatment.attributes.description.toLowerCase();
+        const title = treatment.attributes.data?.title?.toLowerCase() || '';
+        const description = treatment.attributes.data?.description?.toLowerCase() || '';
         return title.includes(query) || description.includes(query);
       });
     }
@@ -76,9 +212,12 @@ export default [
         let aValue: string | undefined;
         let bValue: string | undefined;
 
-        if (field === 'title' || field === 'description') {
-          aValue = a.attributes[field];
-          bValue = b.attributes[field];
+        if (field === 'title') {
+          aValue = a.attributes.data?.title;
+          bValue = b.attributes.data?.title;
+        } else if (field === 'description') {
+          aValue = a.attributes.data?.description;
+          bValue = b.attributes.data?.description;
         }
 
         if (aValue === undefined || bValue === undefined) {

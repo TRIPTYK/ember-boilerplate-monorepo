@@ -1,0 +1,97 @@
+wizard:
+  step1:
+    title: 'Nom du traitement'
+    labels:
+      title: 'Titre du traitement'
+      treatmentType: 'Type de traitement'
+      description: 'Description'
+    placeholders:
+      title: 'Entrez le titre du traitement'
+      treatmentType: 'Sélectionnez le type de traitement'
+      description: 'Entrez la description du traitement'
+    validation:
+      titleRequired: 'Le titre du traitement est requis'
+  
+  step2:
+    title: 'Identification générale'
+    sections:
+      responsible: 'Entité responsable'
+      dpo: 'Délégué à la protection des données (DPO)'
+      externalDPO: 'DPO externe'
+    notes:
+      responsibleNotEditable: 'Les informations du responsable du traitement ne peuvent pas être modifiées'
+    labels:
+      hasDPO: 'Nous travaillons avec un DPO'
+      hasExternalDPO: 'Le DPO est externe à la société'
+      responsible:
+        fullName: 'Nom de l''entité'
+        entityNumber: 'Numéro d''entreprise'
+      dpo:
+        fullName: 'Nom complet'
+      externalDPO:
+        fullName: 'Nom de l''organisation'
+        entityNumber: 'Numéro d''entreprise'
+      address:
+        streetAndNumber: 'Rue et numéro'
+        postalCode: 'Code postal'
+        city: 'Ville'
+        country: 'Pays'
+        phone: 'Téléphone'
+        email: 'Email'
+    validation:
+      responsibleNameRequired: 'Le nom de l''entité est requis'
+      addressRequired: 'L''adresse est requise'
+      postalCodeRequired: 'Le code postal est requis'
+      cityRequired: 'La ville est requise'
+      countryRequired: 'Le pays est requis'
+      phoneRequired: 'Le téléphone est requis'
+      emailRequired: 'L''email est requis'
+      emailInvalid: 'Adresse email invalide'
+  
+  navigation:
+    cancel: 'Annuler'
+    start: 'Commencer'
+    previous: 'Précédent'
+    next: 'Suivant'
+    save: 'Enregistrer'
+    skip: 'Passer'
+    finish: 'Terminer'
+  
+  progress:
+    step1: 'Nom du traitement'
+    step2: 'Identification générale'
+  
+  validation:
+    stepInvalid: 'Veuillez corriger les erreurs avant de continuer'
+  
+  messages:
+    draftSaved: 'Brouillon enregistré avec succès'
+    treatmentCreated: 'Traitement créé avec succès'
+    saveFailed: 'Échec de l''enregistrement du traitement'
+
+table:
+  headers:
+    title: 'Titre'
+    description: 'Description'
+    type: 'Type'
+    status: 'Statut'
+  actions:
+    addTreatment: 'Ajouter un traitement'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+  confirmModal:
+    question: 'Êtes-vous sûr de vouloir supprimer ce traitement ?'
+
+forms:
+  treatment:
+    validation:
+      titleRequired: 'Le titre est requis'
+      descriptionRequired: 'La description est requise'
+    messages:
+      createSuccess: 'Traitement créé avec succès'
+      deleteSuccess: 'Traitement supprimé avec succès'
+      deleteError: 'Erreur lors de la suppression du traitement'
+
+pages:
+  list:
+    title: 'Traitements'

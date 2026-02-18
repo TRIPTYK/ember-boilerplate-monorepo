@@ -40,7 +40,7 @@ Full content of all applicable standards:
 
 ### 🔗 [references.md](./references.md)
 Project structure patterns to follow:
-- Frontend library structure (`@libs/treatments-front/`)
+- Frontend library structure (`@libs/treatment-front/`)
 - Backend library structure (`@libs/treatments-backend/`)
 - App integration points
 - Form pattern examples

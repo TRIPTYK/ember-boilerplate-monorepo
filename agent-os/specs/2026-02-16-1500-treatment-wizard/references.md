@@ -4,7 +4,7 @@
 
 This document describes the project structure patterns to follow when implementing the treatment wizard (steps 1-2).
 
-**IMPORTANT**: The library `@libs/treatment-front` (package name: `@libs/treatments-front`) already exists with a basic CRUD (list, create, edit, delete). This plan transforms it into a 2-step wizard.
+**IMPORTANT**: The library `@libs/treatment-front` (package name: `@libs/treatment-front`) already exists with a basic CRUD (list, create, edit, delete). This plan transforms it into a 2-step wizard.
 - **No backend library needed** — treatment data stays entirely client-side (SQLite WASM)
 
 The existing library follows the same patterns as `@libs/users-front` and `@libs/todos-front`.
@@ -112,7 +112,7 @@ Even without a backend, create MSW mock handlers in `@libs/treatment-front/http-
 
 **Add for treatments**:
 ```typescript
-import { forRouter as treatmentsLibRouter } from '@libs/treatments-front';
+import { forRouter as treatmentsLibRouter } from '@libs/treatment-front';
 
 Router.map(function () {
   this.route('dashboard', { path: '/' }, function () {
@@ -130,7 +130,7 @@ Router.map(function () {
 
 **Add for treatments**:
 ```typescript
-import { initialize as initializeTreatmentsLib } from '@libs/treatments-front';
+import { initialize as initializeTreatmentsLib } from '@libs/treatment-front';
 import allTreatmentsHandlers from '@libs/treatment-front/http-mocks/all';
 
 // In beforeModel():

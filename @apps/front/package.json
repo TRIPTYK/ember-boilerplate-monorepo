@@ -62,7 +62,7 @@
     "@libs/users-front": "workspace:^",
     "@libs/storage-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
-    "@libs/treatments-front": "workspace:^",
+    "@libs/treatment-front": "workspace:^",
     "@playwright/test": "catalog:",
     "@rollup/plugin-babel": "^6.1.0",
     "@tailwindcss/vite": "catalog:",

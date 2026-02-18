@@ -120,7 +120,7 @@ Three sections:
 ### Architecture Decisions
 
 **Library Structure:**
-- Create new `@libs/treatments-front` library for frontend wizard components
+- Create new `@libs/treatment-front` library for frontend wizard components
 - Follow the established library pattern from `@libs/users-front` and `@libs/todos-front`
 - **No backend library needed** — treatments stay entirely client-side
 

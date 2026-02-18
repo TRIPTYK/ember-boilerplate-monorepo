@@ -720,7 +720,7 @@ importers:
       '@libs/todos-front':
         specifier: workspace:^
         version: link:../../@libs/todos-front
-      '@libs/treatments-front':
+      '@libs/treatment-front':
         specifier: workspace:^
         version: link:../../@libs/treatment-front
       '@libs/users-front':

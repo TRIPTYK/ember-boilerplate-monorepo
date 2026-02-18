@@ -5,6 +5,7 @@ import { setupWorker } from 'msw/browser';
 import { initialize as initializeUserLib } from '@libs/users-front';
 import { initialize as initializeTodoLib } from '@libs/todos-front';
 import { initialize as initializeStorageLib } from '@libs/storage-front';
+import { initialize as initializeTreatmentLib } from '@libs/treatment-front';
 import { getOwner } from '@ember/-internals/owner';
 import type SessionService from '@apps/front/services/session';
 import allUsersHandlers from '@libs/users-front/http-mocks/all';
@@ -39,6 +40,7 @@ export default class ApplicationRoute extends Route {
     }
 
     await initializeUserLib(getOwner(this)!);
+    await initializeTreatmentLib(getOwner(this)!);
     await initializeStorageLib(getOwner(this)!);
     initializeTodoLib(getOwner(this)!);
   }

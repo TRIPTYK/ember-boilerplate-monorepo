@@ -35,7 +35,7 @@ Full content of all applicable standards:
 
 ### [references.md](./references.md)
 Project structure patterns to follow:
-- Frontend library structure (`@libs/treatment-front/`, package: `@libs/treatments-front`)
+- Frontend library structure (`@libs/treatment-front/`, package: `@libs/treatment-front`)
 - App integration points
 - Form pattern examples
 - Data flow diagrams

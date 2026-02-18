@@ -3,6 +3,7 @@ import config from '@apps/front/config/environment';
 import { forRouter as userLibRouter } from '@libs/users-front';
 import { forRouter as authRoutes } from '@libs/auth-front';
 import { forRouter as todosLibRouter } from '@libs/todos-front';
+import { forRouter as treatmentLibRouter } from '@libs/treatment-front';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -13,6 +14,7 @@ Router.map(function () {
   this.route('dashboard', { path: '/' }, function () {
     userLibRouter.call(this);
     todosLibRouter.call(this);
+    treatmentLibRouter.call(this);
   });
   authRoutes.call(this);
 });

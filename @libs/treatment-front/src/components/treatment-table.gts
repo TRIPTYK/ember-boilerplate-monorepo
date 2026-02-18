@@ -11,9 +11,11 @@ import EditIcon from '#src/assets/icons/edit.gts';
 import DeleteIcon from '#src/assets/icons/delete.gts';
 import type { TOC } from '@ember/component/template-only';
 import type TreatmentService from '#src/services/treatment.ts';
-import type { UpdatedTreatment } from './forms/treatment-validation';
+import type { DraftTreatmentData } from './forms/treatment-validation';
 import { tracked } from '@glimmer/tracking';
 import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
+
+type TreatmentWithId = DraftTreatmentData & { id: string };
 
 class treatmentsTable extends Component<object> {
   @service declare router: RouterService;
@@ -21,7 +23,7 @@ class treatmentsTable extends Component<object> {
   @service declare treatment: TreatmentService;
   @service declare flashMessages: FlashMessagesService;
 
-  @tracked selectedTreatmentForDelete: UpdatedTreatment | null = null;
+  @tracked selectedTreatmentForDelete: TreatmentWithId | null = null;
 
   get isModalOpen(): boolean {
     return this.selectedTreatmentForDelete !== null;
@@ -41,15 +43,15 @@ class treatmentsTable extends Component<object> {
           (element as { id: string }).id
         );
       },
-      defaultSortColumn: 'title',
+      defaultSortColumn: 'data.title',
       columns: [
         {
-          field: 'title',
+          field: 'data.title',
           headerName: this.intl.t('treatments.table.headers.title'),
           sortable: true,
         },
         {
-          field: 'description',
+          field: 'data.description',
           headerName: this.intl.t('treatments.table.headers.description'),
           sortable: true,
         },
@@ -72,7 +74,7 @@ class treatmentsTable extends Component<object> {
             Element: SVGSVGElement;
           }>,
           action: (element: unknown) => {
-            this.openModalOnDelete(element as UpdatedTreatment);
+            this.openModalOnDelete(element as TreatmentWithId);
           },
           name: this.intl.t('treatments.table.actions.delete'),
         },
@@ -84,7 +86,7 @@ class treatmentsTable extends Component<object> {
     this.router.transitionTo('dashboard.treatments.create');
   };
 
-  openModalOnDelete = (element: UpdatedTreatment) => {
+  openModalOnDelete = (element: TreatmentWithId) => {
     this.selectedTreatmentForDelete = element;
   };
 
