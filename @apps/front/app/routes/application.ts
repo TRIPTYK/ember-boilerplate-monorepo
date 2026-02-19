@@ -9,6 +9,8 @@ import type SessionService from '@apps/front/services/session';
 import allUsersHandlers from '@libs/users-front/http-mocks/all';
 import allTodosHandlers from '@libs/todos-front/http-mocks/all';
 import setTheme from '../utils/set-theme';
+import translationsForFrFr from 'virtual:ember-intl/translations/fr-fr';
+import translationsForEnUs from 'virtual:ember-intl/translations/en-us';
 
 export default class ApplicationRoute extends Route {
   @service declare intl: IntlService;
@@ -18,6 +20,9 @@ export default class ApplicationRoute extends Route {
   async beforeModel() {
     setTheme();
     this.intl.setLocale('en-us');
+
+    this.intl.addTranslations('fr-fr', translationsForFrFr);
+    this.intl.addTranslations('en-us', translationsForEnUs);
 
     // Skip MSW when running against real backend (e2e tests)
     if (import.meta.env.VITE_MOCK_API !== 'false') {
