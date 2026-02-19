@@ -11,6 +11,7 @@ import type SessionService from '@apps/front/services/session';
 import allUsersHandlers from '@libs/users-front/http-mocks/all';
 import allTodosHandlers from '@libs/todos-front/http-mocks/all';
 import allAuthHandlers from '@libs/auth-front/http-mocks/all';
+import allTreatmentsHandlers from '@libs/treatment-front/http-mocks/all';
 import translationsForEnUs from 'virtual:ember-intl/translations/en-us';
 import translationsForFrFr from 'virtual:ember-intl/translations/fr-fr';
 import setTheme from '../utils/set-theme';
@@ -31,7 +32,8 @@ export default class ApplicationRoute extends Route {
       const worker = setupWorker(
         ...allUsersHandlers,
         ...allTodosHandlers,
-        ...allAuthHandlers
+        ...allAuthHandlers,
+        ...allTreatmentsHandlers
       );
       this.worker = worker;
       await worker.start({
@@ -40,8 +42,8 @@ export default class ApplicationRoute extends Route {
     }
 
     await initializeUserLib(getOwner(this)!);
-    await initializeTreatmentLib(getOwner(this)!);
     await initializeStorageLib(getOwner(this)!);
+    initializeTreatmentLib(getOwner(this)!);
     initializeTodoLib(getOwner(this)!);
   }
 

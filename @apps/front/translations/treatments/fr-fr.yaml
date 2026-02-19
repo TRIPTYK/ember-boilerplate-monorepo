@@ -81,6 +81,46 @@ table:
     delete: 'Supprimer'
   confirmModal:
     question: 'Êtes-vous sûr de vouloir supprimer ce traitement ?'
+    archiveQuestion: 'Êtes-vous sûr de vouloir archiver "{title}" ?'
+    unarchiveQuestion: 'Êtes-vous sûr de vouloir désarchiver "{title}" ?'
+  advanced:
+    headers:
+      order: 'Ordre'
+      title: 'Titre'
+      type: 'Type'
+      reasons: 'Finalités'
+      status: 'Statut'
+      sensitiveData: 'Données sensibles'
+      creationDate: 'Date de création'
+      updateDate: 'Dernière mise à jour'
+      responsible: 'Responsable'
+    actions:
+      view: 'Visualiser'
+      edit: 'Modifier'
+      archive: 'Archiver'
+      unarchive: 'Désarchiver'
+    filters:
+      allTypes: 'Tous les types'
+      includeArchived: 'Inclure les archivés'
+      activeFilter: 'Filtre : {type}'
+    status:
+      draft: 'Brouillon'
+      validated: 'Validé'
+      archived: 'Archivé'
+      overdue: 'En retard'
+    sensitiveData:
+      present: 'Contient des données sensibles'
+      absent: 'Pas de données sensibles'
+    messages:
+      archiveSuccess: 'Traitement archivé avec succès'
+      unarchiveSuccess: 'Traitement désarchivé avec succès'
+      typeUpdateSuccess: 'Type de traitement mis à jour'
+      archiveError: 'Erreur lors de l''archivage du traitement'
+      unarchiveError: 'Erreur lors du désarchivage du traitement'
+      typeUpdateError: 'Erreur lors de la mise à jour du type'
+      loadError: 'Erreur lors du chargement des traitements'
+      archiveErrorNoId: "Erreur lors de l'archivage du traitement : ID manquant"
+      unarchiveErrorNoId: "Erreur lors du désarchivage du traitement : ID manquant"
 
 forms:
   treatment:

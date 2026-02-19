@@ -81,6 +81,44 @@ table:
     delete: 'Delete'
   confirmModal:
     question: 'Are you sure you want to delete this treatment?'
+    archiveQuestion: 'Are you sure you want to archive "{title}"?'
+    unarchiveQuestion: 'Are you sure you want to unarchive "{title}"?'
+  advanced:
+    headers:
+      order: 'Order'
+      title: 'Title'
+      type: 'Type'
+      reasons: 'Purposes'
+      status: 'Status'
+      sensitiveData: 'Sensitive Data'
+      creationDate: 'Creation Date'
+      updateDate: 'Last Update'
+      responsible: 'Responsible'
+    actions:
+      view: 'View'
+      edit: 'Edit'
+      archive: 'Archive'
+      unarchive: 'Unarchive'
+    filters:
+      allTypes: 'All Types'
+      includeArchived: 'Include Archived'
+      activeFilter: 'Filter: {type}'
+    status:
+      draft: 'Draft'
+      validated: 'Validated'
+      archived: 'Archived'
+      overdue: 'Overdue'
+    sensitiveData:
+      present: 'Contains sensitive data'
+      absent: 'No sensitive data'
+    messages:
+      archiveSuccess: 'Treatment archived successfully'
+      unarchiveSuccess: 'Treatment unarchived successfully'
+      typeUpdateSuccess: 'Treatment type updated'
+      archiveError: 'Error archiving treatment'
+      unarchiveError: 'Error unarchiving treatment'
+      typeUpdateError: 'Error updating treatment type'
+      loadError: 'Error loading treatments'
 
 forms:
   treatment:

@@ -31,5 +31,6 @@ export function forRouter(this: DSL) {
   this.route('treatments', function () {
     this.route('create');
     this.route('edit', { path: '/:treatment_id/edit' });
+    this.route('view', { path: '/:treatment_id/view' });
   });
 }

@@ -27,11 +27,17 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
   });
 
   handleSaveDraft = async (data: DraftTreatmentData) => {
-    await this.treatment.save({ id: this.args.model.treatment.id, ...data } as any);
+    await this.treatment.save({
+      id: this.args.model.treatment.id,
+      ...data,
+    } as any);
   };
 
   handleFinish = async (data: TreatmentData) => {
-    await this.treatment.save({ id: this.args.model.treatment.id, ...data } as any);
+    await this.treatment.save({
+      id: this.args.model.treatment.id,
+      ...data,
+    } as any);
     this.router.transitionTo('dashboard.treatments');
   };
 

@@ -255,7 +255,7 @@ export default class TreatmentWizard extends Component<TreatmentWizardSignature>
         @onSubmit={{if this.isStep2 this.handleFinish this.goToNextStep}}
         as |F|
       >
-        <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="rounded-lg shadow-lg p-8">
           {{#if this.isStep1}}
             <Step1Name @form={{F}} />
           {{else if this.isStep2}}

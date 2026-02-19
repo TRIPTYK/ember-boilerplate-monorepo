@@ -1,5 +1,13 @@
-import { object, string, boolean, array, type z } from 'zod';
+import { object, string, boolean, array, literal, union, type z } from 'zod';
 import type { IntlService } from 'ember-intl';
+
+export const treatmentStatusSchema = union([
+  literal('draft'),
+  literal('validated'),
+  literal('archived'),
+]);
+
+export type TreatmentStatus = z.infer<typeof treatmentStatusSchema>;
 
 export const addressSchema = object({
   streetAndNumber: string().min(1),
@@ -125,7 +133,7 @@ export const treatmentResponseSchema = object({
   creationDate: string(),
   updateDate: string().optional(),
   dueDateForUpdate: string().optional().nullable(),
-  status: string(),
+  status: treatmentStatusSchema,
   order: string().optional(),
   isOverDueDate: boolean().optional(),
   data: draftTreatmentSchema,
@@ -136,7 +144,7 @@ export const draftTreatmentResponseSchema = object({
   creationDate: string(),
   updateDate: string().optional(),
   dueDateForUpdate: string().optional().nullable(),
-  status: string(),
+  status: treatmentStatusSchema,
   order: string().optional(),
   isOverDueDate: boolean().optional(),
   data: draftTreatmentSchema,
@@ -154,10 +162,9 @@ export type DraftTreatmentData = Omit<
 
 export const step1Schema = (intl: IntlService) =>
   object({
-    title: string(intl.t('treatments.wizard.step1.validation.titleRequired')).min(
-      1,
+    title: string(
       intl.t('treatments.wizard.step1.validation.titleRequired')
-    ),
+    ).min(1, intl.t('treatments.wizard.step1.validation.titleRequired')),
     description: string().optional(),
     treatmentType: string().optional(),
   });
@@ -167,7 +174,10 @@ export const step2Schema = (intl: IntlService) =>
     responsible: object({
       fullName: string(
         intl.t('treatments.wizard.step2.validation.responsibleNameRequired')
-      ).min(1, intl.t('treatments.wizard.step2.validation.responsibleNameRequired')),
+      ).min(
+        1,
+        intl.t('treatments.wizard.step2.validation.responsibleNameRequired')
+      ),
       entityNumber: string().optional(),
       address: object({
         streetAndNumber: string(
@@ -175,7 +185,10 @@ export const step2Schema = (intl: IntlService) =>
         ).min(1, intl.t('treatments.wizard.step2.validation.addressRequired')),
         postalCode: string(
           intl.t('treatments.wizard.step2.validation.postalCodeRequired')
-        ).min(1, intl.t('treatments.wizard.step2.validation.postalCodeRequired')),
+        ).min(
+          1,
+          intl.t('treatments.wizard.step2.validation.postalCodeRequired')
+        ),
         city: string(
           intl.t('treatments.wizard.step2.validation.cityRequired')
         ).min(1, intl.t('treatments.wizard.step2.validation.cityRequired')),

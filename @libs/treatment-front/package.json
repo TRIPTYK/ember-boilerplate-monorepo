@@ -145,6 +145,7 @@
       "./routes/dashboard/treatments/create.js": "./dist/_app_/routes/dashboard/treatments/create.js",
       "./routes/dashboard/treatments/edit.js": "./dist/_app_/routes/dashboard/treatments/edit.js",
       "./routes/dashboard/treatments/index.js": "./dist/_app_/routes/dashboard/treatments/index.js",
+      "./routes/dashboard/treatments/view.js": "./dist/_app_/routes/dashboard/treatments/view.js",
       "./schemas/treatments.js": "./dist/_app_/schemas/treatments.js",
       "./services/treatment.js": "./dist/_app_/services/treatment.js",
       "./templates/dashboard/treatments/create.js": "./dist/_app_/templates/dashboard/treatments/create.js",

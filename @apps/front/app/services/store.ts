@@ -9,6 +9,7 @@ import { setOwner } from '@ember/owner';
 import AuthHandler from '@libs/auth-front/handlers/auth';
 import { getOwner } from '@ember/owner';
 import TodoSchema from '@libs/todos-front/schemas/todos';
+import TreatmentSchema from '@libs/treatment-front/schemas/treatments';
 
 setBuildURLConfig({
   host: null,
@@ -20,7 +21,7 @@ const legacyStore = useLegacyStore({
   legacyRequests: true,
   modelFragments: true,
   cache: JSONAPICache,
-  schemas: [UserSchema, TodoSchema],
+  schemas: [UserSchema, TodoSchema, TreatmentSchema],
   handlers: [],
 });
 

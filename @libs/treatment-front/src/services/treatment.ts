@@ -13,7 +13,6 @@ import {
   deleteRecord,
   updateRecord,
 } from '@warp-drive/utilities/json-api';
-import type ImmerChangeset from 'ember-immer-changeset';
 
 type TreatmentWithId = DraftTreatmentData & { id: string };
 
@@ -68,9 +67,7 @@ export default class treatmentService extends Service {
   }
 
   public async update(
-    data: TreatmentWithId,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changeset?: ImmerChangeset<ValidatedTreatment>
+    data: TreatmentWithId
   ) {
     const existingTreatment = this.store.peekRecord<Treatment>({
       id: data.id,
@@ -123,5 +120,65 @@ export default class treatmentService extends Service {
     const request = deleteRecord(existingTreatment);
     request.body = JSON.stringify({});
     return this.store.request(request);
+  }
+
+  public async archive(id: string): Promise<void> {
+    const existingTreatment = this.store.peekRecord<Treatment>({
+      id,
+      type: 'treatments',
+    });
+    assert('Treatment must exist to be archived', existingTreatment);
+
+    Object.assign(existingTreatment, {
+      status: 'archived' as const,
+    });
+
+    const request = updateRecord(existingTreatment, { patch: true });
+    request.body = JSON.stringify({
+      data: this.store.cache.peek(cacheKeyFor(existingTreatment)),
+    });
+
+    await this.store.request(request);
+  }
+
+  public async unarchive(id: string): Promise<void> {
+    const existingTreatment = this.store.peekRecord<Treatment>({
+      id,
+      type: 'treatments',
+    });
+    assert('Treatment must exist to be unarchived', existingTreatment);
+
+    Object.assign(existingTreatment, {
+      status: 'validated' as const,
+    });
+
+    const request = updateRecord(existingTreatment, { patch: true });
+    request.body = JSON.stringify({
+      data: this.store.cache.peek(cacheKeyFor(existingTreatment)),
+    });
+
+    await this.store.request(request);
+  }
+
+  public async updateType(id: string, treatmentType: string): Promise<void> {
+    const existingTreatment = this.store.peekRecord<Treatment>({
+      id,
+      type: 'treatments',
+    });
+    assert('Treatment must exist to update type', existingTreatment);
+
+    Object.assign(existingTreatment, {
+      data: {
+        ...existingTreatment.data,
+        treatmentType,
+      },
+    });
+
+    const request = updateRecord(existingTreatment, { patch: true });
+    request.body = JSON.stringify({
+      data: this.store.cache.peek(cacheKeyFor(existingTreatment)),
+    });
+
+    await this.store.request(request);
   }
 }

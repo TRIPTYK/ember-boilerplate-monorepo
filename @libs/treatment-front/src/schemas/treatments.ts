@@ -19,13 +19,94 @@ const treatmentSchema = withDefaults({
 
 export default treatmentSchema;
 
+export type TreatmentStatus = 'draft' | 'validated' | 'archived';
+
+export interface TreatmentData {
+  title?: string;
+  description?: string;
+  treatmentType?: string;
+  reasons?: string[];
+  responsible?: {
+    fullName?: string;
+    entityNumber?: string;
+    address?: {
+      streetAndNumber?: string;
+      postalCode?: string;
+      city?: string;
+      country?: string;
+      phone?: string;
+      email?: string;
+    };
+  };
+  hasDPO?: boolean;
+  DPO?: {
+    fullName?: string;
+    address?: {
+      streetAndNumber?: string;
+      postalCode?: string;
+      city?: string;
+      country?: string;
+      phone?: string;
+      email?: string;
+    };
+  };
+  hasExternalDPO?: boolean;
+  externalOrganizationDPO?: {
+    fullName?: string;
+    entityNumber?: string;
+    address?: {
+      streetAndNumber?: string;
+      postalCode?: string;
+      city?: string;
+      country?: string;
+      phone?: string;
+      email?: string;
+    };
+  };
+  subReasons?: Array<{ name?: string; additionalInformation?: string }>;
+  legalBase?: Array<{ name?: string; additionalInformation?: string }>;
+  dataSubjectCategories?: string[];
+  personalDataGroup?: {
+    data: {
+      name: Array<{ name: string; isSensitive: boolean }>;
+    };
+    conservationDuration?: string;
+  };
+  financialDataGroup?: {
+    data: {
+      name: Array<{ name: string; isSensitive: boolean }>;
+    };
+    conservationDuration?: string;
+  };
+  dataSource?: string[];
+  retentionPeriod?: string;
+  hasAccessByThirdParty?: boolean;
+  thirdPartyAccess?: string[];
+  areDataExportedOutsideEU?: boolean;
+  recipient?: {
+    name?: string;
+    entityNumber?: string;
+    address?: {
+      streetAndNumber?: string;
+      postalCode?: string;
+      city?: string;
+      country?: string;
+      phone?: string;
+      email?: string;
+    };
+  };
+  securityMeasures?: string[];
+}
+
 export type Treatment = WithLegacy<{
   creationDate: string;
   updateDate?: string;
   dueDateForUpdate?: string;
-  status: string;
-  order?: string;
+  status: TreatmentStatus;
+  order?: number;
   isOverDueDate?: boolean;
-  data: any;
+  data: TreatmentData;
   [Type]: 'treatments';
 }>;
+
+export type TreatmentWithId = Treatment & { id: string };
