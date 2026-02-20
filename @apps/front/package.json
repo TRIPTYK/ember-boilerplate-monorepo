@@ -23,8 +23,8 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc",
-    "start": "concurrently \"pnpm turbo build:watch --filter=...\" \"vite dev\"",
-    "start:with-back": "VITE_MOCK_API=false concurrently \"pnpm turbo build:watch --filter=...\" \"vite dev\"",
+    "start": "concurrently \"pnpm turbo build:watch --filter=^...\" \"vite dev\"",
+    "start:with-back": "VITE_MOCK_API=false concurrently \"pnpm turbo build:watch --filter=^...\" \"vite dev\"",
     "test": "pnpm vitest run",
     "test:watch": "pnpm vitest",
     "test:playwright": "playwright test"
