@@ -1,6 +1,8 @@
 import { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import TreatmentForm from '#src/components/forms/treatment-form.gts';
+import SuccessScreen from '#src/components/views/success-screen.gts';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import type { treatmentsCreateRouteSignature } from './create.gts';
 import type Owner from '@ember/owner';
 import type { IntlService } from 'ember-intl';
@@ -17,7 +19,8 @@ export default class treatmentsCreateRouteTemplate extends Component<treatmentsC
   @service declare router: RouterService;
   @service declare treatment: TreatmentService;
 
-  changeset = new TreatmentChangeset({});
+  @tracked changeset = new TreatmentChangeset({});
+  @tracked showSuccessScreen = false;
 
   constructor(owner: Owner, args: treatmentsCreateRouteSignature) {
     super(owner, args);
@@ -29,6 +32,15 @@ export default class treatmentsCreateRouteTemplate extends Component<treatmentsC
 
   handleFinish = async (data: TreatmentData) => {
     await this.treatment.save(data);
+    this.showSuccessScreen = true;
+  };
+
+  handleCreateNewFlow = () => {
+    this.changeset = new TreatmentChangeset({});
+    this.showSuccessScreen = false;
+  };
+
+  handleGoToList = () => {
     this.router.transitionTo('dashboard.treatments');
   };
 
@@ -37,11 +49,18 @@ export default class treatmentsCreateRouteTemplate extends Component<treatmentsC
   };
 
   <template>
-    <TreatmentForm
-      @changeset={{this.changeset}}
-      @onSave={{this.handleSaveDraft}}
-      @onFinish={{this.handleFinish}}
-      @onCancel={{this.handleCancel}}
-    />
+    {{#if this.showSuccessScreen}}
+      <SuccessScreen
+        @onCreateNewFlow={{this.handleCreateNewFlow}}
+        @onFinish={{this.handleGoToList}}
+      />
+    {{else}}
+      <TreatmentForm
+        @changeset={{this.changeset}}
+        @onSave={{this.handleSaveDraft}}
+        @onFinish={{this.handleFinish}}
+        @onCancel={{this.handleCancel}}
+      />
+    {{/if}}
   </template>
 }

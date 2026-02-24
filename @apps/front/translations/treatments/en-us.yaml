@@ -229,6 +229,11 @@ pages:
   list:
     title: 'Treatments'
 
+successScreen:
+  title: 'YOUR TREATMENT FLOW CREATION IS COMPLETE'
+  createNewFlow: 'Create a New Flow'
+  finishFlowCreation: 'Finish Flow Creation'
+
 details:
   back: 'Back'
   edit: 'Edit'

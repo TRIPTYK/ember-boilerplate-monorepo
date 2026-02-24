@@ -231,6 +231,11 @@ pages:
   list:
     title: 'Traitements'
 
+successScreen:
+  title: 'LA CRÉATION DE VOTRE FLUX DE TRAITEMENT EST TERMINÉE'
+  createNewFlow: 'Créer un nouveau flux'
+  finishFlowCreation: 'Terminer la création du flux'
+
 details:
   back: 'Retour'
   edit: 'Modifier'

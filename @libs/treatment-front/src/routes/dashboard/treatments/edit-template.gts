@@ -1,6 +1,8 @@
 import { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import TreatmentForm from '#src/components/forms/treatment-form.gts';
+import SuccessScreen from '#src/components/views/success-screen.gts';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import type { treatmentsEditRouteSignature } from './edit.gts';
 import type { IntlService } from 'ember-intl';
 import { service } from '@ember/service';
@@ -16,6 +18,8 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service declare treatment: TreatmentService;
+
+  @tracked showSuccessScreen = false;
 
   constructor(owner: Owner, args: treatmentsEditRouteSignature) {
     super(owner, args);
@@ -38,6 +42,14 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
       id: this.args.model.treatment.id,
       ...data,
     });
+    this.showSuccessScreen = true;
+  };
+
+  handleCreateNewFlow = () => {
+    this.router.transitionTo('dashboard.treatments.create');
+  };
+
+  handleGoToList = () => {
     this.router.transitionTo('dashboard.treatments');
   };
 
@@ -46,11 +58,18 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
   };
 
   <template>
-    <TreatmentForm
-      @changeset={{this.changeset}}
-      @onSave={{this.handleSaveDraft}}
-      @onFinish={{this.handleFinish}}
-      @onCancel={{this.handleCancel}}
-    />
+    {{#if this.showSuccessScreen}}
+      <SuccessScreen
+        @onCreateNewFlow={{this.handleCreateNewFlow}}
+        @onFinish={{this.handleGoToList}}
+      />
+    {{else}}
+      <TreatmentForm
+        @changeset={{this.changeset}}
+        @onSave={{this.handleSaveDraft}}
+        @onFinish={{this.handleFinish}}
+        @onCancel={{this.handleCancel}}
+      />
+    {{/if}}
   </template>
 }
