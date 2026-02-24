@@ -64,15 +64,17 @@ export const draftDataWithInfoSchema = object({
 });
 
 export const recipientSchema = object({
-  name: string().min(1),
-  entityNumber: string().optional(),
-  address: addressSchema,
+  fullName: string().min(1),
+  country: string().min(1),
+  guaranteeTypes: string().min(1),
+  linkToDoc: string().optional(),
 });
 
 export const draftRecipientSchema = object({
-  name: string().optional(),
-  entityNumber: string().optional(),
-  address: draftAddressSchema.optional(),
+  fullName: string().optional(),
+  country: string().optional(),
+  guaranteeTypes: string().optional(),
+  linkToDoc: string().optional(),
 });
 
 export const legalBaseSchema = object({
@@ -110,12 +112,15 @@ export const treatmentSchema = object({
     conservationDuration: string().optional(),
   }).optional(),
   dataSources: array(object({ name: string().min(1), additionalInformation: string().optional() })).optional(),
+  dataAccess: array(draftDataWithInfoSchema).optional(),
+  sharedData: array(draftDataWithInfoSchema).optional(),
   retentionPeriod: string().optional(),
   hasAccessByThirdParty: boolean().optional(),
   thirdPartyAccess: array(string()).optional(),
   areDataExportedOutsideEU: boolean().optional(),
   recipient: draftRecipientSchema.optional(),
   securityMeasures: array(string()).optional(),
+  securitySetup: array(draftDataWithInfoSchema).optional(),
 });
 
 export const draftTreatmentSchema = object({
@@ -143,12 +148,15 @@ export const draftTreatmentSchema = object({
     conservationDuration: string().optional(),
   }).optional(),
   dataSources: array(object({ name: string().optional(), additionalInformation: string().optional() })).optional(),
+  dataAccess: array(draftDataWithInfoSchema).optional(),
+  sharedData: array(draftDataWithInfoSchema).optional(),
   retentionPeriod: string().optional(),
   hasAccessByThirdParty: boolean().optional(),
   thirdPartyAccess: array(string()).optional(),
   areDataExportedOutsideEU: boolean().optional(),
   recipient: draftRecipientSchema.optional(),
   securityMeasures: array(string()).optional(),
+  securitySetup: array(draftDataWithInfoSchema).optional(),
 });
 
 export const treatmentResponseSchema = object({
@@ -258,6 +266,31 @@ export const step5Schema = () =>
 export const step6Schema = () =>
   object({
     legalBase: array(draftLegalBaseSchema).optional(),
+  });
+
+export const step7Schema = () =>
+  object({
+    dataAccess: array(draftDataWithInfoSchema).optional(),
+    sharedData: array(draftDataWithInfoSchema).optional(),
+    areDataExportedOutsideEU: boolean().optional(),
+    recipient: draftRecipientSchema.optional(),
+  }).superRefine((data, ctx) => {
+    if (data.areDataExportedOutsideEU) {
+      if (!data.recipient?.fullName) {
+        ctx.addIssue({ code: 'custom', path: ['recipient', 'fullName'], message: 'required' });
+      }
+      if (!data.recipient?.country) {
+        ctx.addIssue({ code: 'custom', path: ['recipient', 'country'], message: 'required' });
+      }
+      if (!data.recipient?.guaranteeTypes) {
+        ctx.addIssue({ code: 'custom', path: ['recipient', 'guaranteeTypes'], message: 'required' });
+      }
+    }
+  });
+
+export const step8Schema = () =>
+  object({
+    securitySetup: array(draftDataWithInfoSchema).optional(),
   });
 
 export const createTreatmentValidationSchema = step1Schema;

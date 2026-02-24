@@ -1,5 +1,5 @@
 .tpk-modal-content {
-  @apply modal-box min-h-[50vh] max-h-[60vh] min-w-[50vw] max-w-[60vw];
+  @apply modal-box max-h-[60vh] min-w-[30vw] max-w-[60vw];
 }
 
 .tpk-modal-content .tpk-modal-title {

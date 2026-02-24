@@ -101,6 +101,42 @@ form:
       question: 'What are the legal bases for this processing?'
       searchPlaceholder: 'Search or add a legal basis...'
 
+  step7:
+    title: 'Step 7 - Data Sharing'
+    precisions: 'Additional Details'
+    section1:
+      title: 'Data Access'
+      question: 'Who has access to the collected data?'
+      searchPlaceholder: 'Search or add an access type...'
+      modalTitle: 'Data Access Details'
+      emptyMessage: 'No access types selected. Add access types to add details.'
+    section2:
+      title: 'Data Sharing with Third Parties'
+      question: 'Is the data shared with third parties?'
+      searchPlaceholder: 'Search or add a sharing type...'
+      modalTitle: 'Data Sharing Details'
+      emptyMessage: 'No sharing types selected. Add sharing types to add details.'
+    section3:
+      title: 'Data Outside EU'
+      switchLabel: 'Data is exported outside the EU'
+      recipientInfo: 'Recipient Information'
+      recipientName: 'Recipient Name'
+      recipientCountry: 'Recipient Country'
+      guaranteeTypes: 'Types of Guarantees'
+      linkToDoc: 'Link to Document'
+
+  step8:
+    title: 'Step 8 - Security Measures'
+    question: 'What security measures are in place to protect the data?'
+    searchPlaceholder: 'Search or add a security measure...'
+    precisions: 'Additional Details'
+    precisionsModalTitle: 'Security Measures Details'
+    emptyMessage: 'No measures selected. Add measures to add details.'
+    infoModalTitle: 'Legal Framework — Security Measures'
+    infoModalContent: 'Article 32 of the GDPR requires the controller and the processor to implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk.'
+    infoModalLink: 'Guide to the Security of Personal Data — CNIL'
+    infoModalClose: 'Close'
+
   navigation:
     cancel: 'Cancel'
     start: 'Start'
@@ -117,6 +153,8 @@ form:
     step4: 'Data Subjects'
     step5: 'Data'
     step6: 'Legal Basis'
+    step7: 'Data Sharing'
+    step8: 'Security Measures'
 
   validation:
     stepInvalid: 'Please correct the errors before continuing'

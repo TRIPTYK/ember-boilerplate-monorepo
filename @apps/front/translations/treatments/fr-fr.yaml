@@ -101,6 +101,42 @@ form:
       question: 'Quelles sont les bases légales de ce traitement ?'
       searchPlaceholder: 'Rechercher ou ajouter une base légale...'
 
+  step7:
+    title: 'Étape 7 - Partage des données'
+    precisions: 'Précisions'
+    section1:
+      title: 'Accès aux données'
+      question: 'Qui a accès aux données collectées ?'
+      searchPlaceholder: "Rechercher ou ajouter un type d'accès..."
+      modalTitle: "Détails de l'accès aux données"
+      emptyMessage: "Aucun accès sélectionné. Ajoutez des types d'accès pour ajouter des précisions."
+    section2:
+      title: 'Partage avec des tiers'
+      question: 'Les données sont-elles partagées avec des tiers ?'
+      searchPlaceholder: 'Rechercher ou ajouter un type de partage...'
+      modalTitle: 'Détails du partage des données'
+      emptyMessage: 'Aucun partage sélectionné. Ajoutez des types de partage pour ajouter des précisions.'
+    section3:
+      title: 'Données hors UE'
+      switchLabel: 'Les données sont exportées hors UE'
+      recipientInfo: 'Informations sur le destinataire'
+      recipientName: 'Nom du destinataire'
+      recipientCountry: 'Pays du destinataire'
+      guaranteeTypes: 'Types de garanties'
+      linkToDoc: 'Lien vers le document'
+
+  step8:
+    title: 'Étape 8 - Mesures de sécurité'
+    question: 'Quelles mesures de sécurité sont mises en place pour protéger les données ?'
+    searchPlaceholder: 'Rechercher ou ajouter une mesure de sécurité...'
+    precisions: 'Précisions'
+    precisionsModalTitle: 'Détails des mesures de sécurité'
+    emptyMessage: 'Aucune mesure sélectionnée. Ajoutez des mesures pour ajouter des précisions.'
+    infoModalTitle: 'Cadre légal — Mesures de sécurité'
+    infoModalContent: "L'article 32 du RGPD impose au responsable du traitement et au sous-traitant de mettre en place des mesures techniques et organisationnelles appropriées afin de garantir un niveau de sécurité adapté au risque."
+    infoModalLink: 'Guide de la sécurité des données personnelles — CNIL'
+    infoModalClose: 'Fermer'
+
   navigation:
     cancel: 'Annuler'
     start: 'Commencer'
@@ -117,6 +153,8 @@ form:
     step4: 'Personnes concernées'
     step5: 'Données'
     step6: 'Base légale'
+    step7: 'Partage des données'
+    step8: 'Mesures de sécurité'
 
   validation:
     stepInvalid: 'Veuillez corriger les erreurs avant de continuer'

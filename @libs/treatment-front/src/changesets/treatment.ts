@@ -59,23 +59,20 @@ export interface DraftTreatment {
     conservationDuration?: string;
   };
   dataSources?: Array<{ name: string; additionalInformation?: string }>;
+  dataAccess?: Array<{ name: string; additionalInformation?: string }>;
+  sharedData?: Array<{ name: string; additionalInformation?: string }>;
   retentionPeriod?: string;
   hasAccessByThirdParty?: boolean;
   thirdPartyAccess?: string[];
   areDataExportedOutsideEU?: boolean;
   recipient?: {
-    name?: string;
-    entityNumber?: string;
-    address?: {
-      streetAndNumber?: string;
-      postalCode?: string;
-      city?: string;
-      country?: string;
-      phone?: string;
-      email?: string;
-    };
+    fullName?: string;
+    country?: string;
+    guaranteeTypes?: string;
+    linkToDoc?: string;
   };
   securityMeasures?: string[];
+  securitySetup?: Array<{ name: string; additionalInformation?: string }>;
 }
 
 export class TreatmentChangeset extends ImmerChangeset<DraftTreatment> {}
