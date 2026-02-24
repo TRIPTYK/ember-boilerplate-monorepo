@@ -7,10 +7,10 @@ import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.
 
 const PREDEFINED_LEGAL_BASES = [
   'Consentement de la personne concernée',
-  'Exécution d\'un contrat (ou des mesures précontractuelles)',
-  'Respect d\'une obligation légale',
+  "Exécution d'un contrat (ou des mesures précontractuelles)",
+  "Respect d'une obligation légale",
   'Sauvegarde des intérêts vitaux',
-  'Exécution d\'une mission d\'intérêt public ou relevant de l\'exercice de l\'autorité publique',
+  "Exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique",
 ];
 
 interface Step6Signature {

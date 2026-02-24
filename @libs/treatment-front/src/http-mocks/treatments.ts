@@ -44,20 +44,64 @@ const mocktreatments = [
           },
         },
         hasExternalDPO: false,
-        reasons: [],
-        subReasons: [],
-        legalBase: [],
-        dataSubjectCategories: [],
-
+        reasons: ['Recrutement', 'Gestion du personnel'],
+        subReasons: [
+          {
+            name: 'Sélection des candidats',
+            additionalInformation: 'Phase de pré-sélection et entretiens',
+          },
+        ],
+        legalBase: [
+          {
+            name: 'Intérêt légitime',
+            additionalInformation: 'Traitement nécessaire au recrutement',
+          },
+        ],
+        dataSubjectCategories: ['Candidats', 'Employés'],
+        subjectCategoryPrecisions: [
+          {
+            name: 'Candidats',
+            additionalInformation: 'Personnes postulant à un poste',
+          },
+          {
+            name: 'Employés',
+            additionalInformation: 'Personnel actif de la société',
+          },
+        ],
+        personalDataGroup: {
+          data: {
+            name: [
+              { name: 'Nom et prénom', isSensitive: false },
+              { name: 'CV et lettre de motivation', isSensitive: false },
+              { name: 'Coordonnées de contact', isSensitive: false },
+            ],
+          },
+          conservationDuration: '2 ans',
+        },
         dataSources: [],
-        dataAccess: [],
+        dataAccess: [
+          {
+            name: 'Direction RH',
+            additionalInformation: 'Accès complet',
+          },
+          {
+            name: 'Managers',
+            additionalInformation:
+              'Accès limité aux candidats de leur département',
+          },
+        ],
         sharedData: [],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
         areDataExportedOutsideEU: false,
         securityMeasures: [],
-        securitySetup: [],
+        securitySetup: [
+          {
+            name: "Contrôle d'accès",
+            additionalInformation: 'Accès restreint au personnel RH autorisé',
+          },
+        ],
       },
     },
   },
@@ -202,28 +246,70 @@ const mocktreatments = [
         hasDPO: false,
         hasExternalDPO: false,
         reasons: ['Marketing direct', 'Communication'],
-        subReasons: [],
-        legalBase: [],
-        dataSubjectCategories: [],
-
+        subReasons: [
+          {
+            name: 'Newsletter mensuelle',
+            additionalInformation: 'Envoi le premier lundi du mois',
+          },
+        ],
+        legalBase: [
+          {
+            name: 'Consentement',
+            additionalInformation: "Opt-in lors de l'inscription",
+          },
+        ],
+        dataSubjectCategories: ['Clients', 'Prospects'],
+        subjectCategoryPrecisions: [
+          {
+            name: 'Clients',
+            additionalInformation: 'Clients actifs et anciens clients',
+          },
+        ],
         personalDataGroup: {
           data: {
             name: [
-              { name: 'Email', isSensitive: false },
+              { name: 'Adresse email', isSensitive: false },
               { name: 'Nom et prénom', isSensitive: false },
+              { name: 'Préférences de communication', isSensitive: false },
             ],
           },
           conservationDuration: '3 ans',
         },
         dataSources: [],
-        dataAccess: [],
-        sharedData: [],
+        dataAccess: [
+          {
+            name: 'Service marketing',
+            additionalInformation: 'Gestion des campagnes',
+          },
+        ],
+        sharedData: [
+          {
+            name: 'Mailchimp (prestataire)',
+            additionalInformation:
+              "Plateforme d'envoi de newsletters — contrat de sous-traitance signé",
+          },
+        ],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
-        areDataExportedOutsideEU: false,
+        areDataExportedOutsideEU: true,
+        recipient: {
+          fullName: 'Mailchimp / Intuit Inc.',
+          country: 'États-Unis',
+          guaranteeTypes: 'Clauses contractuelles types (CCT)',
+          linkToDoc: 'https://mailchimp.com/legal/data-processing-addendum/',
+        },
         securityMeasures: [],
-        securitySetup: [],
+        securitySetup: [
+          {
+            name: 'Chiffrement des données en transit',
+            additionalInformation: 'TLS 1.3',
+          },
+          {
+            name: 'Accès restreint',
+            additionalInformation: 'Authentification à deux facteurs',
+          },
+        ],
       },
     },
   },
@@ -266,29 +352,74 @@ const mocktreatments = [
         },
         hasExternalDPO: false,
         reasons: ['Suivi médical', 'Gestion des absences'],
-        subReasons: [],
-        legalBase: [],
-        dataSubjectCategories: [],
-
+        subReasons: [
+          {
+            name: 'Suivi des arrêts maladie',
+            additionalInformation: 'Durée et fréquence des absences',
+          },
+        ],
+        legalBase: [
+          {
+            name: 'Obligation légale',
+            additionalInformation:
+              'Art. 9(2)(b) RGPD — Droit du travail et sécurité sociale',
+          },
+          {
+            name: 'Consentement explicite',
+            additionalInformation: 'Pour les données de santé sensibles',
+          },
+        ],
+        dataSubjectCategories: ['Employés'],
+        subjectCategoryPrecisions: [
+          {
+            name: 'Employés',
+            additionalInformation: 'Personnel actif et en arrêt maladie',
+          },
+        ],
         personalDataGroup: {
           data: {
             name: [
               { name: 'Nom et prénom', isSensitive: false },
               { name: 'Données de santé', isSensitive: true },
               { name: 'Données génétiques', isSensitive: true },
+              { name: 'Numéro de sécurité sociale', isSensitive: false },
             ],
           },
           conservationDuration: '20 ans',
         },
         dataSources: [],
-        dataAccess: [],
-        sharedData: [],
+        dataAccess: [
+          {
+            name: 'Médecin du travail',
+            additionalInformation: 'Accès aux données de santé uniquement',
+          },
+          {
+            name: 'Direction RH',
+            additionalInformation: 'Données administratives uniquement',
+          },
+        ],
+        sharedData: [
+          {
+            name: 'Mutuelle',
+            additionalInformation: 'Certificats médicaux anonymisés',
+          },
+        ],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
         areDataExportedOutsideEU: false,
         securityMeasures: [],
-        securitySetup: [],
+        securitySetup: [
+          {
+            name: 'Chiffrement AES-256',
+            additionalInformation:
+              'Toutes les données de santé chiffrées au repos',
+          },
+          {
+            name: 'Journalisation des accès',
+            additionalInformation: 'Traçabilité complète des consultations',
+          },
+        ],
       },
     },
   },

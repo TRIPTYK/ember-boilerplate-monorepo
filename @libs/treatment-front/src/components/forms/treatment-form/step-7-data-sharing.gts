@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import type TpkValidationInputPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-input';
@@ -168,7 +167,9 @@ export default class Step7DataSharing extends Component<Step7Signature> {
       {{t "treatments.form.step7.title"}}
     </h4>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]">
+      <div
+        class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]"
+      >
         <h5 class="font-semibold text-base-content text-sm">
           {{t "treatments.form.step7.section1.title"}}
         </h5>
@@ -203,7 +204,9 @@ export default class Step7DataSharing extends Component<Step7Signature> {
         />
       </div>
 
-      <div class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]">
+      <div
+        class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]"
+      >
         <h5 class="font-semibold text-base-content text-sm">
           {{t "treatments.form.step7.section2.title"}}
         </h5>
@@ -238,7 +241,9 @@ export default class Step7DataSharing extends Component<Step7Signature> {
         />
       </div>
 
-      <div class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]">
+      <div
+        class="card bg-base-100 shadow p-4 flex flex-col gap-3 min-h-[700px]"
+      >
         <h5 class="font-semibold text-base-content text-sm">
           {{t "treatments.form.step7.section3.title"}}
         </h5>

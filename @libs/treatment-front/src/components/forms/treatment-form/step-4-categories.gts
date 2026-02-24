@@ -5,7 +5,6 @@ import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 import PrecisionsModal from '#src/components/ui/precisions-modal.gts';
-import TpkButtonPrefabComponent from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
 import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
 
 const PREDEFINED_CATEGORIES = [

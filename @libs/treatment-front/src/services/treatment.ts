@@ -37,26 +37,30 @@ export default class treatmentService extends Service {
       subReasons: data.subReasons,
       legalBase: data.legalBase,
       dataSubjectCategories: data.dataSubjectCategories,
-      personalDataGroup: data.personalDataGroup ? {
-        data: {
-          name: (data.personalDataGroup.data.name ?? []).filter(
-            (item): item is { name: string; isSensitive: boolean } => 
-              item.name !== undefined && item.isSensitive !== undefined
-          ),
-        },
-        conservationDuration: data.personalDataGroup.conservationDuration,
-      } : undefined,
-      financialDataGroup: data.financialDataGroup ? {
-        data: {
-          name: (data.financialDataGroup.data.name ?? []).filter(
-            (item): item is { name: string; isSensitive: boolean } => 
-              item.name !== undefined && item.isSensitive !== undefined
-          ),
-        },
-        conservationDuration: data.financialDataGroup.conservationDuration,
-      } : undefined,
+      personalDataGroup: data.personalDataGroup
+        ? {
+            data: {
+              name: (data.personalDataGroup.data.name ?? []).filter(
+                (item): item is { name: string; isSensitive: boolean } =>
+                  item.name !== undefined && item.isSensitive !== undefined
+              ),
+            },
+            conservationDuration: data.personalDataGroup.conservationDuration,
+          }
+        : undefined,
+      financialDataGroup: data.financialDataGroup
+        ? {
+            data: {
+              name: (data.financialDataGroup.data.name ?? []).filter(
+                (item): item is { name: string; isSensitive: boolean } =>
+                  item.name !== undefined && item.isSensitive !== undefined
+              ),
+            },
+            conservationDuration: data.financialDataGroup.conservationDuration,
+          }
+        : undefined,
       dataSources: data.dataSources?.filter(
-        (item): item is { name: string; additionalInformation?: string } => 
+        (item): item is { name: string; additionalInformation?: string } =>
           item.name !== undefined
       ),
       retentionPeriod: data.retentionPeriod,
@@ -101,26 +105,30 @@ export default class treatmentService extends Service {
       subReasons: data.subReasons,
       legalBase: data.legalBase,
       dataSubjectCategories: data.dataSubjectCategories,
-      personalDataGroup: data.personalDataGroup ? {
-        data: {
-          name: (data.personalDataGroup.data.name ?? []).filter(
-            (item): item is { name: string; isSensitive: boolean } => 
-              item.name !== undefined && item.isSensitive !== undefined
-          ),
-        },
-        conservationDuration: data.personalDataGroup.conservationDuration,
-      } : undefined,
-      financialDataGroup: data.financialDataGroup ? {
-        data: {
-          name: (data.financialDataGroup.data.name ?? []).filter(
-            (item): item is { name: string; isSensitive: boolean } => 
-              item.name !== undefined && item.isSensitive !== undefined
-          ),
-        },
-        conservationDuration: data.financialDataGroup.conservationDuration,
-      } : undefined,
+      personalDataGroup: data.personalDataGroup
+        ? {
+            data: {
+              name: (data.personalDataGroup.data.name ?? []).filter(
+                (item): item is { name: string; isSensitive: boolean } =>
+                  item.name !== undefined && item.isSensitive !== undefined
+              ),
+            },
+            conservationDuration: data.personalDataGroup.conservationDuration,
+          }
+        : undefined,
+      financialDataGroup: data.financialDataGroup
+        ? {
+            data: {
+              name: (data.financialDataGroup.data.name ?? []).filter(
+                (item): item is { name: string; isSensitive: boolean } =>
+                  item.name !== undefined && item.isSensitive !== undefined
+              ),
+            },
+            conservationDuration: data.financialDataGroup.conservationDuration,
+          }
+        : undefined,
       dataSources: data.dataSources?.filter(
-        (item): item is { name: string; additionalInformation?: string } => 
+        (item): item is { name: string; additionalInformation?: string } =>
           item.name !== undefined
       ),
       retentionPeriod: data.retentionPeriod,

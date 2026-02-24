@@ -240,13 +240,17 @@ export default class Step5Data extends Component<Step5Signature> {
           @onRemove={{this.removePersonalData}}
           @onToggleSensitivity={{this.togglePersonalDataSensitivity}}
           @allowCustomValues={{true}}
-          @placeholder={{t "treatments.form.step5.labels.searchPersonalPlaceholder"}}
+          @placeholder={{t
+            "treatments.form.step5.labels.searchPersonalPlaceholder"
+          }}
         />
         <div class="mt-auto pt-4">
           <@form.TpkInputPrefab
             @label={{t "treatments.form.step5.labels.conservationDuration"}}
             @validationField="personalDataGroup.conservationDuration"
-            @placeholder={{t "treatments.form.step5.labels.conservationDurationPlaceholder"}}
+            @placeholder={{t
+              "treatments.form.step5.labels.conservationDurationPlaceholder"
+            }}
             class="w-full"
           />
         </div>
@@ -263,13 +267,17 @@ export default class Step5Data extends Component<Step5Signature> {
           @onRemove={{this.removeFinancialData}}
           @onToggleSensitivity={{this.toggleFinancialDataSensitivity}}
           @allowCustomValues={{true}}
-          @placeholder={{t "treatments.form.step5.labels.searchFinancialPlaceholder"}}
+          @placeholder={{t
+            "treatments.form.step5.labels.searchFinancialPlaceholder"
+          }}
         />
         <div class="mt-auto pt-4">
           <@form.TpkInputPrefab
             @label={{t "treatments.form.step5.labels.conservationDuration"}}
             @validationField="financialDataGroup.conservationDuration"
-            @placeholder={{t "treatments.form.step5.labels.conservationDurationPlaceholder"}}
+            @placeholder={{t
+              "treatments.form.step5.labels.conservationDurationPlaceholder"
+            }}
             class="w-full"
           />
         </div>
@@ -286,7 +294,9 @@ export default class Step5Data extends Component<Step5Signature> {
           @onSelect={{this.selectSource}}
           @onRemove={{this.removeSource}}
           @allowCustomValues={{true}}
-          @placeholder={{t "treatments.form.step5.labels.searchSourcePlaceholder"}}
+          @placeholder={{t
+            "treatments.form.step5.labels.searchSourcePlaceholder"
+          }}
         />
         <TpkButtonComponent
           @label={{t "treatments.form.step5.labels.showPrecisions"}}

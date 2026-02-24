@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import { t } from 'ember-intl';
 import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
-import type { Treatment, TreatmentData, TreatmentStatus } from '#src/schemas/treatments.ts';
+import type {
+  Treatment,
+  TreatmentData,
+  TreatmentStatus,
+} from '#src/schemas/treatments.ts';
 
 interface TreatmentViewSignature {
   Args: {
@@ -150,8 +154,19 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
           @onClick={{@onBack}}
           class="btn btn-ghost gap-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           {{t "treatments.details.back"}}
         </TpkButtonComponent>
@@ -161,8 +176,19 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
           class="btn btn-primary gap-2"
         >
           {{t "treatments.details.edit"}}
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
           </svg>
         </TpkButtonComponent>
       </div>
@@ -205,7 +231,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{! ── Section 2 : Informations générales ────────────────── }}
       <div class="flex flex-col gap-3">
         <div class="flex items-center gap-3">
-          <span class="text-primary font-bold text-sm tracking-widest uppercase">
+          <span
+            class="text-primary font-bold text-sm tracking-widest uppercase"
+          >
             {{t "treatments.details.generalInfo"}}
           </span>
           <div class="flex-1 border-t border-base-300"></div>
@@ -263,7 +291,10 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                   <td>{{this.data.DPO.address.phone}}</td>
                   <td>{{this.data.DPO.address.email}}</td>
                 {{else}}
-                  <td colspan={{if this.hasEntityNumber "8" "7"}} class="text-base-content/50 italic">
+                  <td
+                    colspan={{if this.hasEntityNumber "8" "7"}}
+                    class="text-base-content/50 italic"
+                  >
                     {{t "treatments.details.notApplicable"}}
                   </td>
                 {{/if}}
@@ -278,8 +309,10 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                   {{#if this.hasEntityNumber}}
                     <td>{{this.data.externalOrganizationDPO.entityNumber}}</td>
                   {{/if}}
-                  <td>{{this.data.externalOrganizationDPO.address.streetAndNumber}}</td>
-                  <td>{{this.data.externalOrganizationDPO.address.postalCode}}</td>
+                  <td
+                  >{{this.data.externalOrganizationDPO.address.streetAndNumber}}</td>
+                  <td
+                  >{{this.data.externalOrganizationDPO.address.postalCode}}</td>
                   <td>{{this.data.externalOrganizationDPO.address.city}}</td>
                   <td>{{this.data.externalOrganizationDPO.address.country}}</td>
                   <td>{{this.data.externalOrganizationDPO.address.phone}}</td>
@@ -295,7 +328,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.hasFinalites}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.purposes"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -324,7 +359,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                     </td>
                     <td>
                       {{#if sub.additionalInformation}}
-                        {{sub.name}} : {{sub.additionalInformation}}
+                        {{sub.name}}
+                        :
+                        {{sub.additionalInformation}}
                       {{else}}
                         {{sub.name}}
                       {{/if}}
@@ -341,7 +378,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.personalDataItems.length}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.personalData"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -353,17 +392,32 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                   <th class="w-[210px] text-right border-r border-base-300">
                     {{t "treatments.details.description"}}
                   </th>
-                  <th class="text-center">{{t "treatments.details.isSensitive"}}</th>
+                  <th class="text-center">{{t
+                      "treatments.details.isSensitive"
+                    }}</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each this.personalDataItems as |item|}}
                   <tr>
-                    <td class="text-right border-r border-base-300 font-medium">{{item.name}}</td>
+                    <td
+                      class="text-right border-r border-base-300 font-medium"
+                    >{{item.name}}</td>
                     <td class="text-center">
                       {{#if item.isSensitive}}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-error mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-5 h-5 text-error mx-auto"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
                         </svg>
                       {{/if}}
                     </td>
@@ -374,7 +428,10 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
           </div>
           {{#if this.data.personalDataGroup.conservationDuration}}
             <p class="text-sm text-base-content/70 mt-1">
-              {{t "treatments.details.conservationDuration" duration=this.data.personalDataGroup.conservationDuration}}
+              {{t
+                "treatments.details.conservationDuration"
+                duration=this.data.personalDataGroup.conservationDuration
+              }}
             </p>
           {{/if}}
         </div>
@@ -384,7 +441,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.financialDataItems.length}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.financialData"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -396,17 +455,32 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                   <th class="w-[210px] text-right border-r border-base-300">
                     {{t "treatments.details.description"}}
                   </th>
-                  <th class="text-center">{{t "treatments.details.isSensitive"}}</th>
+                  <th class="text-center">{{t
+                      "treatments.details.isSensitive"
+                    }}</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each this.financialDataItems as |item|}}
                   <tr>
-                    <td class="text-right border-r border-base-300 font-medium">{{item.name}}</td>
+                    <td
+                      class="text-right border-r border-base-300 font-medium"
+                    >{{item.name}}</td>
                     <td class="text-center">
                       {{#if item.isSensitive}}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-error mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-5 h-5 text-error mx-auto"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
                         </svg>
                       {{/if}}
                     </td>
@@ -417,7 +491,10 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
           </div>
           {{#if this.data.financialDataGroup.conservationDuration}}
             <p class="text-sm text-base-content/70 mt-1">
-              {{t "treatments.details.conservationDuration" duration=this.data.financialDataGroup.conservationDuration}}
+              {{t
+                "treatments.details.conservationDuration"
+                duration=this.data.financialDataGroup.conservationDuration
+              }}
             </p>
           {{/if}}
         </div>
@@ -427,7 +504,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.legalBaseItems.length}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.legalBase"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -445,7 +524,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
               <tbody>
                 {{#each this.legalBaseItems as |item|}}
                   <tr>
-                    <td class="text-right border-r border-base-300 font-medium">{{item.name}}</td>
+                    <td
+                      class="text-right border-r border-base-300 font-medium"
+                    >{{item.name}}</td>
                     <td>{{item.additionalInformation}}</td>
                   </tr>
                 {{/each}}
@@ -459,7 +540,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.subjectCategoriesRows.length}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.categories"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -477,7 +560,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
               <tbody>
                 {{#each this.subjectCategoriesRows as |row|}}
                   <tr>
-                    <td class="text-right border-r border-base-300 font-medium">{{row.name}}</td>
+                    <td
+                      class="text-right border-r border-base-300 font-medium"
+                    >{{row.name}}</td>
                     <td>{{row.additionalInformation}}</td>
                   </tr>
                 {{/each}}
@@ -491,7 +576,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.hasDataSharing}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.dataSharing"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -520,7 +607,10 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
                 {{#each this.sharedDataIndexed as |item|}}
                   <tr>
                     <td class="text-right border-r border-base-300 font-medium">
-                      {{t "treatments.details.recipientExternal" index=item.index}}
+                      {{t
+                        "treatments.details.recipientExternal"
+                        index=item.index
+                      }}
                     </td>
                     <td>{{item.name}}</td>
                     <td>{{item.additionalInformation}}</td>
@@ -536,7 +626,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.securitySetupItems.length}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.securityMeasures"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>
@@ -554,7 +646,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
               <tbody>
                 {{#each this.securitySetupItems as |item|}}
                   <tr>
-                    <td class="text-right border-r border-base-300 font-medium">{{item.name}}</td>
+                    <td
+                      class="text-right border-r border-base-300 font-medium"
+                    >{{item.name}}</td>
                     <td>{{item.additionalInformation}}</td>
                   </tr>
                 {{/each}}
@@ -568,7 +662,9 @@ export default class TreatmentView extends Component<TreatmentViewSignature> {
       {{#if this.data.areDataExportedOutsideEU}}
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <span class="text-primary font-bold text-sm tracking-widest uppercase">
+            <span
+              class="text-primary font-bold text-sm tracking-widest uppercase"
+            >
               {{t "treatments.details.dataTransfers"}}
             </span>
             <div class="flex-1 border-t border-base-300"></div>

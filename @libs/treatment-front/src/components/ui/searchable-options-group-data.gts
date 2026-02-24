@@ -71,9 +71,14 @@ export default class SearchableOptionsGroupData extends Component<SearchableOpti
     </div>
     <div class="flex flex-wrap gap-2 mt-3">
       {{#each @selected as |item|}}
-        <div class="badge gap-2 py-1 h-fit {{if item.isSensitive 'badge-warning' 'badge-primary'}}">
+        <div
+          class="badge gap-2 py-1 h-fit
+            {{if item.isSensitive 'badge-warning' 'badge-primary'}}"
+        >
           {{#if item.isSensitive}}
-            <span title={{t "treatments.form.step5.labels.markAsNotSensitive"}}><ShieldIcon class="w-4 h-4" /></span>
+            <span
+              title={{t "treatments.form.step5.labels.markAsNotSensitive"}}
+            ><ShieldIcon class="w-4 h-4" /></span>
           {{/if}}
           <span>{{item.name}}</span>
           <button
@@ -86,10 +91,16 @@ export default class SearchableOptionsGroupData extends Component<SearchableOpti
             }}
             {{on "click" (fn this.toggleSensitivity item.name)}}
           >
-            {{#if item.isSensitive}}<LockOpenIcon class="w-4 h-4" />{{else}}<LockIcon class="w-4 h-4" />{{/if}}
+            {{#if item.isSensitive}}<LockOpenIcon
+                class="w-4 h-4"
+              />{{else}}<LockIcon class="w-4 h-4" />{{/if}}
           </button>
           <div class="dropdown dropdown-end">
-            <button tabindex="0" type="button" class="p-0.5 rounded hover:bg-black/20 transition-colors cursor-pointer">
+            <button
+              tabindex="0"
+              type="button"
+              class="p-0.5 rounded hover:bg-black/20 transition-colors cursor-pointer"
+            >
               <KebabIcon class="w-4 h-4" />
             </button>
             <ul
@@ -102,7 +113,9 @@ export default class SearchableOptionsGroupData extends Component<SearchableOpti
                   class="flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-base-200 text-left rounded-none"
                   {{on "click" (fn this.toggleSensitivity item.name)}}
                 >
-                  {{#if item.isSensitive}}<LockOpenIcon class="w-4 h-4" />{{else}}<LockIcon class="w-4 h-4" />{{/if}}
+                  {{#if item.isSensitive}}<LockOpenIcon
+                      class="w-4 h-4"
+                    />{{else}}<LockIcon class="w-4 h-4" />{{/if}}
                   {{if
                     item.isSensitive
                     (t "treatments.form.step5.labels.markAsNotSensitive")

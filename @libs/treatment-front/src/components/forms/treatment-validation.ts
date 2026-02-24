@@ -104,14 +104,27 @@ export const treatmentSchema = object({
   dataSubjectCategories: array(string()).optional(),
   subjectCategoryPrecisions: array(draftDataWithInfoSchema).optional(),
   personalDataGroup: object({
-    data: object({ name: array(object({ name: string().min(1), isSensitive: boolean() })).optional() }),
+    data: object({
+      name: array(
+        object({ name: string().min(1), isSensitive: boolean() })
+      ).optional(),
+    }),
     conservationDuration: string().optional(),
   }).optional(),
   financialDataGroup: object({
-    data: object({ name: array(object({ name: string().min(1), isSensitive: boolean() })).optional() }),
+    data: object({
+      name: array(
+        object({ name: string().min(1), isSensitive: boolean() })
+      ).optional(),
+    }),
     conservationDuration: string().optional(),
   }).optional(),
-  dataSources: array(object({ name: string().min(1), additionalInformation: string().optional() })).optional(),
+  dataSources: array(
+    object({
+      name: string().min(1),
+      additionalInformation: string().optional(),
+    })
+  ).optional(),
   dataAccess: array(draftDataWithInfoSchema).optional(),
   sharedData: array(draftDataWithInfoSchema).optional(),
   retentionPeriod: string().optional(),
@@ -140,14 +153,27 @@ export const draftTreatmentSchema = object({
   dataSubjectCategories: array(string()).optional(),
   subjectCategoryPrecisions: array(draftDataWithInfoSchema).optional(),
   personalDataGroup: object({
-    data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+    data: object({
+      name: array(
+        object({ name: string().optional(), isSensitive: boolean().optional() })
+      ).optional(),
+    }),
     conservationDuration: string().optional(),
   }).optional(),
   financialDataGroup: object({
-    data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+    data: object({
+      name: array(
+        object({ name: string().optional(), isSensitive: boolean().optional() })
+      ).optional(),
+    }),
     conservationDuration: string().optional(),
   }).optional(),
-  dataSources: array(object({ name: string().optional(), additionalInformation: string().optional() })).optional(),
+  dataSources: array(
+    object({
+      name: string().optional(),
+      additionalInformation: string().optional(),
+    })
+  ).optional(),
   dataAccess: array(draftDataWithInfoSchema).optional(),
   sharedData: array(draftDataWithInfoSchema).optional(),
   retentionPeriod: string().optional(),
@@ -253,14 +279,33 @@ export const step4Schema = () =>
 export const step5Schema = () =>
   object({
     personalDataGroup: object({
-      data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+      data: object({
+        name: array(
+          object({
+            name: string().optional(),
+            isSensitive: boolean().optional(),
+          })
+        ).optional(),
+      }),
       conservationDuration: string().optional(),
     }).optional(),
     financialDataGroup: object({
-      data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+      data: object({
+        name: array(
+          object({
+            name: string().optional(),
+            isSensitive: boolean().optional(),
+          })
+        ).optional(),
+      }),
       conservationDuration: string().optional(),
     }).optional(),
-    dataSources: array(object({ name: string().optional(), additionalInformation: string().optional() })).optional(),
+    dataSources: array(
+      object({
+        name: string().optional(),
+        additionalInformation: string().optional(),
+      })
+    ).optional(),
   });
 
 export const step6Schema = () =>
@@ -277,13 +322,25 @@ export const step7Schema = () =>
   }).superRefine((data, ctx) => {
     if (data.areDataExportedOutsideEU) {
       if (!data.recipient?.fullName) {
-        ctx.addIssue({ code: 'custom', path: ['recipient', 'fullName'], message: 'required' });
+        ctx.addIssue({
+          code: 'custom',
+          path: ['recipient', 'fullName'],
+          message: 'required',
+        });
       }
       if (!data.recipient?.country) {
-        ctx.addIssue({ code: 'custom', path: ['recipient', 'country'], message: 'required' });
+        ctx.addIssue({
+          code: 'custom',
+          path: ['recipient', 'country'],
+          message: 'required',
+        });
       }
       if (!data.recipient?.guaranteeTypes) {
-        ctx.addIssue({ code: 'custom', path: ['recipient', 'guaranteeTypes'], message: 'required' });
+        ctx.addIssue({
+          code: 'custom',
+          path: ['recipient', 'guaranteeTypes'],
+          message: 'required',
+        });
       }
     }
   });
