@@ -1,0 +1,29 @@
+.tpk-select-search-container {
+  @apply fieldset;
+}
+
+.tpk-select-search-container .tpk-select-create-label {
+  @apply label mb-1;
+}
+
+.tpk-select-search-container .ember-power-select-multiple-options,
+.tpk-select-search-container
+  .ember-power-select-trigger-multiple-input-container,
+.tpk-select-search-container .ember-power-select-input,
+.tpk-select-search-container .ember-power-select-input input {
+  @apply h-full w-full;
+}
+
+.tpk-select-search-container .tpk-select-create-dropdown {
+  @apply min-w-72 text-base;
+}
+
+.tpk-select-search-container
+  .tpk-select-create-dropdown
+  .ember-power-select-option {
+  @apply rounded-md grid grid-flow-col content-start items-center gap-2 pl-2 pr-2 py-1.5 text-start cursor-pointer outline-hidden;
+  transition-property: color, background-color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  grid-auto-columns: minmax(auto, max-content) auto max-content;
+}

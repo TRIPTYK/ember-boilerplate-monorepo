@@ -13,9 +13,9 @@ import { t, type IntlService } from 'ember-intl';
 import type FlashMessagesService from 'ember-cli-flash/services/flash-messages';
 import type TreatmentService from '#src/services/treatment.ts';
 import type { Treatment, TreatmentWithId } from '#src/schemas/treatments.ts';
-import StatusChip from './table-cells/status-chip.gts';
-import SensitiveDataIndicator from './table-cells/sensitive-data-indicator.gts';
-import TreatmentTypeEditor from './table-cells/treatment-type-editor.gts';
+import StatusChip from '#src/components/tables/ui/status-chip.gts';
+import SensitiveDataIndicator from '#src/components/tables/ui/sensitive-data-indicator.gts';
+import TreatmentTypeEditor from '#src/components/tables/ui/treatment-type-editor.gts';
 import { hash } from '@ember/helper';
 import type { TOC } from '@ember/component/template-only';
 import ViewIcon from '#src/assets/icons/view.gts';
@@ -53,7 +53,6 @@ class TreatmentsTable extends Component<object> {
     });
   }
 
-
   get tableParams(): TableParams {
     return {
       entity: 'treatments',
@@ -69,6 +68,7 @@ class TreatmentsTable extends Component<object> {
         includeArchived: this.includeArchived ? 'true' : 'false',
       },
       registerApi: (api: TableApi) => {
+        // eslint-disable-next-line ember/no-side-effects
         this.tableApi = api;
       },
       defaultSortColumn: 'order',
@@ -94,8 +94,12 @@ class TreatmentsTable extends Component<object> {
           headerName: this.intl.t('treatments.table.advanced.headers.reasons'),
           sortable: false,
           renderElement: (value: unknown) => {
-            return (value as { 'data.reasons'?: string[] })['data.reasons']?.join(', ') || '-';
-          }
+            return (
+              (value as { 'data.reasons'?: string[] })['data.reasons']?.join(
+                ', '
+              ) || '-'
+            );
+          },
         },
         {
           field: 'status',
@@ -119,7 +123,7 @@ class TreatmentsTable extends Component<object> {
           sortable: false,
           renderElement: (value: unknown) => {
             return this.formatDate(value as string);
-          }
+          },
         },
         {
           field: 'updateDate',
@@ -129,7 +133,7 @@ class TreatmentsTable extends Component<object> {
           sortable: false,
           renderElement: (value: unknown) => {
             return this.formatDate(value as string);
-          }
+          },
         },
         {
           field: 'data.responsible.fullName',
@@ -166,8 +170,8 @@ class TreatmentsTable extends Component<object> {
         },
         {
           icon: <template><ArchiveIcon class="size-4" /></template> as TOC<{
-                  Element: SVGSVGElement;
-                }>,
+            Element: SVGSVGElement;
+          }>,
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           action: async (element: unknown) => {
             const treatment = element as TreatmentWithId;
@@ -295,7 +299,11 @@ class TreatmentsTable extends Component<object> {
           </TpkSelect>
         </div>
 
-        <TpkTogglePrefabComponent @label={{t "treatments.table.advanced.filters.includeArchived"}} @checked={{this.includeArchived}} @onChange={{this.handleToggleArchived}} />
+        <TpkTogglePrefabComponent
+          @label={{t "treatments.table.advanced.filters.includeArchived"}}
+          @checked={{this.includeArchived}}
+          @onChange={{this.handleToggleArchived}}
+        />
       </div>
 
       <TableGenericPrefab

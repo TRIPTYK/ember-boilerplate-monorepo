@@ -1,0 +1,106 @@
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { t } from 'ember-intl';
+import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
+import SubPurposesModal from '#src/components/ui/sub-purposes-modal.gts';
+import TpkButtonPrefabComponent from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+
+const PREDEFINED_PURPOSES = [
+  'Collecte de données',
+  'Gestion des utilisateurs',
+  'Marketing',
+  'Analyse',
+  'Conformité légale',
+  'Amélioration du service',
+  'Support client',
+  'Recherche',
+  'Sécurité',
+];
+
+interface Step3Signature {
+  Args: {
+    changeset: TreatmentChangeset;
+  };
+}
+
+export default class Step3Purposes extends Component<Step3Signature> {
+  @tracked customOptions: string[] = [];
+  @tracked isModalOpen = false;
+
+  get allOptions(): string[] {
+    return [...PREDEFINED_PURPOSES, ...this.customOptions];
+  }
+
+  get selectedReasons(): string[] {
+    return this.args.changeset.get('reasons') ?? [];
+  }
+
+  get subReasons(): { name?: string; additionalInformation?: string }[] {
+    return this.args.changeset.get('subReasons') ?? [];
+  }
+
+  @action
+  selectReason(value: string): void {
+    if (!this.allOptions.includes(value)) {
+      this.customOptions = [...this.customOptions, value];
+    }
+    const current = this.selectedReasons;
+    if (!current.includes(value)) {
+      this.args.changeset.set('reasons', [...current, value]);
+      console.log(this.args.changeset.get('reasons'));
+    }
+  }
+
+  @action
+  removeReason(value: string): void {
+    this.args.changeset.set(
+      'reasons',
+      this.selectedReasons.filter((r) => r !== value)
+    );
+  }
+
+  @action
+  updateSubReasons(
+    updated: { name?: string; additionalInformation?: string }[]
+  ): void {
+    this.args.changeset.set('subReasons', updated);
+  }
+
+  @action
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  @action
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
+
+  <template>
+    <h4 class="text-2xl font-semibold text-center text-base-content">
+      {{t "treatments.form.step3.title"}}
+    </h4>
+    <SearchableOptionsGroup
+      @allOptions={{this.allOptions}}
+      @selected={{this.selectedReasons}}
+      @onSelect={{this.selectReason}}
+      @onRemove={{this.removeReason}}
+      @allowCustomValues={{true}}
+      @placeholder={{t "treatments.form.step3.labels.searchPlaceholder"}}
+      @popularLabel={{t "treatments.form.step3.labels.popular"}}
+    />
+    <TpkButtonPrefabComponent
+      @label={{t "treatments.form.step3.labels.subPurposes"}}
+      @onClick={{this.openModal}}
+      class="btn btn-primary mt-4"
+    />
+    <SubPurposesModal
+      @isOpen={{this.isModalOpen}}
+      @onClose={{this.closeModal}}
+      @subReasons={{this.subReasons}}
+      @onChange={{this.updateSubReasons}}
+    />
+  </template>
+}

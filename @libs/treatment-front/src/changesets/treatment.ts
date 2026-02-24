@@ -46,6 +46,10 @@ export interface DraftTreatment {
   subReasons?: { name?: string; additionalInformation?: string }[];
   legalBase?: { name?: string; additionalInformation?: string }[];
   dataSubjectCategories?: string[];
+  subjectCategoryPrecisions?: {
+    name?: string;
+    additionalInformation?: string;
+  }[];
   personalData?: { name?: string; additionalInformation?: string }[];
   financialData?: { name?: string; additionalInformation?: string }[];
   dataSource?: string[];
@@ -68,4 +72,4 @@ export interface DraftTreatment {
   securityMeasures?: string[];
 }
 
-export class treatmentChangeset extends ImmerChangeset<DraftTreatment> {}
+export class TreatmentChangeset extends ImmerChangeset<DraftTreatment> {}

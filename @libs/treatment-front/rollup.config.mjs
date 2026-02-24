@@ -52,6 +52,7 @@ export default {
         'handlers/**/*.js',
         'templates/**/*.js',
         'schemas/**/*.js',
+        'styles/**/*.css',
       ],
       {
         mapFilename: fileNameMapper,

@@ -18,6 +18,7 @@ export default class DashboardTemplate extends Component {
   @service declare intl: IntlService;
 
   @tracked sidebarCollapsed = true;
+  themes = ['nord', 'dracula', 'pastel', 'sunset', 'corporate', 'business'];
 
   languages: Language[] = [
     { code: 'fr-fr', label: 'Français' },
@@ -170,7 +171,10 @@ export default class DashboardTemplate extends Component {
             {{if this.sidebarCollapsed 'flex-col'}}"
         >
           <FooterComponent @collapsed={{this.sidebarCollapsed}} />
-          <TpkThemeSelector @sidebarCollapsed={{this.sidebarCollapsed}} />
+          <TpkThemeSelector
+            @sidebarCollapsed={{this.sidebarCollapsed}}
+            @themes={{this.themes}}
+          />
         </div>
       </:footer>
     </TpkDashBoard>

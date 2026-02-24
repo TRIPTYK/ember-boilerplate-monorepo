@@ -1,93 +1,314 @@
 import Component from '@glimmer/component';
-import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import type TreatmentService from '#src/services/treatment.ts';
-import type { treatmentChangeset } from '#src/changesets/treatment.ts';
-import {
-  createTreatmentValidationSchema,
-  editTreatmentValidationSchema,
-  type UpdatedTreatment,
-  type ValidatedTreatment,
-} from '#src/components/forms/treatment-validation.ts';
+import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
 import type RouterService from '@ember/routing/router-service';
-import { create, fillable, clickable } from 'ember-cli-page-object';
 import type FlashMessageService from 'ember-cli-flash/services/flash-messages';
-import { t, type IntlService } from 'ember-intl';
-import { LinkTo } from '@ember/routing';
-import type ImmerChangeset from 'ember-immer-changeset';
-import HandleSaveService from '@libs/shared-front/services/handle-save';
+import { type IntlService } from 'ember-intl';
+import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import {
+  step1Schema,
+  step2Schema,
+  step3Schema,
+  step4Schema,
+  type DraftTreatmentData,
+  type TreatmentData,
+} from '#src/components/forms/treatment-validation.ts';
+import Step1Name from './treatment-form/step-1-name.gts';
+import Step2GeneralInfo from './treatment-form/step-2-general-info.gts';
+import Step3Purposes from './treatment-form/step-3-purposes.gts';
+import Step4Categories from './treatment-form/step-4-categories.gts';
+import FormSteps, {
+  type FormStep,
+  type StepStatus,
+} from '#src/components/ui/form-steps.gts';
+import FormNavigation from '#src/components/ui/form-navigation.gts';
 
-interface treatmentsFormArgs {
-  changeset: treatmentChangeset;
-  validationSchema:
-    | ReturnType<typeof createTreatmentValidationSchema>
-    | ReturnType<typeof editTreatmentValidationSchema>;
+interface TreatmentFormSignature {
+  Args: {
+    changeset: TreatmentChangeset;
+    onSave?: (data: DraftTreatmentData) => Promise<void>;
+    onFinish: (data: TreatmentData) => Promise<void>;
+    onCancel: () => void;
+  };
 }
 
-export default class treatmentsForm extends Component<treatmentsFormArgs> {
-  @service declare treatment: TreatmentService;
+export default class TreatmentForm extends Component<TreatmentFormSignature> {
   @service declare router: RouterService;
   @service declare flashMessages: FlashMessageService;
   @service declare intl: IntlService;
-  @service declare handleSave: HandleSaveService;
 
-  onSubmit = async (
-    data: ValidatedTreatment | UpdatedTreatment,
-    c: ImmerChangeset<ValidatedTreatment | UpdatedTreatment>
-  ) => {
-    await this.handleSave.handleSave({
-      saveAction: () => this.treatment.save(data),
-      changeset: c,
-      successMessage: 'treatments.forms.treatment.messages.saveSuccess',
-      transitionOnSuccess: 'dashboard.treatments',
-    });
+  @tracked currentStep = 1;
+
+  constructor(owner: Owner, args: TreatmentFormSignature['Args']) {
+    super(owner, args);
+    const stepFromQP = Number(
+      new URLSearchParams(window.location.search).get('step')
+    );
+    if (stepFromQP >= 1 && stepFromQP <= 4) {
+      this.currentStep = stepFromQP;
+    }
+  }
+
+  private syncStepToUrl(step: number) {
+    this.currentStep = step;
+    const url = new URL(window.location.href);
+    url.searchParams.set('step', step.toString());
+    window.history.replaceState(null, '', url.toString());
+  }
+
+  @tracked isValidating = false;
+  @tracked isSaving = false;
+  @tracked stepErrors: Partial<Record<number, boolean>> = {};
+
+  getStepStatus = (step: number): StepStatus => {
+    if (this.currentStep === step) return 'current';
+    if (this.stepErrors[step]) return 'error';
+    if (this.currentStep > step) return 'done';
+    return 'pending';
   };
 
-  tpkButton = () => {};
+  get steps(): FormStep[] {
+    return [
+      {
+        number: 1,
+        label: this.intl.t('treatments.form.progress.step1'),
+        status: this.getStepStatus(1),
+      },
+      {
+        number: 2,
+        label: this.intl.t('treatments.form.progress.step2'),
+        status: this.getStepStatus(2),
+      },
+      {
+        number: 3,
+        label: this.intl.t('treatments.form.progress.step3'),
+        status: this.getStepStatus(3),
+      },
+      {
+        number: 4,
+        label: this.intl.t('treatments.form.progress.step4'),
+        status: this.getStepStatus(4),
+      },
+    ];
+  }
+
+  get step1ValidationSchema() {
+    return step1Schema(this.intl);
+  }
+
+  get step2ValidationSchema() {
+    return step2Schema(this.intl);
+  }
+
+  get step3ValidationSchema() {
+    return step3Schema();
+  }
+
+  get step4ValidationSchema() {
+    return step4Schema();
+  }
+
+  get currentValidationSchema() {
+    switch (this.currentStep) {
+      case 1:
+        return this.step1ValidationSchema;
+      case 2:
+        return this.step2ValidationSchema;
+      case 3:
+        return this.step3ValidationSchema;
+      default:
+        return this.step4ValidationSchema;
+    }
+  }
+
+  get isStep1() {
+    return this.currentStep === 1;
+  }
+
+  get isStep2() {
+    return this.currentStep === 2;
+  }
+
+  get isStep3() {
+    return this.currentStep === 3;
+  }
+
+  get isStep4() {
+    return this.currentStep === 4;
+  }
+
+  get isLastStep() {
+    return this.currentStep === 4;
+  }
+
+  get canGoNext() {
+    return this.currentStep < 4;
+  }
+
+  get canGoPrevious() {
+    return this.currentStep > 1;
+  }
+
+  @action
+  async validateCurrentStep(): Promise<boolean> {
+    this.isValidating = true;
+    try {
+      const data = this.args.changeset.data;
+
+      if (this.currentStep === 1) {
+        await this.step1ValidationSchema.parseAsync({
+          title: data.title,
+          description: data.description,
+          treatmentType: data.treatmentType,
+        });
+      } else if (this.currentStep === 2) {
+        await this.step2ValidationSchema.parseAsync({
+          responsible: data.responsible,
+          hasDPO: data.hasDPO,
+          DPO: data.DPO,
+          hasExternalDPO: data.hasExternalDPO,
+          externalOrganizationDPO: data.externalOrganizationDPO,
+        });
+      } else if (this.currentStep === 3) {
+        await this.step3ValidationSchema.parseAsync({
+          reasons: data.reasons,
+          subReasons: data.subReasons,
+        });
+      } else if (this.currentStep === 4) {
+        await this.step4ValidationSchema.parseAsync({
+          dataSubjectCategories: data.dataSubjectCategories,
+          subjectCategoryPrecisions: data.subjectCategoryPrecisions,
+        });
+      }
+
+      const cleared = { ...this.stepErrors };
+      delete cleared[this.currentStep];
+      this.stepErrors = cleared;
+      return true;
+    } catch {
+      this.stepErrors = { ...this.stepErrors, [this.currentStep]: true };
+      this.flashMessages.danger(
+        this.intl.t('treatments.form.validation.stepInvalid')
+      );
+      return false;
+    } finally {
+      this.isValidating = false;
+    }
+  }
+
+  @action
+  goToStep(stepNumber: number) {
+    this.syncStepToUrl(stepNumber);
+  }
+
+  @action
+  async goToNextStep() {
+    const isValid = await this.validateCurrentStep();
+    if (isValid && this.canGoNext) {
+      this.syncStepToUrl(this.currentStep + 1);
+    }
+  }
+
+  @action
+  goToPreviousStep() {
+    if (this.canGoPrevious) {
+      this.syncStepToUrl(this.currentStep - 1);
+    }
+  }
+
+  @action
+  async handleSaveDraft() {
+    if (this.args.onSave) {
+      this.isSaving = true;
+      try {
+        const data = this.args.changeset.data as DraftTreatmentData;
+        await this.args.onSave(data);
+        this.flashMessages.success(
+          this.intl.t('treatments.form.messages.draftSaved')
+        );
+      } catch {
+        this.flashMessages.danger(
+          this.intl.t('treatments.form.messages.saveFailed')
+        );
+      } finally {
+        this.isSaving = false;
+      }
+    }
+  }
+
+  @action
+  skipStep() {
+    if (this.canGoNext) {
+      this.syncStepToUrl(this.currentStep + 1);
+    }
+  }
+
+  @action
+  async handleFinish() {
+    const isValid = await this.validateCurrentStep();
+    if (!isValid) {
+      return;
+    }
+
+    this.isSaving = true;
+    try {
+      const data = this.args.changeset.data as TreatmentData;
+      await this.args.onFinish(data);
+      this.flashMessages.success(
+        this.intl.t('treatments.form.messages.treatmentCreated')
+      );
+    } catch {
+      this.flashMessages.danger(
+        this.intl.t('treatments.form.messages.saveFailed')
+      );
+    } finally {
+      this.isSaving = false;
+    }
+  }
+
+  @action
+  handleCancel() {
+    this.args.onCancel();
+  }
 
   <template>
-    <TpkForm
-      @changeset={{@changeset}}
-      @onSubmit={{this.onSubmit}}
-      @validationSchema={{@validationSchema}}
-      data-test-treatments-form
-      as |F|
-    >
-      <div class="grid grid-cols-12 gap-x-6 gap-y-3 max-w-4xl">
-        <F.TpkInputPrefab
-          @label={{t "treatments.forms.treatment.labels.title"}}
-          @validationField="title"
-          class="col-span-12 md:col-span-4"
-        />
-        <F.TpkTextareaPrefab
-          @label={{t "treatments.forms.treatment.labels.description"}}
-          @validationField="description"
-          class="col-span-12 md:col-span-5"
-        />
-        <div class="col-span-12 flex items-center justify-between gap-2">
-          <button type="submit" class="btn btn-primary">
-            {{t "treatments.forms.treatment.actions.submit"}}
-          </button>
-          <LinkTo
-            @route="dashboard.treatments"
-            class="text-sm text-primary underline text-center mt-2"
-          >
-            {{t "treatments.forms.treatment.actions.back"}}
-          </LinkTo>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <FormSteps @steps={{this.steps}} @onStepClick={{this.goToStep}} />
+      <TpkForm
+        {{! @glint-expect-error: Changeset type mismatch with TpkForm generic }}
+        @changeset={{@changeset}}
+        @validationSchema={{this.currentValidationSchema}}
+        @onSubmit={{if this.isLastStep this.handleFinish this.goToNextStep}}
+        as |F|
+      >
+        <div class="rounded-lg shadow-lg p-8">
+          {{#if this.isStep1}}
+            <Step1Name @form={{F}} @changeset={{@changeset}} />
+          {{/if}}
+          {{#if this.isStep2}}
+            <Step2GeneralInfo @form={{F}} @changeset={{@changeset}} />
+          {{/if}}
+          {{#if this.isStep3}}
+            <Step3Purposes @changeset={{@changeset}} />
+          {{/if}}
+          {{#if this.isStep4}}
+            <Step4Categories @changeset={{@changeset}} />
+          {{/if}}
+          <FormNavigation
+            @isFirstStep={{this.isStep1}}
+            @isLastStep={{this.isLastStep}}
+            @isSaving={{this.isSaving}}
+            @isValidating={{this.isValidating}}
+            @onCancel={{this.handleCancel}}
+            @onPrevious={{this.goToPreviousStep}}
+            @onSaveDraft={{this.handleSaveDraft}}
+            @onSkip={{this.skipStep}}
+          />
         </div>
-      </div>
-    </TpkForm>
+      </TpkForm>
+    </div>
   </template>
 }
-
-export const pageObject = create({
-  scope: '[data-test-treatments-form]',
-  title: fillable('[data-test-tpk-prefab-input-container="title"] input'),
-  description: fillable(
-    '[data-test-tpk-prefab-textarea-container="description"] textarea'
-  ),
-  completed: clickable(
-    '[data-test-tpk-prefab-checkbox-container="completed"] input'
-  ),
-  submit: clickable('button[type="submit"]'),
-});

@@ -1,5 +1,5 @@
-import { treatmentChangeset } from '#src/changesets/treatment.ts';
-import TreatmentWizard from '#src/components/wizard/treatment-wizard.gts';
+import { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import TreatmentForm from '#src/components/forms/treatment-form.gts';
 import Component from '@glimmer/component';
 import type { treatmentsCreateRouteSignature } from './create.gts';
 import type Owner from '@ember/owner';
@@ -17,18 +17,18 @@ export default class treatmentsCreateRouteTemplate extends Component<treatmentsC
   @service declare router: RouterService;
   @service declare treatment: TreatmentService;
 
-  changeset = new treatmentChangeset({});
+  changeset = new TreatmentChangeset({});
 
   constructor(owner: Owner, args: treatmentsCreateRouteSignature) {
     super(owner, args);
   }
 
   handleSaveDraft = async (data: DraftTreatmentData) => {
-    await this.treatment.save(data as any);
+    await this.treatment.save(data);
   };
 
   handleFinish = async (data: TreatmentData) => {
-    await this.treatment.save(data as any);
+    await this.treatment.save(data);
     this.router.transitionTo('dashboard.treatments');
   };
 
@@ -37,7 +37,7 @@ export default class treatmentsCreateRouteTemplate extends Component<treatmentsC
   };
 
   <template>
-    <TreatmentWizard
+    <TreatmentForm
       @changeset={{this.changeset}}
       @onSave={{this.handleSaveDraft}}
       @onFinish={{this.handleFinish}}

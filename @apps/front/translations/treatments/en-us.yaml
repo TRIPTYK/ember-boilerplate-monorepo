@@ -1,4 +1,4 @@
-wizard:
+form:
   step1:
     title: 'Treatment Name'
     labels:
@@ -11,7 +11,7 @@ wizard:
       description: 'Enter treatment description'
     validation:
       titleRequired: 'Treatment title is required'
-  
+
   step2:
     title: 'General Identification'
     sections:
@@ -47,23 +47,52 @@ wizard:
       phoneRequired: 'Phone is required'
       emailRequired: 'Email is required'
       emailInvalid: 'Invalid email address'
-  
+
+  step3:
+    title: 'Treatment Purposes'
+    labels:
+      searchPlaceholder: 'Search or add a purpose...'
+      popular: 'Popular'
+      selected: 'Selected purposes'
+      subPurposes: 'Sub-purposes'
+      addSubPurpose: 'Add a sub-purpose'
+      subPurposeName: 'Sub-purpose name'
+      subPurposeNamePlaceholder: 'Enter sub-purpose name'
+      subPurposeDescription: 'Description for {name}'
+      subPurposeDescriptionPlaceholder: 'Describe the sub-purpose {name}'
+      removeSubPurpose: 'Remove sub-purpose'
+      save: 'Save'
+      cancel: 'Cancel'
+
+  step4:
+    title: 'Data Subject Categories'
+    labels:
+      searchPlaceholder: 'Search or add a category...'
+      popular: 'Popular'
+      selected: 'Selected categories'
+      precisions: 'Precisions'
+      noCategoriesSelected: 'No categories selected yet. Add categories to add precisions.'
+      save: 'Save'
+      cancel: 'Cancel'
+
   navigation:
     cancel: 'Cancel'
     start: 'Start'
     previous: 'Previous'
     next: 'Next'
-    save: 'Save Draft'
+    save: 'Save as draft'
     skip: 'Skip'
     finish: 'Finish'
-  
+
   progress:
     step1: 'Treatment Name'
     step2: 'General Identification'
-  
+    step3: 'Purposes'
+    step4: 'Data Subjects'
+
   validation:
     stepInvalid: 'Please correct the errors before continuing'
-  
+
   messages:
     draftSaved: 'Draft saved successfully'
     treatmentCreated: 'Treatment created successfully'

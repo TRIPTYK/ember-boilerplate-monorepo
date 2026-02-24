@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { t } from 'ember-intl';
 import type { TreatmentData } from '#src/schemas/treatments.ts';
 
 interface SensitiveDataIndicatorArgs {

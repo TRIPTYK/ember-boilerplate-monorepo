@@ -35,6 +35,12 @@ frontend:
     description: Steps to wire a new frontend lib into @apps/front
   auth-handler:
     description: WarpDrive auth handler for injecting JWT tokens into requests
+  ember-input-composition:
+    description: Composition required for base components, base vs prefab vs standalone prefab
+  ember-input-specifics:
+    description: Radio group pattern (G.Radio yielded) and TpkButton anti-spam protection
+  ember-input-validation-yields:
+    description: Base component yields — hasError, firstError, errors, mandatory
   file-extensions:
     description: .gts for templates, .ts for logic-only files
   form-pattern:
@@ -57,6 +63,8 @@ frontend:
     description: Entity service CRUD operations via WarpDrive
   testing-setup:
     description: Vitest + ember-vitest test infrastructure and patterns
+  tpk-form-injection:
+    description: Auto-injection of @changeset and @mandatory via TpkForm, exception for nested changesets
   translations:
     description: i18n key conventions and translation file locations
 

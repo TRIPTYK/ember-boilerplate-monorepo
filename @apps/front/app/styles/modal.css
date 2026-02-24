@@ -1,0 +1,7 @@
+.tpk-modal-content {
+  @apply modal-box min-h-[50vh] max-h-[60vh] min-w-[50vw] max-w-[60vw];
+}
+
+.tpk-modal-content .tpk-modal-title {
+  @apply text-2xl font-semibold text-center text-white;
+}

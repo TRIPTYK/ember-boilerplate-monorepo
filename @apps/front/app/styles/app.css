@@ -5,14 +5,17 @@
 @import '@triptyk/ember-input-validation/dist/app.css';
 @import './auth.css';
 @import './flash.css';
+@import './modal.css';
+@import '../../node_modules/@libs/treatment-front/src/styles/app.css';
 
 @plugin "daisyui" {
   themes:
     nord --default,
     dracula,
-    cupcake,
+    sunset,
+    business,
     corporate,
-    lemonade;
+    pastel;
 }
 
 /* Additional global styles can be added below */

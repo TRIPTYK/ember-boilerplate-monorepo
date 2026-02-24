@@ -339,6 +339,7 @@ export default [
             {
               status: '404',
               title: 'Not Found',
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               detail: `Treatment with id ${id} not found`,
               code: 'treatment_NOT_FOUND',
             },
@@ -353,7 +354,7 @@ export default [
 
     return HttpResponse.json({
       data: {
-        id: json.data.lid,
+        id: crypto.randomUUID(),
         type: 'treatments' as const,
         attributes: json.data.attributes,
       },
@@ -361,10 +362,11 @@ export default [
   }),
   http.untyped.patch('/api/v1/treatments/:id', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
+    const { id } = req.params;
 
     return HttpResponse.json({
       data: {
-        id: json.data.lid,
+        id: String(id),
         type: 'treatments' as const,
         attributes: json.data.attributes,
       },

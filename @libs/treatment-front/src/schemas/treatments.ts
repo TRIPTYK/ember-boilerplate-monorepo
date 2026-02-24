@@ -66,6 +66,10 @@ export interface TreatmentData {
   subReasons?: Array<{ name?: string; additionalInformation?: string }>;
   legalBase?: Array<{ name?: string; additionalInformation?: string }>;
   dataSubjectCategories?: string[];
+  subjectCategoryPrecisions?: Array<{
+    name?: string;
+    additionalInformation?: string;
+  }>;
   personalDataGroup?: {
     data: {
       name: Array<{ name: string; isSensitive: boolean }>;

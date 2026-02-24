@@ -23,7 +23,7 @@ export default class ApplicationRoute extends Route {
 
   async beforeModel() {
     setTheme();
-    this.intl.setLocale('en-us');
+    this.intl.setLocale('fr-fr');
     this.intl.addTranslations('en-us', translationsForEnUs);
     this.intl.addTranslations('fr-fr', translationsForFrFr);
 

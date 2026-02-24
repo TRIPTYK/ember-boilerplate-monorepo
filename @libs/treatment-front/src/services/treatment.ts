@@ -1,9 +1,5 @@
 import type { Treatment } from '#src/schemas/treatments.ts';
-import {
-  type UpdatedTreatment,
-  type ValidatedTreatment,
-  type DraftTreatmentData,
-} from '#src/components/forms/treatment-validation.ts';
+import { type DraftTreatmentData } from '#src/components/forms/treatment-validation.ts';
 import { assert } from '@ember/debug';
 import Service from '@ember/service';
 import { service } from '@ember/service';
@@ -66,9 +62,7 @@ export default class treatmentService extends Service {
     await this.store.request(request);
   }
 
-  public async update(
-    data: TreatmentWithId
-  ) {
+  public async update(data: TreatmentWithId) {
     const existingTreatment = this.store.peekRecord<Treatment>({
       id: data.id,
       type: 'treatments',

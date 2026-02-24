@@ -1,5 +1,5 @@
-import { treatmentChangeset } from '#src/changesets/treatment.ts';
-import TreatmentWizard from '#src/components/wizard/treatment-wizard.gts';
+import { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import TreatmentForm from '#src/components/forms/treatment-form.gts';
 import Component from '@glimmer/component';
 import type { treatmentsEditRouteSignature } from './edit.gts';
 import type { IntlService } from 'ember-intl';
@@ -21,7 +21,7 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
     super(owner, args);
   }
 
-  changeset = new treatmentChangeset({
+  changeset = new TreatmentChangeset({
     id: this.args.model.treatment.id,
     ...(this.args.model.treatment.data || {}),
   });
@@ -30,14 +30,14 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
     await this.treatment.save({
       id: this.args.model.treatment.id,
       ...data,
-    } as any);
+    });
   };
 
   handleFinish = async (data: TreatmentData) => {
     await this.treatment.save({
       id: this.args.model.treatment.id,
       ...data,
-    } as any);
+    });
     this.router.transitionTo('dashboard.treatments');
   };
 
@@ -46,7 +46,7 @@ export default class treatmentsEditRouteTemplate extends Component<treatmentsEdi
   };
 
   <template>
-    <TreatmentWizard
+    <TreatmentForm
       @changeset={{this.changeset}}
       @onSave={{this.handleSaveDraft}}
       @onFinish={{this.handleFinish}}

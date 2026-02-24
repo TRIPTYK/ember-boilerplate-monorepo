@@ -1,4 +1,4 @@
-wizard:
+form:
   step1:
     title: 'Nom du traitement'
     labels:
@@ -11,7 +11,7 @@ wizard:
       description: 'Entrez la description du traitement'
     validation:
       titleRequired: 'Le titre du traitement est requis'
-  
+
   step2:
     title: 'Identification générale'
     sections:
@@ -24,13 +24,13 @@ wizard:
       hasDPO: 'Nous travaillons avec un DPO'
       hasExternalDPO: 'Le DPO est externe à la société'
       responsible:
-        fullName: 'Nom de l''entité'
-        entityNumber: 'Numéro d''entreprise'
+        fullName: "Nom de l'entité"
+        entityNumber: "Numéro d'entreprise"
       dpo:
         fullName: 'Nom complet'
       externalDPO:
-        fullName: 'Nom de l''organisation'
-        entityNumber: 'Numéro d''entreprise'
+        fullName: "Nom de l'organisation"
+        entityNumber: "Numéro d'entreprise"
       address:
         streetAndNumber: 'Rue et numéro'
         postalCode: 'Code postal'
@@ -39,35 +39,64 @@ wizard:
         phone: 'Téléphone'
         email: 'Email'
     validation:
-      responsibleNameRequired: 'Le nom de l''entité est requis'
-      addressRequired: 'L''adresse est requise'
+      responsibleNameRequired: "Le nom de l'entité est requis"
+      addressRequired: "L'adresse est requise"
       postalCodeRequired: 'Le code postal est requis'
       cityRequired: 'La ville est requise'
       countryRequired: 'Le pays est requis'
       phoneRequired: 'Le téléphone est requis'
-      emailRequired: 'L''email est requis'
+      emailRequired: "L'email est requis"
       emailInvalid: 'Adresse email invalide'
-  
+
+  step3:
+    title: 'Finalité(s) du traitement'
+    labels:
+      searchPlaceholder: 'Rechercher ou ajouter une finalité...'
+      popular: 'Populaire'
+      selected: 'Finalités sélectionnées'
+      subPurposes: 'Sous-finalités'
+      addSubPurpose: 'Ajouter une sous-finalité'
+      subPurposeName: 'Nom de la sous-finalité'
+      subPurposeNamePlaceholder: 'Entrez le nom de la sous finalité'
+      subPurposeDescription: 'Description pour {name}'
+      subPurposeDescriptionPlaceholder: 'Décrivez la sous finalité {name}'
+      removeSubPurpose: 'Supprimer la sous-finalité'
+      save: 'Enregistrer'
+      cancel: 'Annuler'
+
+  step4:
+    title: 'Catégories de personnes concernées'
+    labels:
+      searchPlaceholder: 'Rechercher ou ajouter une catégorie...'
+      popular: 'Populaire'
+      selected: 'Catégories sélectionnées'
+      precisions: 'Précisions'
+      noCategoriesSelected: 'Aucune catégorie sélectionnée. Ajoutez des catégories pour ajouter des précisions.'
+      save: 'Enregistrer'
+      cancel: 'Annuler'
+
   navigation:
     cancel: 'Annuler'
     start: 'Commencer'
     previous: 'Précédent'
     next: 'Suivant'
-    save: 'Enregistrer'
+    save: 'Enregistrer le brouillon'
     skip: 'Passer'
     finish: 'Terminer'
-  
+
   progress:
     step1: 'Nom du traitement'
     step2: 'Identification générale'
-  
+    step3: 'Finalités'
+    step4: 'Personnes concernées'
+
   validation:
     stepInvalid: 'Veuillez corriger les erreurs avant de continuer'
-  
+
   messages:
     draftSaved: 'Brouillon enregistré avec succès'
     treatmentCreated: 'Traitement créé avec succès'
-    saveFailed: 'Échec de l''enregistrement du traitement'
+    saveFailed: "Échec de l'enregistrement du traitement"
 
 table:
   headers:
@@ -115,12 +144,12 @@ table:
       archiveSuccess: 'Traitement archivé avec succès'
       unarchiveSuccess: 'Traitement désarchivé avec succès'
       typeUpdateSuccess: 'Type de traitement mis à jour'
-      archiveError: 'Erreur lors de l''archivage du traitement'
+      archiveError: "Erreur lors de l'archivage du traitement"
       unarchiveError: 'Erreur lors du désarchivage du traitement'
       typeUpdateError: 'Erreur lors de la mise à jour du type'
       loadError: 'Erreur lors du chargement des traitements'
       archiveErrorNoId: "Erreur lors de l'archivage du traitement : ID manquant"
-      unarchiveErrorNoId: "Erreur lors du désarchivage du traitement : ID manquant"
+      unarchiveErrorNoId: 'Erreur lors du désarchivage du traitement : ID manquant'
 
 forms:
   treatment:
