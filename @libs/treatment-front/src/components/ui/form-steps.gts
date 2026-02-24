@@ -21,11 +21,11 @@ function stepClass(status: StepStatus): string {
   const base = 'step cursor-pointer';
   switch (status) {
     case 'done':
-      return `${base} step-success`;
+      return `${base} step-info`;
     case 'error':
       return `${base} step-error`;
     case 'current':
-      return `${base} step-primary`;
+      return `${base} step-info`;
     default:
       return base;
   }

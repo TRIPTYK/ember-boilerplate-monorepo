@@ -75,6 +75,32 @@ form:
       save: 'Save'
       cancel: 'Cancel'
 
+  step5:
+    title: 'Step 5 - Data'
+    labels:
+      firstQuestion: 'What personal data do you collect?'
+      secondQuestion: 'What economic and financial information do you collect?'
+      thirdQuestion: 'What is the source of the data?'
+      conservationDuration: 'Retention period'
+      conservationDurationPlaceholder: 'E.g.: 2 years'
+      showPrecisions: 'Additional Details'
+      precisionDetails: 'Details on Selected Items'
+      searchPersonalPlaceholder: 'Search for personal data...'
+      searchFinancialPlaceholder: 'Search for financial data...'
+      searchSourcePlaceholder: 'Search or add a source...'
+      noSourcesSelected: 'No sources selected. Add sources to add details.'
+      markAsSensitive: 'Mark as Sensitive'
+      markAsNotSensitive: 'Mark as Not Sensitive'
+      delete: 'Delete'
+      save: 'Save'
+      cancel: 'Cancel'
+
+  step6:
+    title: 'Step 6 - Legal Basis'
+    labels:
+      question: 'What are the legal bases for this processing?'
+      searchPlaceholder: 'Search or add a legal basis...'
+
   navigation:
     cancel: 'Cancel'
     start: 'Start'
@@ -89,6 +115,8 @@ form:
     step2: 'General Identification'
     step3: 'Purposes'
     step4: 'Data Subjects'
+    step5: 'Data'
+    step6: 'Legal Basis'
 
   validation:
     stepInvalid: 'Please correct the errors before continuing'

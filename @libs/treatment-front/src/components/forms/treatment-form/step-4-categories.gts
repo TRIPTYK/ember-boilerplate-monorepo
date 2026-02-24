@@ -6,6 +6,7 @@ import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 import PrecisionsModal from '#src/components/ui/precisions-modal.gts';
 import TpkButtonPrefabComponent from '@triptyk/ember-input/components/prefabs/tpk-prefab-button';
+import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
 
 const PREDEFINED_CATEGORIES = [
   'Clients',
@@ -91,11 +92,13 @@ export default class Step4Categories extends Component<Step4Signature> {
       @placeholder={{t "treatments.form.step4.labels.searchPlaceholder"}}
       @popularLabel={{t "treatments.form.step4.labels.popular"}}
     />
-    <TpkButtonPrefabComponent
+    <TpkButtonComponent
       @label={{t "treatments.form.step4.labels.precisions"}}
       @onClick={{this.openModal}}
-      class="btn btn-primary mt-4"
-    />
+      class="btn btn-warning mt-4"
+    >
+      {{t "treatments.form.step4.labels.precisions"}}
+    </TpkButtonComponent>
     <PrecisionsModal
       @isOpen={{this.isModalOpen}}
       @onClose={{this.closeModal}}

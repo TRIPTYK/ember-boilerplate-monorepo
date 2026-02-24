@@ -13,6 +13,8 @@ import {
   step2Schema,
   step3Schema,
   step4Schema,
+  step5Schema,
+  step6Schema,
   type DraftTreatmentData,
   type TreatmentData,
 } from '#src/components/forms/treatment-validation.ts';
@@ -20,6 +22,8 @@ import Step1Name from './treatment-form/step-1-name.gts';
 import Step2GeneralInfo from './treatment-form/step-2-general-info.gts';
 import Step3Purposes from './treatment-form/step-3-purposes.gts';
 import Step4Categories from './treatment-form/step-4-categories.gts';
+import Step5Data from './treatment-form/step-5-data.gts';
+import Step6LegalBasis from './treatment-form/step-6-legal-basis.gts';
 import FormSteps, {
   type FormStep,
   type StepStatus,
@@ -47,7 +51,7 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
     const stepFromQP = Number(
       new URLSearchParams(window.location.search).get('step')
     );
-    if (stepFromQP >= 1 && stepFromQP <= 4) {
+    if (stepFromQP >= 1 && stepFromQP <= 6) {
       this.currentStep = stepFromQP;
     }
   }
@@ -92,6 +96,16 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
         label: this.intl.t('treatments.form.progress.step4'),
         status: this.getStepStatus(4),
       },
+      {
+        number: 5,
+        label: this.intl.t('treatments.form.progress.step5'),
+        status: this.getStepStatus(5),
+      },
+      {
+        number: 6,
+        label: this.intl.t('treatments.form.progress.step6'),
+        status: this.getStepStatus(6),
+      },
     ];
   }
 
@@ -111,6 +125,14 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
     return step4Schema();
   }
 
+  get step5ValidationSchema() {
+    return step5Schema();
+  }
+
+  get step6ValidationSchema() {
+    return step6Schema();
+  }
+
   get currentValidationSchema() {
     switch (this.currentStep) {
       case 1:
@@ -119,8 +141,12 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
         return this.step2ValidationSchema;
       case 3:
         return this.step3ValidationSchema;
-      default:
+      case 4:
         return this.step4ValidationSchema;
+      case 5:
+        return this.step5ValidationSchema;
+      default:
+        return this.step6ValidationSchema;
     }
   }
 
@@ -140,12 +166,20 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
     return this.currentStep === 4;
   }
 
+  get isStep5() {
+    return this.currentStep === 5;
+  }
+
+  get isStep6() {
+    return this.currentStep === 6;
+  }
+
   get isLastStep() {
-    return this.currentStep === 4;
+    return this.currentStep === 6;
   }
 
   get canGoNext() {
-    return this.currentStep < 4;
+    return this.currentStep < 6;
   }
 
   get canGoPrevious() {
@@ -181,6 +215,16 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
         await this.step4ValidationSchema.parseAsync({
           dataSubjectCategories: data.dataSubjectCategories,
           subjectCategoryPrecisions: data.subjectCategoryPrecisions,
+        });
+      } else if (this.currentStep === 5) {
+        await this.step5ValidationSchema.parseAsync({
+          personalDataGroup: data.personalDataGroup,
+          financialDataGroup: data.financialDataGroup,
+          dataSources: data.dataSources,
+        });
+      } else if (this.currentStep === 6) {
+        await this.step6ValidationSchema.parseAsync({
+          legalBase: data.legalBase,
         });
       }
 
@@ -296,6 +340,12 @@ export default class TreatmentForm extends Component<TreatmentFormSignature> {
           {{/if}}
           {{#if this.isStep4}}
             <Step4Categories @changeset={{@changeset}} />
+          {{/if}}
+          {{#if this.isStep5}}
+            <Step5Data @form={{F}} @changeset={{@changeset}} />
+          {{/if}}
+          {{#if this.isStep6}}
+            <Step6LegalBasis @changeset={{@changeset}} />
           {{/if}}
           <FormNavigation
             @isFirstStep={{this.isStep1}}

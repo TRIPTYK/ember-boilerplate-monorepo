@@ -48,9 +48,8 @@ const mocktreatments = [
         subReasons: [],
         legalBase: [],
         dataSubjectCategories: [],
-        personalData: [],
-        financialData: [],
-        dataSource: [],
+
+        dataSources: [],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
@@ -113,8 +112,7 @@ const mocktreatments = [
         subReasons: [],
         legalBase: [],
         dataSubjectCategories: [],
-        personalData: [],
-        financialData: [],
+
         personalDataGroup: {
           data: {
             name: [
@@ -133,7 +131,7 @@ const mocktreatments = [
           },
           conservationDuration: '10 ans',
         },
-        dataSource: [],
+        dataSources: [],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
@@ -173,8 +171,7 @@ const mocktreatments = [
         subReasons: [],
         legalBase: [],
         dataSubjectCategories: [],
-        personalData: [],
-        financialData: [],
+
         personalDataGroup: {
           data: {
             name: [
@@ -184,7 +181,7 @@ const mocktreatments = [
           },
           conservationDuration: '3 ans',
         },
-        dataSource: [],
+        dataSources: [],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
@@ -235,8 +232,7 @@ const mocktreatments = [
         subReasons: [],
         legalBase: [],
         dataSubjectCategories: [],
-        personalData: [],
-        financialData: [],
+
         personalDataGroup: {
           data: {
             name: [
@@ -247,7 +243,7 @@ const mocktreatments = [
           },
           conservationDuration: '20 ans',
         },
-        dataSource: [],
+        dataSources: [],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],

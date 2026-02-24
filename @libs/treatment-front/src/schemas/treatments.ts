@@ -82,7 +82,7 @@ export interface TreatmentData {
     };
     conservationDuration?: string;
   };
-  dataSource?: string[];
+  dataSources?: Array<{ name: string; additionalInformation?: string }>;
   retentionPeriod?: string;
   hasAccessByThirdParty?: boolean;
   thirdPartyAccess?: string[];

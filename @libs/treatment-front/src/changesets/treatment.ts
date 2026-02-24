@@ -50,9 +50,15 @@ export interface DraftTreatment {
     name?: string;
     additionalInformation?: string;
   }[];
-  personalData?: { name?: string; additionalInformation?: string }[];
-  financialData?: { name?: string; additionalInformation?: string }[];
-  dataSource?: string[];
+  personalDataGroup?: {
+    data: { name: Array<{ name: string; isSensitive: boolean }> };
+    conservationDuration?: string;
+  };
+  financialDataGroup?: {
+    data: { name: Array<{ name: string; isSensitive: boolean }> };
+    conservationDuration?: string;
+  };
+  dataSources?: Array<{ name: string; additionalInformation?: string }>;
   retentionPeriod?: string;
   hasAccessByThirdParty?: boolean;
   thirdPartyAccess?: string[];

@@ -240,8 +240,6 @@ export default class SubPurposesModal extends Component<SubPurposesModalSignatur
             </TpkButton>
           {{/if}}
         </div>
-
-        {{! Footer buttons }}
         <div
           class="flex items-center justify-between mt-6 pt-4 border-t border-base-300"
         >

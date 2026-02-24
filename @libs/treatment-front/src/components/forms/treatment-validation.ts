@@ -101,9 +101,15 @@ export const treatmentSchema = object({
   legalBase: array(draftLegalBaseSchema).optional(),
   dataSubjectCategories: array(string()).optional(),
   subjectCategoryPrecisions: array(draftDataWithInfoSchema).optional(),
-  personalData: array(draftDataWithInfoSchema).optional(),
-  financialData: array(draftDataWithInfoSchema).optional(),
-  dataSource: array(string()).optional(),
+  personalDataGroup: object({
+    data: object({ name: array(object({ name: string().min(1), isSensitive: boolean() })).optional() }),
+    conservationDuration: string().optional(),
+  }).optional(),
+  financialDataGroup: object({
+    data: object({ name: array(object({ name: string().min(1), isSensitive: boolean() })).optional() }),
+    conservationDuration: string().optional(),
+  }).optional(),
+  dataSources: array(object({ name: string().min(1), additionalInformation: string().optional() })).optional(),
   retentionPeriod: string().optional(),
   hasAccessByThirdParty: boolean().optional(),
   thirdPartyAccess: array(string()).optional(),
@@ -128,9 +134,15 @@ export const draftTreatmentSchema = object({
   legalBase: array(draftLegalBaseSchema).optional(),
   dataSubjectCategories: array(string()).optional(),
   subjectCategoryPrecisions: array(draftDataWithInfoSchema).optional(),
-  personalData: array(draftDataWithInfoSchema).optional(),
-  financialData: array(draftDataWithInfoSchema).optional(),
-  dataSource: array(string()).optional(),
+  personalDataGroup: object({
+    data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+    conservationDuration: string().optional(),
+  }).optional(),
+  financialDataGroup: object({
+    data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+    conservationDuration: string().optional(),
+  }).optional(),
+  dataSources: array(object({ name: string().optional(), additionalInformation: string().optional() })).optional(),
   retentionPeriod: string().optional(),
   hasAccessByThirdParty: boolean().optional(),
   thirdPartyAccess: array(string()).optional(),
@@ -228,6 +240,24 @@ export const step4Schema = () =>
   object({
     dataSubjectCategories: array(string()).optional(),
     subjectCategoryPrecisions: array(draftDataWithInfoSchema).optional(),
+  });
+
+export const step5Schema = () =>
+  object({
+    personalDataGroup: object({
+      data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+      conservationDuration: string().optional(),
+    }).optional(),
+    financialDataGroup: object({
+      data: object({ name: array(object({ name: string().optional(), isSensitive: boolean().optional() })).optional() }),
+      conservationDuration: string().optional(),
+    }).optional(),
+    dataSources: array(object({ name: string().optional(), additionalInformation: string().optional() })).optional(),
+  });
+
+export const step6Schema = () =>
+  object({
+    legalBase: array(draftLegalBaseSchema).optional(),
   });
 
 export const createTreatmentValidationSchema = step1Schema;

@@ -75,6 +75,32 @@ form:
       save: 'Enregistrer'
       cancel: 'Annuler'
 
+  step5:
+    title: 'Étape 5 - Données'
+    labels:
+      firstQuestion: 'Quelles données personnelles collectez-vous ?'
+      secondQuestion: "Quelles informations d'ordre économique et financier récoltez-vous ?"
+      thirdQuestion: 'Quelle est la source des données ?'
+      conservationDuration: 'Durée de conservation'
+      conservationDurationPlaceholder: 'Ex: 2 ans'
+      showPrecisions: 'Précisions'
+      precisionDetails: 'Précisions sur les éléments sélectionnés'
+      searchPersonalPlaceholder: 'Rechercher une donnée personnelle...'
+      searchFinancialPlaceholder: 'Rechercher une donnée financière...'
+      searchSourcePlaceholder: 'Rechercher ou ajouter une source...'
+      noSourcesSelected: 'Aucune source sélectionnée. Ajoutez des sources pour ajouter des précisions.'
+      markAsSensitive: 'Marquer comme sensible'
+      markAsNotSensitive: 'Marquer comme non sensible'
+      delete: 'Supprimer'
+      save: 'Enregistrer'
+      cancel: 'Annuler'
+
+  step6:
+    title: 'Étape 6 - Base légale'
+    labels:
+      question: 'Quelles sont les bases légales de ce traitement ?'
+      searchPlaceholder: 'Rechercher ou ajouter une base légale...'
+
   navigation:
     cancel: 'Annuler'
     start: 'Commencer'
@@ -89,6 +115,8 @@ form:
     step2: 'Identification générale'
     step3: 'Finalités'
     step4: 'Personnes concernées'
+    step5: 'Données'
+    step6: 'Base légale'
 
   validation:
     stepInvalid: 'Veuillez corriger les erreurs avant de continuer'

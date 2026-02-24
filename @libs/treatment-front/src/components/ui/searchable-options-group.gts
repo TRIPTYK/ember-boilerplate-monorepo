@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import TpkSelectCreate from '@triptyk/ember-input/components/tpk-select-create';
+import XMarkIcon from '#src/assets/icons/x-mark.gts';
 
 interface SearchableOptionsGroupSignature {
   Args: {
@@ -56,14 +57,14 @@ export default class SearchableOptionsGroup extends Component<SearchableOptionsG
     </div>
     <div class="flex flex-wrap gap-2 mt-3">
       {{#each @selected as |item|}}
-        <div class="badge badge-primary gap-2 px-3 py-3">
+        <div class="badge badge-primary gap-2 py-1 h-fit">
           <span>{{item}}</span>
           <button
             type="button"
-            class="hover:text-primary-content/70 transition-colors"
+            class="cursor-pointer hover:text-primary-content/70 transition-colors"
             {{on "click" (fn this.removeItem item)}}
           >
-            ×
+            <XMarkIcon class="w-4 h-4" />
           </button>
         </div>
       {{/each}}
