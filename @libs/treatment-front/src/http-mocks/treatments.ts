@@ -112,9 +112,22 @@ const mocktreatments = [
           },
         },
         reasons: ['Gestion de la paie', 'Déclarations sociales'],
-        subReasons: [],
-        legalBase: [],
-        dataSubjectCategories: [],
+        subReasons: [
+          { name: 'Calcul des salaires', additionalInformation: 'Mensuel' },
+        ],
+        legalBase: [
+          {
+            name: 'Obligation légale',
+            additionalInformation: 'Code du travail belge',
+          },
+        ],
+        dataSubjectCategories: ['Employés'],
+        subjectCategoryPrecisions: [
+          {
+            name: 'Employés',
+            additionalInformation: 'Salariés de la société',
+          },
+        ],
 
         personalDataGroup: {
           data: {
@@ -135,14 +148,29 @@ const mocktreatments = [
           conservationDuration: '10 ans',
         },
         dataSources: [],
-        dataAccess: [],
-        sharedData: [],
+        dataAccess: [
+          {
+            name: 'Service RH',
+            additionalInformation: 'Gestion administrative',
+          },
+        ],
+        sharedData: [
+          {
+            name: 'ONSS',
+            additionalInformation: 'Déclarations sociales trimestrielles',
+          },
+        ],
         retentionPeriod: '',
         hasAccessByThirdParty: false,
         thirdPartyAccess: [],
         areDataExportedOutsideEU: false,
         securityMeasures: [],
-        securitySetup: [],
+        securitySetup: [
+          {
+            name: 'Chiffrement des données',
+            additionalInformation: 'AES-256',
+          },
+        ],
       },
     },
   },
