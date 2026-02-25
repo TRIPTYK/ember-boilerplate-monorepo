@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 import PrecisionsModal from '#src/components/ui/precisions-modal.gts';
 import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
@@ -27,11 +30,26 @@ interface Step4Signature {
 }
 
 export default class Step4Categories extends Component<Step4Signature> {
-  @tracked customOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingCategories: string[] = [];
   @tracked isModalOpen = false;
 
+  constructor(owner: Owner, args: Step4Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const s = await this.setting.load('customCategories');
+      this.settingCategories = (s.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty list
+    }
+  }
+
   get allOptions(): string[] {
-    return [...PREDEFINED_CATEGORIES, ...this.customOptions];
+    return [...PREDEFINED_CATEGORIES, ...this.settingCategories];
   }
 
   get selectedCategories(): string[] {
@@ -44,8 +62,11 @@ export default class Step4Categories extends Component<Step4Signature> {
 
   @action
   selectCategory(value: string): void {
+    console.log('value', value);
     if (!this.allOptions.includes(value)) {
-      this.customOptions = [...this.customOptions, value];
+      const updated = [...this.settingCategories, value];
+      this.settingCategories = updated;
+      void this.setting.save('customCategories', updated);
     }
     const current = this.selectedCategories;
     if (!current.includes(value)) {

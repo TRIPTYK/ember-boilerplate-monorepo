@@ -21,11 +21,13 @@ interface SearchableOptionsGroupSignature {
 export default class SearchableOptionsGroup extends Component<SearchableOptionsGroupSignature> {
   @action
   handleChange(newSelected: unknown): void {
+    console.log('handleChange', newSelected);
     this.args.onSelect((newSelected as string[])[0] ?? '');
   }
 
   @action
   handleCreate(value: unknown): void {
+    console.log('handleCreate', value);
     this.args.onSelect(value as string);
   }
 
@@ -41,6 +43,7 @@ export default class SearchableOptionsGroup extends Component<SearchableOptionsG
 
   <template>
     <div class="tpk-select-search-container">
+      aaa
       <TpkSelectCreate
         @label={{if @placeholder @placeholder "Rechercher..."}}
         @options={{@allOptions}}

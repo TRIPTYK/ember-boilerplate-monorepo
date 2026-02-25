@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 
 const PREDEFINED_LEGAL_BASES = [
@@ -20,10 +23,25 @@ interface Step6Signature {
 }
 
 export default class Step6LegalBasis extends Component<Step6Signature> {
-  @tracked customOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingLegalBase: string[] = [];
+
+  constructor(owner: Owner, args: Step6Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const s = await this.setting.load('customLegalBase');
+      this.settingLegalBase = (s.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty list
+    }
+  }
 
   get allOptions(): string[] {
-    return [...PREDEFINED_LEGAL_BASES, ...this.customOptions];
+    return [...PREDEFINED_LEGAL_BASES, ...this.settingLegalBase];
   }
 
   get legalBase(): Array<{ name?: string; additionalInformation?: string }> {
@@ -37,7 +55,9 @@ export default class Step6LegalBasis extends Component<Step6Signature> {
   @action
   selectLegalBase(name: string): void {
     if (!this.allOptions.includes(name)) {
-      this.customOptions = [...this.customOptions, name];
+      const updated = [...this.settingLegalBase, name];
+      this.settingLegalBase = updated;
+      void this.setting.save('customLegalBase', updated);
     }
     if (!this.legalBase.some((l) => l.name === name)) {
       this.args.changeset.set('legalBase', [

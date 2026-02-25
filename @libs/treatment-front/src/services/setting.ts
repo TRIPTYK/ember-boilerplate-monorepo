@@ -68,4 +68,18 @@ export default class SettingService extends Service {
 
     await this.store.request(request);
   }
+
+  /**
+   * Persist a setting value, loading the record first if not already in store.
+   * Safe to call without a prior load() — use this in user actions.
+   */
+  public async save<K extends SettingKey>(
+    key: K,
+    value: SettingValue<K>
+  ): Promise<void> {
+    if (!this.peek(key)) {
+      await this.load(key);
+    }
+    await this.update(key, value);
+  }
 }

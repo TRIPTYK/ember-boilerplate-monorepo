@@ -64,7 +64,10 @@ export default class DataSharing extends Component<DataSharingSignature> {
               {{#each this.sharedDataIndexed as |item|}}
                 <tr>
                   <td class="text-right border-r border-base-300 font-medium">
-                    {{t "treatments.details.recipientExternal" index=item.index}}
+                    {{t
+                      "treatments.details.recipientExternal"
+                      index=item.index
+                    }}
                   </td>
                   <td>{{item.name}}</td>
                   <td>{{item.additionalInformation}}</td>

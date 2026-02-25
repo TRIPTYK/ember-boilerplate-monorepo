@@ -12,6 +12,7 @@ import { JSONAPICache } from '@warp-drive/json-api';
 import '@warp-drive/ember/install';
 import FlashMessageService from 'ember-cli-flash/services/flash-messages';
 import treatmentSchema from '#src/schemas/treatments.ts';
+import settingSchema from '#src/schemas/settings.ts';
 
 class Router extends EmberRouter {
   location = 'none';
@@ -42,7 +43,7 @@ export default class TestStore extends useLegacyStore({
   legacyRequests: true,
   modelFragments: true,
   cache: JSONAPICache,
-  schemas: [treatmentSchema],
+  schemas: [treatmentSchema, settingSchema],
 }) {}
 
 export function initializeTestApp(owner: Owner, locale: string) {

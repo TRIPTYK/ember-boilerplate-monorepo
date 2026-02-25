@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 import PrecisionsModal from '#src/components/ui/precisions-modal.gts';
 import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
@@ -33,12 +36,27 @@ interface Step8Signature {
 }
 
 export default class Step8Security extends Component<Step8Signature> {
-  @tracked customOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingMeasures: string[] = [];
   @tracked isPrecisionsModalOpen = false;
   @tracked isInfoModalOpen = false;
 
+  constructor(owner: Owner, args: Step8Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const s = await this.setting.load('customMeasures');
+      this.settingMeasures = (s.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty list
+    }
+  }
+
   get allOptions(): string[] {
-    return [...PREDEFINED_SECURITY_MEASURES, ...this.customOptions];
+    return [...PREDEFINED_SECURITY_MEASURES, ...this.settingMeasures];
   }
 
   get securitySetup(): Array<{ name: string; additionalInformation?: string }> {
@@ -52,7 +70,9 @@ export default class Step8Security extends Component<Step8Signature> {
   @action
   selectMeasure(name: string): void {
     if (!this.allOptions.includes(name)) {
-      this.customOptions = [...this.customOptions, name];
+      const updated = [...this.settingMeasures, name];
+      this.settingMeasures = updated;
+      void this.setting.save('customMeasures', updated);
     }
     if (!this.securitySetup.some((s) => s.name === name)) {
       this.args.changeset.set('securitySetup', [

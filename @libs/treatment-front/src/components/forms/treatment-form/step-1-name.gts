@@ -1,10 +1,22 @@
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import type { WithBoundArgs } from '@glint/template';
 import type TpkValidationSelectPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-select';
 import type TpkValidationTextareaPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-textarea';
 import type TpkValidationInputComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-input';
 import { t } from 'ember-intl';
+
+const PREDEFINED_TREATMENT_TYPES = [
+  'Ressources Humaines',
+  'Marketing',
+  'Ventes',
+  'Finance',
+  'IT',
+];
 
 interface Step1NameSignature {
   Args: {
@@ -28,43 +40,34 @@ interface Step1NameSignature {
 }
 
 export default class Step1Name extends Component<Step1NameSignature> {
-  treatmentTypes = [
-    {
-      value: 'Ressources Humaines',
-      label: 'Ressources Humaines',
-      toString: function () {
-        return this.label;
-      },
-    },
-    {
-      value: 'Marketing',
-      label: 'Marketing',
-      toString: function () {
-        return this.label;
-      },
-    },
-    {
-      value: 'Ventes',
-      label: 'Ventes',
-      toString: function () {
-        return this.label;
-      },
-    },
-    {
-      value: 'Finance',
-      label: 'Finance',
-      toString: function () {
-        return this.label;
-      },
-    },
-    {
-      value: 'IT',
-      label: 'IT',
-      toString: function () {
-        return this.label;
-      },
-    },
-  ];
+  @service declare setting: SettingService;
+  @tracked settingTreatmentTypes: string[] = [];
+
+  constructor(owner: Owner, args: Step1NameSignature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const s = await this.setting.load('customTreatmentTypes');
+      this.settingTreatmentTypes = (s.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty list
+    }
+  }
+
+  get treatmentTypes() {
+    return [...PREDEFINED_TREATMENT_TYPES, ...this.settingTreatmentTypes].map(
+      (label) => ({
+        value: label,
+        label,
+        toString() {
+          return this.label;
+        },
+      })
+    );
+  }
 
   selectTreatmentType = (type: unknown) => {
     const selected = (type as { value: string }).value;

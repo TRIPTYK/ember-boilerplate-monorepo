@@ -85,7 +85,8 @@ export default class GeneralInfo extends Component<GeneralInfoSignature> {
                 {{#if this.hasEntityNumber}}
                   <td>{{@data.externalOrganizationDPO.entityNumber}}</td>
                 {{/if}}
-                <td>{{@data.externalOrganizationDPO.address.streetAndNumber}}</td>
+                <td
+                >{{@data.externalOrganizationDPO.address.streetAndNumber}}</td>
                 <td>{{@data.externalOrganizationDPO.address.postalCode}}</td>
                 <td>{{@data.externalOrganizationDPO.address.city}}</td>
                 <td>{{@data.externalOrganizationDPO.address.country}}</td>

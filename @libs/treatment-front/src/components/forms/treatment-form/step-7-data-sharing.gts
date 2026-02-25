@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import type TpkValidationInputPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-input';
 import type { WithBoundArgs } from '@glint/template';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
@@ -45,15 +48,34 @@ interface Step7Signature {
 }
 
 export default class Step7DataSharing extends Component<Step7Signature> {
-  @tracked customDataAccessOptions: string[] = [];
-  @tracked customSharedDataOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingDataAccess: string[] = [];
+  @tracked settingSharedData: string[] = [];
   @tracked isDataAccessModalOpen = false;
   @tracked isSharedDataModalOpen = false;
+
+  constructor(owner: Owner, args: Step7Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const [dataAccess, sharedData] = await Promise.all([
+        this.setting.load('customDataAccess'),
+        this.setting.load('customSharedData'),
+      ]);
+      this.settingDataAccess = (dataAccess.value as string[]) ?? [];
+      this.settingSharedData = (sharedData.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty lists
+    }
+  }
 
   // Section 1 — Accès aux données
 
   get allDataAccessOptions(): string[] {
-    return [...PREDEFINED_DATA_ACCESS, ...this.customDataAccessOptions];
+    return [...PREDEFINED_DATA_ACCESS, ...this.settingDataAccess];
   }
 
   get dataAccess(): Array<{ name: string; additionalInformation?: string }> {
@@ -67,7 +89,9 @@ export default class Step7DataSharing extends Component<Step7Signature> {
   @action
   selectDataAccess(name: string): void {
     if (!this.allDataAccessOptions.includes(name)) {
-      this.customDataAccessOptions = [...this.customDataAccessOptions, name];
+      const updated = [...this.settingDataAccess, name];
+      this.settingDataAccess = updated;
+      void this.setting.save('customDataAccess', updated);
     }
     if (!this.dataAccess.some((d) => d.name === name)) {
       this.args.changeset.set('dataAccess', [
@@ -105,8 +129,10 @@ export default class Step7DataSharing extends Component<Step7Signature> {
     this.isDataAccessModalOpen = false;
   }
 
+  // Section 2 — Partage des données
+
   get allSharedDataOptions(): string[] {
-    return [...PREDEFINED_SHARED_DATA, ...this.customSharedDataOptions];
+    return [...PREDEFINED_SHARED_DATA, ...this.settingSharedData];
   }
 
   get sharedData(): Array<{ name: string; additionalInformation?: string }> {
@@ -120,7 +146,9 @@ export default class Step7DataSharing extends Component<Step7Signature> {
   @action
   selectSharedData(name: string): void {
     if (!this.allSharedDataOptions.includes(name)) {
-      this.customSharedDataOptions = [...this.customSharedDataOptions, name];
+      const updated = [...this.settingSharedData, name];
+      this.settingSharedData = updated;
+      void this.setting.save('customSharedData', updated);
     }
     if (!this.sharedData.some((s) => s.name === name)) {
       this.args.changeset.set('sharedData', [

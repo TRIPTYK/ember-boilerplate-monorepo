@@ -1,4 +1,4 @@
-import TreatmentView from '#src/components/views/treatment-view.gts';
+import TreatmentView from '#src/components/treatment-view.gts';
 import Component from '@glimmer/component';
 import type { TreatmentsViewRouteSignature } from './view.gts';
 import { service } from '@ember/service';

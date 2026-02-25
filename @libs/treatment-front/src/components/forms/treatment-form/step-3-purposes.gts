@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
 import SearchableOptionsGroup from '#src/components/ui/searchable-options-group.gts';
 import SubPurposesModal from '#src/components/ui/sub-purposes-modal.gts';
 import TpkButtonComponent from '@triptyk/ember-input/components/tpk-button';
@@ -26,11 +29,26 @@ interface Step3Signature {
 }
 
 export default class Step3Purposes extends Component<Step3Signature> {
-  @tracked customOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingReasons: string[] = [];
   @tracked isModalOpen = false;
 
+  constructor(owner: Owner, args: Step3Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const s = await this.setting.load('customReasons');
+      this.settingReasons = (s.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty list
+    }
+  }
+
   get allOptions(): string[] {
-    return [...PREDEFINED_PURPOSES, ...this.customOptions];
+    return [...PREDEFINED_PURPOSES, ...this.settingReasons];
   }
 
   get selectedReasons(): string[] {
@@ -44,12 +62,13 @@ export default class Step3Purposes extends Component<Step3Signature> {
   @action
   selectReason(value: string): void {
     if (!this.allOptions.includes(value)) {
-      this.customOptions = [...this.customOptions, value];
+      const updated = [...this.settingReasons, value];
+      this.settingReasons = updated;
+      void this.setting.save('customReasons', updated);
     }
     const current = this.selectedReasons;
     if (!current.includes(value)) {
       this.args.changeset.set('reasons', [...current, value]);
-      console.log(this.args.changeset.get('reasons'));
     }
   }
 

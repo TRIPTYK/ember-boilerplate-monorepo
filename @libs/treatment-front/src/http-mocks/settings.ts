@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpResponse } from 'msw';
 import { createOpenApiHttp } from 'openapi-msw';
 import type { paths } from '@apps/backend';
@@ -68,7 +65,7 @@ const mockSettings: MockSetting[] = [
         { name: 'Données de santé', isSensitive: true },
         { name: 'Numéro de téléphone personnel', isSensitive: false },
         { name: 'Adresse e-mail personnelle', isSensitive: false },
-        { name: 'Photo d\'identité', isSensitive: false },
+        { name: "Photo d'identité", isSensitive: false },
       ],
     },
   },
@@ -90,7 +87,7 @@ const mockSettings: MockSetting[] = [
     attributes: {
       value: [
         'Employé lui-même',
-        'Agence d\'intérim',
+        "Agence d'intérim",
         'Système RH interne',
         'Candidature directe (CV)',
         'LinkedIn / réseau professionnel',
@@ -103,11 +100,11 @@ const mockSettings: MockSetting[] = [
     type: 'settings',
     attributes: {
       value: [
-        'Intérêt légitime de l\'employeur',
+        "Intérêt légitime de l'employeur",
         'Consentement explicite',
         'Obligation légale (droit belge)',
-        'Exécution d\'un contrat de travail',
-        'Mission d\'intérêt public',
+        "Exécution d'un contrat de travail",
+        "Mission d'intérêt public",
       ],
     },
   },
@@ -131,7 +128,7 @@ const mockSettings: MockSetting[] = [
     attributes: {
       value: [
         'Secrétariat social (Partena, SD Worx, Acerta...)',
-        'Mutuelle d\'entreprise',
+        "Mutuelle d'entreprise",
         'Fonds de pension',
         'Assureur groupe',
         'Fisc belge (SPF Finances)',
@@ -151,7 +148,7 @@ const mockSettings: MockSetting[] = [
       value: [
         'Certification ISO 27001',
         'Chiffrement AES-256',
-        'Plan de continuité d\'activité (PCA)',
+        "Plan de continuité d'activité (PCA)",
         'Surveillance 24/7 (SOC)',
         'Authentification multi-facteurs (MFA)',
         'Politique de gestion des accès (IAM)',

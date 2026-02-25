@@ -20,7 +20,9 @@ const DataGroup: TOC<DataGroupSignature> = <template>
               <th class="w-[210px] text-right border-r border-base-300">
                 {{t "treatments.details.description"}}
               </th>
-              <th class="text-center">{{t "treatments.details.isSensitive"}}</th>
+              <th class="text-center">{{t
+                  "treatments.details.isSensitive"
+                }}</th>
             </tr>
           </thead>
           <tbody>

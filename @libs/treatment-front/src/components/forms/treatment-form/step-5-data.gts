@@ -1,8 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Owner from '@ember/owner';
+import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
+import type SettingService from '#src/services/setting.ts';
+import type { CustomPersonalData } from '#src/schemas/settings.ts';
 import type TpkValidationInputPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-input';
 import type { WithBoundArgs } from '@glint/template';
 import SearchableOptionsGroupData, {
@@ -56,13 +60,38 @@ interface Step5Signature {
 }
 
 export default class Step5Data extends Component<Step5Signature> {
-  @tracked customPersonalOptions: string[] = [];
-  @tracked customFinancialOptions: string[] = [];
-  @tracked customSourceOptions: string[] = [];
+  @service declare setting: SettingService;
+  @tracked settingPersonalData: CustomPersonalData[] = [];
+  @tracked settingFinancialData: CustomPersonalData[] = [];
+  @tracked settingSourceOptions: string[] = [];
   @tracked isSourcesModalOpen = false;
 
+  constructor(owner: Owner, args: Step5Signature['Args']) {
+    super(owner, args);
+    void this.loadFromSettings();
+  }
+
+  async loadFromSettings(): Promise<void> {
+    try {
+      const [personal, financial, sources] = await Promise.all([
+        this.setting.load('customPersonalData'),
+        this.setting.load('customEconomicInformation'),
+        this.setting.load('customDataSources'),
+      ]);
+      this.settingPersonalData = (personal.value as CustomPersonalData[]) ?? [];
+      this.settingFinancialData =
+        (financial.value as CustomPersonalData[]) ?? [];
+      this.settingSourceOptions = (sources.value as string[]) ?? [];
+    } catch {
+      // settings unavailable, use empty lists
+    }
+  }
+
   get allPersonalOptions(): string[] {
-    return [...PREDEFINED_PERSONAL_DATA, ...this.customPersonalOptions];
+    return [
+      ...PREDEFINED_PERSONAL_DATA,
+      ...this.settingPersonalData.map((d) => d.name),
+    ];
   }
 
   get selectedPersonalData(): SensitiveDataItem[] {
@@ -78,7 +107,12 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectPersonalData(name: string): void {
     if (!this.allPersonalOptions.includes(name)) {
-      this.customPersonalOptions = [...this.customPersonalOptions, name];
+      const updated = [
+        ...this.settingPersonalData,
+        { name, isSensitive: false },
+      ];
+      this.settingPersonalData = updated;
+      void this.setting.save('customPersonalData', updated);
     }
     if (!this.selectedPersonalData.some((item) => item.name === name)) {
       this.args.changeset.set('personalDataGroup', {
@@ -115,7 +149,10 @@ export default class Step5Data extends Component<Step5Signature> {
   }
 
   get allFinancialOptions(): string[] {
-    return [...PREDEFINED_FINANCIAL_DATA, ...this.customFinancialOptions];
+    return [
+      ...PREDEFINED_FINANCIAL_DATA,
+      ...this.settingFinancialData.map((d) => d.name),
+    ];
   }
 
   get selectedFinancialData(): SensitiveDataItem[] {
@@ -131,7 +168,12 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectFinancialData(name: string): void {
     if (!this.allFinancialOptions.includes(name)) {
-      this.customFinancialOptions = [...this.customFinancialOptions, name];
+      const updated = [
+        ...this.settingFinancialData,
+        { name, isSensitive: true },
+      ];
+      this.settingFinancialData = updated;
+      void this.setting.save('customEconomicInformation', updated);
     }
     if (!this.selectedFinancialData.some((item) => item.name === name)) {
       this.args.changeset.set('financialDataGroup', {
@@ -171,7 +213,7 @@ export default class Step5Data extends Component<Step5Signature> {
   }
 
   get allSourceOptions(): string[] {
-    return [...PREDEFINED_DATA_SOURCES, ...this.customSourceOptions];
+    return [...PREDEFINED_DATA_SOURCES, ...this.settingSourceOptions];
   }
 
   get dataSources(): Array<{ name: string; additionalInformation?: string }> {
@@ -185,7 +227,9 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectSource(name: string): void {
     if (!this.allSourceOptions.includes(name)) {
-      this.customSourceOptions = [...this.customSourceOptions, name];
+      const updated = [...this.settingSourceOptions, name];
+      this.settingSourceOptions = updated;
+      void this.setting.save('customDataSources', updated);
     }
     if (!this.dataSources.some((s) => s.name === name)) {
       this.args.changeset.set('dataSources', [
