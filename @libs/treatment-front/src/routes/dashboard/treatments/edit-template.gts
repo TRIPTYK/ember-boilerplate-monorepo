@@ -1,6 +1,6 @@
 import { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import TreatmentForm from '#src/components/forms/treatment-form.gts';
-import SuccessScreen from '#src/components/views/success-screen.gts';
+import SuccessScreen from '#src/components/forms/treatment-form/success-screen.gts';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import type { treatmentsEditRouteSignature } from './edit.gts';
