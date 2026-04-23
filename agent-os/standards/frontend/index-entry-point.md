@@ -9,6 +9,7 @@ Registers the lib's modules into Ember's resolver. Only include glob patterns fo
 ```typescript
 import { buildRegistry } from 'ember-strict-application-resolver/build-registry';
 import IntlService from 'ember-intl/services/intl';
+import { moduleRegistry as sharedModuleRegistry } from '@libs/shared-front';
 
 export function moduleRegistry() {
   return buildRegistry({
@@ -17,11 +18,15 @@ export function moduleRegistry() {
     ...import.meta.glob('./helpers/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./components/**/*.{js,ts}', { eager: true }),
     ...import.meta.glob('./services/**/*.{js,ts}', { eager: true }),
+    ...sharedModuleRegistry(),
     './services/intl': { default: IntlService },
   })();
 }
 ```
 
+- Always spread `...sharedModuleRegistry()` to include shared components, helpers, and services from `@libs/shared-front`
+- Place `...sharedModuleRegistry()` after the local globs so shared modules are available, but before manual service entries so manual entries take precedence
+- The `shared-front` lib itself does **not** import a shared registry (it is the shared one)
 - Always include the manual `IntlService` entry
 - Add other manual service entries as needed (e.g., `SessionService` for auth libs)
 
