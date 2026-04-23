@@ -1,85 +1,53 @@
-import { assert } from '@ember/debug';
-import Service, { service } from '@ember/service';
-import { cacheKeyFor, type Store } from '@warp-drive/core';
-import { findRecord, updateRecord } from '@warp-drive/utilities/json-api';
-import type {
-  Setting,
-  SettingKey,
-  SettingValue,
-  SettingWithKey,
-} from '#src/schemas/settings.ts';
+import Service from '@ember/service';
+import type { SettingItem, SettingKey } from '#src/schemas/settings.ts';
+
+type ApiItem = {
+  id: string;
+  attributes: { key: SettingKey; name: string };
+};
+
+const toSettingItem = ({ id, attributes }: ApiItem): SettingItem => ({
+  id,
+  key: attributes.key,
+  name: attributes.name,
+});
 
 export default class SettingService extends Service {
-  @service declare store: Store;
-
-  /**
-   * Load a single setting by key from the API (or cache if already loaded).
-   */
-  public async load<K extends SettingKey>(key: K): Promise<SettingWithKey<K>> {
-    const response = await this.store.request(
-      findRecord<Setting>('settings', key, { include: [] })
-    );
-    return response.content.data as SettingWithKey<K>;
+  async findAll(): Promise<SettingItem[]> {
+    const res = await fetch('/api/v1/settings');
+    const json = (await res.json()) as { data: ApiItem[] };
+    return json.data.map(toSettingItem);
   }
 
-  /**
-   * Load all settings from the API.
-   */
-  public async loadAll(): Promise<SettingWithKey[]> {
-    const response = await this.store.request<{ data: Setting[] }>({
-      url: '/api/v1/settings',
-      method: 'GET',
-      op: 'query',
+  async findByKey(key: SettingKey): Promise<SettingItem[]> {
+    const res = await fetch(`/api/v1/settings?filter[key]=${key}`);
+    const json = (await res.json()) as { data: ApiItem[] };
+    return json.data.map(toSettingItem);
+  }
+
+  async create(key: SettingKey, name: string): Promise<SettingItem> {
+    const res = await fetch('/api/v1/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: { type: 'settings', attributes: { key, name } },
+      }),
     });
-    return response.content.data as SettingWithKey[];
+    const json = (await res.json()) as { data: ApiItem };
+    return toSettingItem(json.data);
   }
 
-  /**
-   * Read a cached setting without making a network request.
-   * Returns null if the setting has not been loaded yet.
-   */
-  public peek<K extends SettingKey>(key: K): SettingWithKey<K> | null {
-    return this.store.peekRecord<Setting>({
-      id: key,
-      type: 'settings',
-    }) as SettingWithKey<K> | null;
-  }
-
-  /**
-   * Update (PATCH) a setting value.
-   * The setting must already be in the store — call load(key) first.
-   */
-  public async update<K extends SettingKey>(
-    key: K,
-    value: SettingValue<K>
-  ): Promise<void> {
-    const existing = this.store.peekRecord<Setting>({
-      id: key,
-      type: 'settings',
+  async update(id: string, name: string): Promise<void> {
+    await fetch(`/api/v1/settings/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: { type: 'settings', id, attributes: { name } },
+      }),
     });
-    assert(`Setting '${key}' must be loaded before updating`, existing);
-
-    Object.assign(existing, { value });
-
-    const request = updateRecord(existing, { patch: true });
-    request.body = JSON.stringify({
-      data: this.store.cache.peek(cacheKeyFor(existing)),
-    });
-
-    await this.store.request(request);
   }
 
-  /**
-   * Persist a setting value, loading the record first if not already in store.
-   * Safe to call without a prior load() — use this in user actions.
-   */
-  public async save<K extends SettingKey>(
-    key: K,
-    value: SettingValue<K>
-  ): Promise<void> {
-    if (!this.peek(key)) {
-      await this.load(key);
-    }
-    await this.update(key, value);
+  async delete(id: string): Promise<void> {
+    await fetch(`/api/v1/settings/${id}`, { method: 'DELETE' });
   }
 }

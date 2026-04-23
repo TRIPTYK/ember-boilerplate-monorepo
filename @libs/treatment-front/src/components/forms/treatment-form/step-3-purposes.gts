@@ -40,8 +40,8 @@ export default class Step3Purposes extends Component<Step3Signature> {
 
   async loadFromSettings(): Promise<void> {
     try {
-      const s = await this.setting.load('customReasons');
-      this.settingReasons = (s.value as string[]) ?? [];
+      const items = await this.setting.findByKey('customReasons');
+      this.settingReasons = items.map((i) => i.name);
     } catch {
       // settings unavailable, use empty list
     }
@@ -62,9 +62,8 @@ export default class Step3Purposes extends Component<Step3Signature> {
   @action
   selectReason(value: string): void {
     if (!this.allOptions.includes(value)) {
-      const updated = [...this.settingReasons, value];
-      this.settingReasons = updated;
-      void this.setting.save('customReasons', updated);
+      this.settingReasons = [...this.settingReasons, value];
+      void this.setting.create('customReasons', value);
     }
     const current = this.selectedReasons;
     if (!current.includes(value)) {

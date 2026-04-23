@@ -43,7 +43,6 @@ export default class SearchableOptionsGroup extends Component<SearchableOptionsG
 
   <template>
     <div class="tpk-select-search-container">
-      aaa
       <TpkSelectCreate
         @label={{if @placeholder @placeholder "Rechercher..."}}
         @options={{@allOptions}}

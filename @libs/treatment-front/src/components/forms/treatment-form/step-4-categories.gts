@@ -41,8 +41,8 @@ export default class Step4Categories extends Component<Step4Signature> {
 
   async loadFromSettings(): Promise<void> {
     try {
-      const s = await this.setting.load('customCategories');
-      this.settingCategories = (s.value as string[]) ?? [];
+      const items = await this.setting.findByKey('customCategories');
+      this.settingCategories = items.map((i) => i.name);
     } catch {
       // settings unavailable, use empty list
     }
@@ -64,9 +64,8 @@ export default class Step4Categories extends Component<Step4Signature> {
   selectCategory(value: string): void {
     console.log('value', value);
     if (!this.allOptions.includes(value)) {
-      const updated = [...this.settingCategories, value];
-      this.settingCategories = updated;
-      void this.setting.save('customCategories', updated);
+      this.settingCategories = [...this.settingCategories, value];
+      void this.setting.create('customCategories', value);
     }
     const current = this.selectedCategories;
     if (!current.includes(value)) {

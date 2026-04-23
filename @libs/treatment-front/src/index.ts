@@ -28,6 +28,7 @@ export function initialize(owner: Owner) {
 }
 
 export function forRouter(this: DSL) {
+  this.route('settings');
   this.route('treatments', function () {
     this.route('create');
     this.route('edit', { path: '/:treatment_id/edit' });

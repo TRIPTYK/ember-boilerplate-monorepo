@@ -62,11 +62,11 @@ export default class Step7DataSharing extends Component<Step7Signature> {
   async loadFromSettings(): Promise<void> {
     try {
       const [dataAccess, sharedData] = await Promise.all([
-        this.setting.load('customDataAccess'),
-        this.setting.load('customSharedData'),
+        this.setting.findByKey('customDataAccess'),
+        this.setting.findByKey('customSharedData'),
       ]);
-      this.settingDataAccess = (dataAccess.value as string[]) ?? [];
-      this.settingSharedData = (sharedData.value as string[]) ?? [];
+      this.settingDataAccess = dataAccess.map((i) => i.name);
+      this.settingSharedData = sharedData.map((i) => i.name);
     } catch {
       // settings unavailable, use empty lists
     }
@@ -89,9 +89,8 @@ export default class Step7DataSharing extends Component<Step7Signature> {
   @action
   selectDataAccess(name: string): void {
     if (!this.allDataAccessOptions.includes(name)) {
-      const updated = [...this.settingDataAccess, name];
-      this.settingDataAccess = updated;
-      void this.setting.save('customDataAccess', updated);
+      this.settingDataAccess = [...this.settingDataAccess, name];
+      void this.setting.create('customDataAccess', name);
     }
     if (!this.dataAccess.some((d) => d.name === name)) {
       this.args.changeset.set('dataAccess', [
@@ -146,9 +145,8 @@ export default class Step7DataSharing extends Component<Step7Signature> {
   @action
   selectSharedData(name: string): void {
     if (!this.allSharedDataOptions.includes(name)) {
-      const updated = [...this.settingSharedData, name];
-      this.settingSharedData = updated;
-      void this.setting.save('customSharedData', updated);
+      this.settingSharedData = [...this.settingSharedData, name];
+      void this.setting.create('customSharedData', name);
     }
     if (!this.sharedData.some((s) => s.name === name)) {
       this.args.changeset.set('sharedData', [

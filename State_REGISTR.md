@@ -1,0 +1,16 @@
+State of the art :
+- Revoir les standards pour AgentOS pour être en adéquation avec les standards de l'équipe.
+- Import et Export des données de traitement
+- Import et Export des données des paramètres
+- Génération du PDF du registre des traitements
+- Transformer le tableau des traitements en YetiTable (ça réglera le bug d'affichage lorsqu'on change un filtre).
+- A la suite de la transformation, mettre en place la fonctionnalité de drag & drop pour réorganiser les traitements et pouvoir les mettre dans l'ordre souhaité et que ça persiste.
+- Gestion des paramètre dans le traitement (création du paramètre s'il n'existe pas)
+- Meilleure gestion de l'erreur dans le processus du traitement lors de la validation globale (indiquer l'erreur au niveau de l'étape en erreur)
+- Mise en place du backend local (SQLite WASM) pour la gestion des traitements et des paramètres. Eventuellement retravailler le POC @libs/storage-front avec OPFSCoopSyncVFS.
+  - L'idée est de mettre en place un middleware dans WarpDrive pour gérer ce cas de figure (!!!)
+- Revoir le design globale de l'application car celle-ci est totalement de la V1 de Registr.
+- Tester manuellement globalement l'application et corriger les bugs
+- Faire des tests e2e
+- Compléter les tests intégrations
+- Faire des tests unitaires

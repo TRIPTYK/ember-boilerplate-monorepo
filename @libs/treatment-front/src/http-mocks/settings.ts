@@ -1,211 +1,186 @@
 import { HttpResponse } from 'msw';
 import { createOpenApiHttp } from 'openapi-msw';
 import type { paths } from '@apps/backend';
-import type { SettingKey } from '#src/schemas/settings.ts';
+import type { SettingItemKey } from '#src/schemas/settings.ts';
 
-type MockSetting = {
-  id: SettingKey;
+// ── Items plats { key, name } ─────────────────────────────────────────────────
+
+type MockItem = {
+  id: string;
   type: 'settings';
-  attributes: { value: unknown };
+  attributes: { key: SettingItemKey; name: string };
 };
 
-const mockSettings: MockSetting[] = [
-  {
-    id: 'customTreatmentTypes',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Ressources Humaines',
-        'Finance et Paie',
-        'Marketing et Communication',
-        'Médical et Santé',
-        'Juridique et Conformité',
-        'Sécurité et Surveillance',
-      ],
-    },
-  },
-  {
-    id: 'customReasons',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Gestion du personnel',
-        'Recrutement',
-        'Formation et développement',
-        'Paie et rémunération',
-        'Évaluation des performances',
-        'Fidélisation clients',
-      ],
-    },
-  },
-  {
-    id: 'customCategories',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Candidats',
-        'Employés',
-        'Anciens employés',
-        'Clients',
-        'Prospects',
-        'Fournisseurs',
-        'Patients',
-        'Bénévoles',
-      ],
-    },
-  },
-  {
-    id: 'customPersonalData',
-    type: 'settings',
-    attributes: {
-      value: [
-        { name: 'Numéro de sécurité sociale (NISS)', isSensitive: true },
-        { name: 'Numéro de registre national', isSensitive: true },
-        { name: 'Données biométriques', isSensitive: true },
-        { name: 'Données de santé', isSensitive: true },
-        { name: 'Numéro de téléphone personnel', isSensitive: false },
-        { name: 'Adresse e-mail personnelle', isSensitive: false },
-        { name: "Photo d'identité", isSensitive: false },
-      ],
-    },
-  },
-  {
-    id: 'customEconomicInformation',
-    type: 'settings',
-    attributes: {
-      value: [
-        { name: 'Numéro de compte bancaire (IBAN)', isSensitive: false },
-        { name: 'Historique de crédit', isSensitive: true },
-        { name: 'Données fiscales', isSensitive: true },
-        { name: 'Salaire et avantages', isSensitive: false },
-      ],
-    },
-  },
-  {
-    id: 'customDataSources',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Employé lui-même',
-        "Agence d'intérim",
-        'Système RH interne',
-        'Candidature directe (CV)',
-        'LinkedIn / réseau professionnel',
-        'Secrétariat social',
-      ],
-    },
-  },
-  {
-    id: 'customLegalBase',
-    type: 'settings',
-    attributes: {
-      value: [
-        "Intérêt légitime de l'employeur",
-        'Consentement explicite',
-        'Obligation légale (droit belge)',
-        "Exécution d'un contrat de travail",
-        "Mission d'intérêt public",
-      ],
-    },
-  },
-  {
-    id: 'customDataAccess',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Service des Ressources Humaines',
-        'Direction générale',
-        'Service juridique et conformité',
-        'Service informatique (accès technique)',
-        'Médecin du travail',
-        'Responsable de département',
-      ],
-    },
-  },
-  {
-    id: 'customSharedData',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Secrétariat social (Partena, SD Worx, Acerta...)',
-        "Mutuelle d'entreprise",
-        'Fonds de pension',
-        'Assureur groupe',
-        'Fisc belge (SPF Finances)',
-        'ONSS / INAMI',
-      ],
-    },
-  },
-  {
-    id: 'customSharedDataAccess',
-    type: 'settings',
-    attributes: { value: [] },
-  },
-  {
-    id: 'customMeasures',
-    type: 'settings',
-    attributes: {
-      value: [
-        'Certification ISO 27001',
-        'Chiffrement AES-256',
-        "Plan de continuité d'activité (PCA)",
-        'Surveillance 24/7 (SOC)',
-        'Authentification multi-facteurs (MFA)',
-        'Politique de gestion des accès (IAM)',
-        'Audit de sécurité annuel',
-        'Formation RGPD des collaborateurs',
-      ],
-    },
-  },
-  {
-    id: 'DPO',
-    type: 'settings',
-    attributes: {
-      value: {
-        fullName: 'Marie Lambert',
-        entityNumber: 'BE 0412.589.401',
-        address: {
-          streetAndNumber: 'Avenue Louise 149',
-          postalCode: '1050',
-          city: 'Bruxelles',
-          country: 'Belgique',
-          phone: '+32 2 345 67 89',
-          email: 'dpo@organisation.be',
-        },
-      },
-    },
-  },
+let nextId = 1;
+const i = (key: SettingItemKey, name: string): MockItem => ({
+  id: String(nextId++),
+  type: 'settings',
+  attributes: { key, name },
+});
+
+const mockItems: MockItem[] = [
+  i('customTreatmentTypes', 'Ressources Humaines'),
+  i('customTreatmentTypes', 'Finance et Paie'),
+  i('customTreatmentTypes', 'Marketing et Communication'),
+  i('customTreatmentTypes', 'Médical et Santé'),
+  i('customTreatmentTypes', 'Juridique et Conformité'),
+  i('customTreatmentTypes', 'Sécurité et Surveillance'),
+
+  i('customReasons', 'Gestion du personnel'),
+  i('customReasons', 'Recrutement'),
+  i('customReasons', 'Formation et développement'),
+  i('customReasons', 'Paie et rémunération'),
+  i('customReasons', 'Évaluation des performances'),
+  i('customReasons', 'Fidélisation clients'),
+
+  i('customCategories', 'Candidats'),
+  i('customCategories', 'Employés'),
+  i('customCategories', 'Anciens employés'),
+  i('customCategories', 'Clients'),
+  i('customCategories', 'Prospects'),
+  i('customCategories', 'Fournisseurs'),
+  i('customCategories', 'Patients'),
+  i('customCategories', 'Bénévoles'),
+
+  i('customPersonalData', 'Numéro de sécurité sociale (NISS)'),
+  i('customPersonalData', 'Numéro de registre national'),
+  i('customPersonalData', 'Données biométriques'),
+  i('customPersonalData', 'Données de santé'),
+  i('customPersonalData', 'Numéro de téléphone personnel'),
+  i('customPersonalData', 'Adresse e-mail personnelle'),
+  i('customPersonalData', "Photo d'identité"),
+
+  i('customEconomicInformation', 'Numéro de compte bancaire (IBAN)'),
+  i('customEconomicInformation', 'Historique de crédit'),
+  i('customEconomicInformation', 'Données fiscales'),
+  i('customEconomicInformation', 'Salaire et avantages'),
+
+  i('customDataSources', 'Employé lui-même'),
+  i('customDataSources', "Agence d'intérim"),
+  i('customDataSources', 'Système RH interne'),
+  i('customDataSources', 'Candidature directe (CV)'),
+  i('customDataSources', 'LinkedIn / réseau professionnel'),
+  i('customDataSources', 'Secrétariat social'),
+
+  i('customLegalBase', "Intérêt légitime de l'employeur"),
+  i('customLegalBase', 'Consentement explicite'),
+  i('customLegalBase', 'Obligation légale (droit belge)'),
+  i('customLegalBase', "Exécution d'un contrat de travail"),
+  i('customLegalBase', "Mission d'intérêt public"),
+
+  i('customDataAccess', 'Service des Ressources Humaines'),
+  i('customDataAccess', 'Direction générale'),
+  i('customDataAccess', 'Service juridique et conformité'),
+  i('customDataAccess', 'Service informatique (accès technique)'),
+  i('customDataAccess', 'Médecin du travail'),
+  i('customDataAccess', 'Responsable de département'),
+
+  i('customSharedData', 'Secrétariat social (Partena, SD Worx, Acerta...)'),
+  i('customSharedData', "Mutuelle d'entreprise"),
+  i('customSharedData', 'Fonds de pension'),
+  i('customSharedData', 'Assureur groupe'),
+  i('customSharedData', 'Fisc belge (SPF Finances)'),
+  i('customSharedData', 'ONSS / INAMI'),
+
+  i('customMeasures', 'Certification ISO 27001'),
+  i('customMeasures', 'Chiffrement AES-256'),
+  i('customMeasures', "Plan de continuité d'activité (PCA)"),
+  i('customMeasures', 'Surveillance 24/7 (SOC)'),
+  i('customMeasures', 'Authentification multi-facteurs (MFA)'),
+  i('customMeasures', 'Politique de gestion des accès (IAM)'),
+  i('customMeasures', 'Audit de sécurité annuel'),
+  i('customMeasures', 'Formation RGPD des collaborateurs'),
 ];
 
 const http = createOpenApiHttp<paths>();
 
 export default [
-  http.untyped.get('/api/v1/settings', () => {
-    return HttpResponse.json({ data: mockSettings });
-  }),
+  // ── GET /api/v1/settings — liste paginée avec filtres ─────────────────────
+  http.untyped.get('/api/v1/settings', ({ request }) => {
+    const url = new URL(request.url);
+    const search = url.searchParams.get('filter[search]')?.toLowerCase() ?? '';
+    const keyFilter = url.searchParams.get(
+      'filter[key]'
+    ) as SettingItemKey | null;
+    const pageNumber = parseInt(
+      url.searchParams.get('page[number]') ?? '1',
+      10
+    );
+    const pageSize = parseInt(url.searchParams.get('page[size]') ?? '0', 10);
+    const sort = url.searchParams.get('sort') ?? '';
 
-  http.untyped.get('/api/v1/settings/:key', ({ params }) => {
-    const { key } = params as { key: string };
-    const setting = mockSettings.find((s) => s.id === key);
-    if (!setting) {
-      return HttpResponse.json({ data: null });
+    let filtered = mockItems;
+
+    if (keyFilter) {
+      filtered = filtered.filter((s) => s.attributes.key === keyFilter);
     }
-    return HttpResponse.json({ data: setting });
+
+    if (search) {
+      filtered = filtered.filter(
+        (s) =>
+          s.attributes.key.toLowerCase().includes(search) ||
+          s.attributes.name.toLowerCase().includes(search)
+      );
+    }
+
+    if (sort) {
+      const field = sort.replace(/^-/, '') as 'key' | 'name';
+      const dir = sort.startsWith('-') ? -1 : 1;
+      if (field === 'key' || field === 'name') {
+        filtered = [...filtered].sort(
+          (a, b) => a.attributes[field].localeCompare(b.attributes[field]) * dir
+        );
+      }
+    }
+
+    const total = filtered.length;
+    const paginated =
+      pageSize > 0
+        ? filtered.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+        : filtered;
+
+    return HttpResponse.json({ data: paginated, meta: { total } });
   }),
 
-  http.untyped.patch('/api/v1/settings/:key', async ({ params, request }) => {
-    const { key } = params as { key: string };
+  // ── POST /api/v1/settings — créer un item ─────────────────────────────────
+  http.untyped.post('/api/v1/settings', async ({ request }) => {
     const body = (await request.json()) as {
-      data: { attributes: { value: unknown } };
+      data: { attributes: { key: SettingItemKey; name: string } };
     };
-    const setting = mockSettings.find((s) => s.id === key);
-    if (!setting) {
+    const { key, name } = body.data.attributes;
+    const newItem = i(key, name);
+    mockItems.push(newItem);
+    return HttpResponse.json({ data: newItem }, { status: 201 });
+  }),
+
+  // ── PATCH /api/v1/settings/:id ───────────────────────────────────────────
+  http.untyped.patch('/api/v1/settings/:id', async ({ params, request }) => {
+    const { id } = params as { id: string };
+    const body = (await request.json()) as {
+      data: { attributes: { name: string } };
+    };
+    const found = mockItems.find((s) => s.id === id);
+    if (!found) {
       return HttpResponse.json(
         { message: 'Not Found', code: 'SETTING_NOT_FOUND' },
         { status: 404 }
       );
     }
-    setting.attributes.value = body.data.attributes.value;
-    return HttpResponse.json({ data: setting });
+    found.attributes.name = body.data.attributes.name;
+    return HttpResponse.json({ data: found });
+  }),
+
+  // ── DELETE /api/v1/settings/:id ───────────────────────────────────────────
+  http.untyped.delete('/api/v1/settings/:id', ({ params }) => {
+    const { id } = params as { id: string };
+    const index = mockItems.findIndex((s) => s.id === id);
+    if (index === -1) {
+      return HttpResponse.json(
+        { message: 'Not Found', code: 'SETTING_NOT_FOUND' },
+        { status: 404 }
+      );
+    }
+    mockItems.splice(index, 1);
+    return new HttpResponse(null, { status: 204 });
   }),
 ];

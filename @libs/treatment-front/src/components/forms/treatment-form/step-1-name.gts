@@ -50,8 +50,8 @@ export default class Step1Name extends Component<Step1NameSignature> {
 
   async loadFromSettings(): Promise<void> {
     try {
-      const s = await this.setting.load('customTreatmentTypes');
-      this.settingTreatmentTypes = (s.value as string[]) ?? [];
+      const items = await this.setting.findByKey('customTreatmentTypes');
+      this.settingTreatmentTypes = items.map((i) => i.name);
     } catch {
       // settings unavailable, use empty list
     }

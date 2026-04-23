@@ -1,0 +1,97 @@
+page:
+  title: 'Settings'
+  tabs:
+    settings: 'Settings'
+    company: 'Company'
+
+table:
+  filterAll: 'All types'
+  addButton: '+ Parameter'
+  headers:
+    type: 'Type'
+    name: 'Name'
+    actions: 'Actions'
+  loading: 'Loading...'
+  empty: 'No data'
+  actions:
+    edit: 'Edit'
+    delete: 'Delete'
+  pagination:
+    showing: 'Showing {start} to {end} of {total}'
+    rowsPerPage: 'Rows per page'
+    previous: 'Previous'
+    next: 'Next'
+
+deleteModal:
+  title: 'Delete parameter'
+  confirm: 'Are you sure you want to delete « {name} »?'
+  cancel: 'Cancel'
+  delete: 'Delete'
+
+form:
+  addTitle: 'Add parameter'
+  editTitle: 'Edit parameter'
+  typeLabel: 'Parameter type'
+  nameLabel: 'Parameter name'
+  namePlaceholder: 'E.g. : HR Management'
+  cancel: 'Cancel'
+  save: 'Save'
+  saving: 'Saving...'
+
+types:
+  customTreatmentTypes: 'Treatment type'
+  customReasons: 'Processing purpose'
+  customCategories: 'Person category'
+  customPersonalData: 'Personal data'
+  customEconomicInformation: 'Economic information'
+  customDataSources: 'Data source'
+  customLegalBase: 'Legal basis'
+  customDataAccess: 'Data access'
+  customSharedData: 'Shared data'
+  customSharedDataAccess: 'External sharing'
+  customMeasures: 'Security measure'
+
+company:
+  common:
+    save: 'Save'
+    saving: 'Saving...'
+    saved: 'Saved ✓'
+  validation:
+    required: 'This field is required'
+    emailInvalid: 'Invalid email'
+  entity:
+    title: 'Responsible entity'
+    fullName: 'Entity name'
+    entityNumber: 'Entity number'
+    placeholders:
+      fullName: 'Servais Ltd'
+      entityNumber: 'GB012345678'
+  internalDpo:
+    title: 'Internal DPO'
+    enable: 'Enable'
+    fullName: 'Full name'
+    placeholders:
+      fullName: 'John Smith'
+  externalDpo:
+    title: 'External DPO'
+    enable: 'Enable'
+    fullName: 'Organization name'
+    entityNumber: 'Entity number'
+    placeholders:
+      fullName: 'DPO Consulting Ltd'
+      entityNumber: 'GB098765432'
+  address:
+    title: 'Address'
+    street: 'Street and number'
+    postalCode: 'Postal code'
+    city: 'City'
+    country: 'Country'
+    phone: 'Phone'
+    email: 'Email'
+    placeholders:
+      street: '42 Parliament Street'
+      postalCode: 'SW1A 0AA'
+      city: 'London'
+      country: 'United Kingdom'
+      phone: '+44 20 1234 5678'
+      email: 'contact@company.com'

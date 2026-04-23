@@ -6,7 +6,6 @@ import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import type { TreatmentChangeset } from '#src/changesets/treatment.ts';
 import type SettingService from '#src/services/setting.ts';
-import type { CustomPersonalData } from '#src/schemas/settings.ts';
 import type TpkValidationInputPrefabComponent from '@triptyk/ember-input-validation/components/prefabs/tpk-validation-input';
 import type { WithBoundArgs } from '@glint/template';
 import SearchableOptionsGroupData, {
@@ -61,8 +60,8 @@ interface Step5Signature {
 
 export default class Step5Data extends Component<Step5Signature> {
   @service declare setting: SettingService;
-  @tracked settingPersonalData: CustomPersonalData[] = [];
-  @tracked settingFinancialData: CustomPersonalData[] = [];
+  @tracked settingPersonalData: string[] = [];
+  @tracked settingFinancialData: string[] = [];
   @tracked settingSourceOptions: string[] = [];
   @tracked isSourcesModalOpen = false;
 
@@ -74,24 +73,20 @@ export default class Step5Data extends Component<Step5Signature> {
   async loadFromSettings(): Promise<void> {
     try {
       const [personal, financial, sources] = await Promise.all([
-        this.setting.load('customPersonalData'),
-        this.setting.load('customEconomicInformation'),
-        this.setting.load('customDataSources'),
+        this.setting.findByKey('customPersonalData'),
+        this.setting.findByKey('customEconomicInformation'),
+        this.setting.findByKey('customDataSources'),
       ]);
-      this.settingPersonalData = (personal.value as CustomPersonalData[]) ?? [];
-      this.settingFinancialData =
-        (financial.value as CustomPersonalData[]) ?? [];
-      this.settingSourceOptions = (sources.value as string[]) ?? [];
+      this.settingPersonalData = personal.map((item) => item.name);
+      this.settingFinancialData = financial.map((item) => item.name);
+      this.settingSourceOptions = sources.map((item) => item.name);
     } catch {
       // settings unavailable, use empty lists
     }
   }
 
   get allPersonalOptions(): string[] {
-    return [
-      ...PREDEFINED_PERSONAL_DATA,
-      ...this.settingPersonalData.map((d) => d.name),
-    ];
+    return [...PREDEFINED_PERSONAL_DATA, ...this.settingPersonalData];
   }
 
   get selectedPersonalData(): SensitiveDataItem[] {
@@ -107,12 +102,8 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectPersonalData(name: string): void {
     if (!this.allPersonalOptions.includes(name)) {
-      const updated = [
-        ...this.settingPersonalData,
-        { name, isSensitive: false },
-      ];
-      this.settingPersonalData = updated;
-      void this.setting.save('customPersonalData', updated);
+      this.settingPersonalData = [...this.settingPersonalData, name];
+      void this.setting.create('customPersonalData', name);
     }
     if (!this.selectedPersonalData.some((item) => item.name === name)) {
       this.args.changeset.set('personalDataGroup', {
@@ -149,10 +140,7 @@ export default class Step5Data extends Component<Step5Signature> {
   }
 
   get allFinancialOptions(): string[] {
-    return [
-      ...PREDEFINED_FINANCIAL_DATA,
-      ...this.settingFinancialData.map((d) => d.name),
-    ];
+    return [...PREDEFINED_FINANCIAL_DATA, ...this.settingFinancialData];
   }
 
   get selectedFinancialData(): SensitiveDataItem[] {
@@ -168,20 +156,13 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectFinancialData(name: string): void {
     if (!this.allFinancialOptions.includes(name)) {
-      const updated = [
-        ...this.settingFinancialData,
-        { name, isSensitive: true },
-      ];
-      this.settingFinancialData = updated;
-      void this.setting.save('customEconomicInformation', updated);
+      this.settingFinancialData = [...this.settingFinancialData, name];
+      void this.setting.create('customEconomicInformation', name);
     }
     if (!this.selectedFinancialData.some((item) => item.name === name)) {
       this.args.changeset.set('financialDataGroup', {
         data: {
-          name: [
-            ...this.selectedFinancialData,
-            { name, isSensitive: true }, // auto-sensible
-          ],
+          name: [...this.selectedFinancialData, { name, isSensitive: true }],
         },
         conservationDuration: this.financialConservationDuration,
       });
@@ -227,9 +208,8 @@ export default class Step5Data extends Component<Step5Signature> {
   @action
   selectSource(name: string): void {
     if (!this.allSourceOptions.includes(name)) {
-      const updated = [...this.settingSourceOptions, name];
-      this.settingSourceOptions = updated;
-      void this.setting.save('customDataSources', updated);
+      this.settingSourceOptions = [...this.settingSourceOptions, name];
+      void this.setting.create('customDataSources', name);
     }
     if (!this.dataSources.some((s) => s.name === name)) {
       this.args.changeset.set('dataSources', [

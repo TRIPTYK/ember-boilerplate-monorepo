@@ -1,0 +1,97 @@
+page:
+  title: 'Paramètres'
+  tabs:
+    settings: 'Paramètres'
+    company: 'Entreprise'
+
+table:
+  filterAll: 'Tous les types'
+  addButton: '+ Paramètre'
+  headers:
+    type: 'Type'
+    name: 'Nom'
+    actions: 'Actions'
+  loading: 'Chargement...'
+  empty: 'Aucune donnée'
+  actions:
+    edit: 'Modifier'
+    delete: 'Supprimer'
+  pagination:
+    showing: 'Affichage de {start} à {end} sur {total}'
+    rowsPerPage: 'Lignes par page'
+    previous: 'Précédent'
+    next: 'Suivant'
+
+deleteModal:
+  title: 'Supprimer le paramètre'
+  confirm: 'Êtes-vous sûr de vouloir supprimer « {name} » ?'
+  cancel: 'Annuler'
+  delete: 'Supprimer'
+
+form:
+  addTitle: 'Ajouter un paramètre'
+  editTitle: 'Modifier le paramètre'
+  typeLabel: 'Type de paramètre'
+  nameLabel: 'Nom du paramètre'
+  namePlaceholder: 'Ex : Gestion du personnel'
+  cancel: 'Annuler'
+  save: 'Enregistrer'
+  saving: 'Enregistrement...'
+
+types:
+  customTreatmentTypes: 'Type de traitement'
+  customReasons: 'Finalité du traitement'
+  customCategories: 'Catégorie de personne'
+  customPersonalData: 'Donnée personnelle'
+  customEconomicInformation: 'Information économique'
+  customDataSources: 'Source de données'
+  customLegalBase: 'Base légale'
+  customDataAccess: 'Accès aux données'
+  customSharedData: 'Donnée partagée'
+  customSharedDataAccess: 'Partage externe'
+  customMeasures: 'Mesure de sécurité'
+
+company:
+  common:
+    save: 'Enregistrer'
+    saving: 'Enregistrement...'
+    saved: 'Enregistré ✓'
+  validation:
+    required: 'Ce champ est requis'
+    emailInvalid: 'Email invalide'
+  entity:
+    title: 'Entité responsable'
+    fullName: "Nom de l'entité"
+    entityNumber: "Numéro d'entité"
+    placeholders:
+      fullName: 'Servais SA'
+      entityNumber: 'BE0123456789'
+  internalDpo:
+    title: 'DPO interne'
+    enable: 'Activer'
+    fullName: 'Nom complet'
+    placeholders:
+      fullName: 'Marie Lambert'
+  externalDpo:
+    title: 'DPO externe'
+    enable: 'Activer'
+    fullName: "Nom de l'organisation"
+    entityNumber: "Numéro d'entité"
+    placeholders:
+      fullName: 'DPO Consulting SPRL'
+      entityNumber: 'BE0987654321'
+  address:
+    title: 'Adresse'
+    street: 'Rue et numéro'
+    postalCode: 'Code postal'
+    city: 'Ville'
+    country: 'Pays'
+    phone: 'Téléphone'
+    email: 'Email'
+    placeholders:
+      street: 'Rue de la Loi 42'
+      postalCode: '1000'
+      city: 'Bruxelles'
+      country: 'Belgique'
+      phone: '+32 2 123 45 67'
+      email: 'contact@entreprise.com'

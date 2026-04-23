@@ -33,8 +33,8 @@ export default class Step6LegalBasis extends Component<Step6Signature> {
 
   async loadFromSettings(): Promise<void> {
     try {
-      const s = await this.setting.load('customLegalBase');
-      this.settingLegalBase = (s.value as string[]) ?? [];
+      const items = await this.setting.findByKey('customLegalBase');
+      this.settingLegalBase = items.map((i) => i.name);
     } catch {
       // settings unavailable, use empty list
     }
@@ -55,9 +55,8 @@ export default class Step6LegalBasis extends Component<Step6Signature> {
   @action
   selectLegalBase(name: string): void {
     if (!this.allOptions.includes(name)) {
-      const updated = [...this.settingLegalBase, name];
-      this.settingLegalBase = updated;
-      void this.setting.save('customLegalBase', updated);
+      this.settingLegalBase = [...this.settingLegalBase, name];
+      void this.setting.create('customLegalBase', name);
     }
     if (!this.legalBase.some((l) => l.name === name)) {
       this.args.changeset.set('legalBase', [

@@ -49,6 +49,7 @@ catalog:
   '@triptyk/ember-input': git+https://github.com/TRIPTYK/ember-common-ui/tree/develop-ember-input-dist
   '@triptyk/ember-input-validation': git+https://github.com/TRIPTYK/ember-common-ui/tree/develop-ember-input-validation-dist
   '@triptyk/ember-ui': git+https://github.com/TRIPTYK/ember-common-ui/tree/develop-ember-ui-dist
+  '@triptyk/ember-yeti-table': ~3.0.0
   '@types/amqplib': ^0.10.6
   '@types/handlebars': ^4.1.0
   '@types/jsonwebtoken': 9.0.3

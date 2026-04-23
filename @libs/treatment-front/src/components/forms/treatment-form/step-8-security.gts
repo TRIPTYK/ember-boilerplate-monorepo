@@ -48,8 +48,8 @@ export default class Step8Security extends Component<Step8Signature> {
 
   async loadFromSettings(): Promise<void> {
     try {
-      const s = await this.setting.load('customMeasures');
-      this.settingMeasures = (s.value as string[]) ?? [];
+      const items = await this.setting.findByKey('customMeasures');
+      this.settingMeasures = items.map((i) => i.name);
     } catch {
       // settings unavailable, use empty list
     }
@@ -70,9 +70,8 @@ export default class Step8Security extends Component<Step8Signature> {
   @action
   selectMeasure(name: string): void {
     if (!this.allOptions.includes(name)) {
-      const updated = [...this.settingMeasures, name];
-      this.settingMeasures = updated;
-      void this.setting.save('customMeasures', updated);
+      this.settingMeasures = [...this.settingMeasures, name];
+      void this.setting.create('customMeasures', name);
     }
     if (!this.securitySetup.some((s) => s.name === name)) {
       this.args.changeset.set('securitySetup', [
