@@ -10,7 +10,8 @@
     "lint:format": "pnpm turbo run lint:format",
     "dev:front": "pnpm --filter run --filter=@apps/front start:with-back",
     "dev:back": "pnpm --filter run --filter=@apps/backend dev",
-    "dev": "concurrently \"pnpm:dev:*\" --names \"dev:\" --prefixColors auto"
+    "dev": "concurrently \"pnpm:dev:*\" --names \"dev:\" --prefixColors auto",
+    "pack:tuto": "node scripts/pack-tuto.mjs"
   },
   "keywords": [],
   "author": "",
