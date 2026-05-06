@@ -15,36 +15,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@11.0.1",
-  "pnpm": {
-    "overrides": {
-      "@glint/template": "1.7.7",
-      "msw": "2.14.3",
-      "@glimmer/component": "2.1.1",
-      "@babel/core": "7.29.0",
-      "ember-basic-dropdown": "git+https://github.com/cibernox/ember-basic-dropdown/tree/dist"
-    },
-    "patchedDependencies": {
-      "@embroider/vite": "patches/@embroider__vite.patch",
-      "ember-power-select-with-create": "patches/ember-power-select-with-create.patch"
-    },
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "argon2",
-      "better-sqlite3",
-      "core-js",
-      "core-js-pure",
-      "cpu-features",
-      "edgedriver",
-      "esbuild",
-      "geckodriver",
-      "lefthook",
-      "msw",
-      "protobufjs",
-      "sqlite3",
-      "ssh2"
-    ]
-  },
+  "packageManager": "pnpm@11.0.6",
   "devDependencies": {
     "git-conventional-commits": "catalog:",
     "lefthook": "catalog:",
@@ -52,6 +23,6 @@
   },
   "volta": {
     "node": "24.15.0",
-    "pnpm": "11.0.1"
+    "pnpm": "11.0.6"
   }
 }
