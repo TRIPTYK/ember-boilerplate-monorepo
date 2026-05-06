@@ -68,7 +68,7 @@
     "msw": "catalog:",
     "@libs/shared-front": "workspace:^",
     "openapi-msw": "catalog:",
-    "zod": "~4.3.6"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@apps/backend": "workspace:^",

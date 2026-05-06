@@ -58,7 +58,7 @@
     "true-myth": "catalog:",
     "ts-dotenv": "catalog:",
     "vitest": "catalog:",
-    "zod": "^4.4.3"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@fastify/flash": "catalog:",

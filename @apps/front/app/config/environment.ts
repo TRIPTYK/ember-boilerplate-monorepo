@@ -7,8 +7,7 @@ export interface Config {
     [key: string]: unknown;
   };
   [key: string]: unknown;
-};
-
+}
 
 function environmentConfig(environment: string): Config {
   const ENV = {
@@ -72,6 +71,6 @@ function environmentConfig(environment: string): Config {
   }
 
   return ENV;
-};
+}
 
 export default environmentConfig(import.meta.env.MODE);

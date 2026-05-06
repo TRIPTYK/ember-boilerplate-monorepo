@@ -37,7 +37,6 @@ export class TestModule {
     const orm = await MikroORM.init({
       entities: [...todoEntities, ...userEntities],
       clientUrl: connectionUrl,
-      driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
     });
 
     const fastifyInstance = fastify().withTypeProvider<ZodTypeProvider>();

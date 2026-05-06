@@ -25,7 +25,7 @@
     "fastify": "catalog:",
     "fastify-type-provider-zod": "catalog:",
     "vitest": "catalog:",
-    "zod": "^3.24.1",
+    "zod": "catalog:",
     "@libs/backend-shared": "workspace:*",
     "@libs/users-backend": "workspace:*"
   },

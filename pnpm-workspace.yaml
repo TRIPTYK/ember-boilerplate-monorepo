@@ -6,6 +6,7 @@ lockfile: true
 
 overrides:
   '@mikro-orm/core': 7.0.14
+  '@mikro-orm/postgresql': 7.0.14
   "@glint/template": "1.7.7"
   "msw": "2.14.3"
   "@glimmer/component": "2.1.1"

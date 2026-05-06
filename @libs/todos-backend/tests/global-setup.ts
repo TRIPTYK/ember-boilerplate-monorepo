@@ -20,7 +20,7 @@ export async function setup() {
     clientUrl: process.env.TEST_DATABASE_URL,
   });
 
-  await orm.schema.refreshDatabase();
+  await orm.schema.refresh();
 
   const hashedPassword =
     "$argon2id$v=19$m=65536,t=3,p=4$ETHkx8pEQN6qQwlIR+vUTQ$+QC4JBKJCQUL1dyCHzRMBNjbk+QaJi3PV+HkPY00kcc";

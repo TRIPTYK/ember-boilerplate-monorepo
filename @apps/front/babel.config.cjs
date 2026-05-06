@@ -1,22 +1,19 @@
 'use strict';
 
-const {
-  templateCompatSupport,
-} = require('@embroider/compat/babel');
+const { templateCompatSupport } = require('@embroider/compat/babel');
 const { buildMacros } = require('@embroider/macros/babel');
 const { setConfig } = require('@warp-drive/core/build-config');
 
 const macros = buildMacros({
   setOwnConfig: {
-    isTesting: true
+    isTesting: true,
   },
   configure: (config) => {
     setConfig(config, {
-      compatWith: '5.6'
+      compatWith: '5.6',
     });
   },
 });
-
 
 module.exports = {
   plugins: [

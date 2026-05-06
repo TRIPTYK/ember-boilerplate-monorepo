@@ -1,7 +1,7 @@
-import { literal, object, string, ZodObject, type ZodTypeAny } from "zod";
+import { literal, object, string, ZodObject, ZodType } from "zod";
 import { z } from "zod";
 
-export const makeJsonApiDocumentSchema = <T extends ZodObject>(
+export const makeJsonApiDocumentSchema = <T extends ZodType>(
   type: string,
   attributesSchema: T,
 ): ZodObject<
@@ -18,7 +18,7 @@ export const makeJsonApiDocumentSchema = <T extends ZodObject>(
     attributes: attributesSchema,
   });
 
-export const makeSingleJsonApiTopDocument = <T extends ZodTypeAny>(
+export const makeSingleJsonApiTopDocument = <T extends ZodType>(
   dataSchema: T,
 ): ZodObject<{
   data: T;

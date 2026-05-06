@@ -123,7 +123,7 @@
     "typescript-eslint": "~8.59.2",
     "vite": "8.0.10",
     "vitest": "catalog:",
-    "zod": "~4.4.3"
+    "zod": "catalog:"
   },
   "engines": {
     "node": ">= 20"

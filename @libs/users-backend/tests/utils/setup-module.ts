@@ -6,7 +6,7 @@ import {
   type FastifyInstanceTypeForModule,
   AuthModule,
 } from "#src/index.js";
-import { MikroORM } from "@mikro-orm/core";
+import { MikroORM } from "@mikro-orm/postgresql";
 import { fastify } from "fastify";
 import {
   serializerCompiler,
@@ -41,7 +41,6 @@ export class TestModule {
     const orm = await MikroORM.init({
       entities: [...entities],
       clientUrl: connectionUrl,
-      driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
     });
 
     const fastifyInstance = fastify().withTypeProvider<ZodTypeProvider>();
