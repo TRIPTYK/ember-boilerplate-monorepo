@@ -1,0 +1,154 @@
+# =============================================================================
+# Security Patterns Configuration
+# =============================================================================
+# Used by damage-control hooks to block dangerous operations
+# =============================================================================
+
+# === BASH TOOL PATTERNS (~30 patterns) ===
+# Patterns that trigger blocking or confirmation for bash commands
+bashToolPatterns:
+  # --- FILE DESTRUCTION (10 patterns) ---
+  - pattern: '\brm\s+(-[^\s]*)*-[rRf]'
+    reason: rm with recursive or force flags - could delete entire directories
+
+  - pattern: '\brm\s+-rf\s+/'
+    reason: rm -rf on root paths - extremely dangerous
+
+  - pattern: '\bfind\b.*-delete\b'
+    reason: find with -delete can remove many files silently
+
+  - pattern: '\bfind\b.*-exec\s+rm\b'
+    reason: find with rm execution - bulk deletion
+
+  - pattern: '\bshred\b'
+    reason: shred permanently destroys file contents
+
+  - pattern: '\brmdir\s+(-[^\s]*)*-p'
+    reason: rmdir -p removes parent directories
+
+  - pattern: '\btruncate\b.*--size\s*0'
+    reason: truncate to 0 destroys file contents
+
+  - pattern: '\bdd\b.*of=/'
+    reason: dd can overwrite critical system files
+
+  - pattern: '>\s*/dev/sd[a-z]'
+    reason: writing directly to disk device
+
+  - pattern: '\bmkfs\b'
+    reason: mkfs formats/erases entire drives
+
+  # --- GIT DESTRUCTIVE (8 patterns) ---
+  - pattern: '\bgit\s+push\b.*--force\b'
+    reason: force push can overwrite remote history
+
+  - pattern: '\bgit\s+push\b.*-f\b'
+    reason: force push shorthand - same danger
+
+  - pattern: '\bgit\s+reset\b.*--hard\b'
+    reason: hard reset discards all uncommitted changes
+
+  - pattern: '\bgit\s+clean\b.*-fd'
+    reason: git clean -fd removes untracked files and directories
+
+  - pattern: '\bgit\s+checkout\s+\.'
+    reason: discards all unstaged changes
+    ask: true
+
+  - pattern: '\bgit\s+branch\b.*-D\b'
+    reason: force delete branch even if not merged
+    ask: true
+
+  - pattern: '\bgit\s+stash\s+drop\b'
+    reason: permanently deletes stashed changes
+    ask: true
+
+  - pattern: '\bgit\s+reflog\s+expire\b.*--all'
+    reason: can make commits unrecoverable
+
+  # --- DATABASE DESTRUCTIVE (7 patterns) ---
+  - pattern: '\bDROP\s+(DATABASE|TABLE|SCHEMA)\b'
+    reason: DROP permanently deletes database objects
+
+  - pattern: '\bTRUNCATE\s+TABLE\b'
+    reason: TRUNCATE removes all rows instantly
+
+  - pattern: '\bDELETE\s+FROM\s+\w+\s*;'
+    reason: DELETE without WHERE clause removes all rows
+
+  - pattern: '\bDELETE\s+FROM\s+\w+\s+WHERE\s+1\s*=\s*1'
+    reason: DELETE WHERE 1=1 removes all rows
+
+  - pattern: '\bFLUSHALL\b'
+    reason: Redis FLUSHALL deletes all data
+
+  - pattern: '\bFLUSHDB\b'
+    reason: Redis FLUSHDB deletes current database
+
+  - pattern: 'db\.dropDatabase\s*\('
+    reason: MongoDB dropDatabase removes entire database
+
+  # --- CLOUD/INFRA DESTRUCTIVE (5 patterns) ---
+  - pattern: '\baws\s+s3\s+rm\b.*--recursive\b'
+    reason: recursively deletes S3 objects
+
+  - pattern: '\bterraform\s+destroy\b'
+    reason: terraform destroy removes all infrastructure
+    ask: true
+
+  - pattern: '\bkubectl\s+delete\s+namespace\b'
+    reason: deletes entire Kubernetes namespace
+
+  - pattern: '\bdocker\s+system\s+prune\b.*-a'
+    reason: removes all unused Docker resources
+    ask: true
+
+  - pattern: '\bheroku\s+apps:destroy\b'
+    reason: destroys Heroku application
+
+# === ZERO ACCESS PATHS ===
+# Never read, write, or execute - complete lockout
+zeroAccessPaths:
+  - ".env"
+  - ".env.*"
+  - "*.env"
+  - "~/.ssh/"
+  - "~/.aws/"
+  - "~/.gnupg/"
+  - "*.pem"
+  - "*.key"
+  - "*-adminsdk*.json"
+  - "firebase-adminsdk*.json"
+  - "service-account*.json"
+  - "credentials.json"
+  - "secrets.yaml"
+  - "secrets.json"
+  - ".npmrc"
+  - ".pypirc"
+
+# === READ ONLY PATHS ===
+# Can read, cannot modify
+readOnlyPaths:
+  - "/etc/"
+  - "~/.bashrc"
+  - "~/.zshrc"
+  - "~/.bash_profile"
+  - "~/.profile"
+  - "package-lock.json"
+  - "yarn.lock"
+  - "pnpm-lock.yaml"
+  - "Gemfile.lock"
+  - "poetry.lock"
+  - "Cargo.lock"
+  - "composer.lock"
+  - "*.lock"
+
+# === NO DELETE PATHS ===
+# Can read and modify, cannot delete
+noDeletePaths:
+  - ".claude/"
+  - ".git/"
+  - "README.md"
+  - "LICENSE"
+  - "CHANGELOG.md"
+  - ".gitignore"
