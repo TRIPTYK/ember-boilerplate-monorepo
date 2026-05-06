@@ -134,7 +134,7 @@ catalog:
   mailgen: ^2.0.34
   msw: 2.14.3
   nodemailer: ^8.0.7
-  openapi-msw: ^2.0.0
+  openapi-msw: 2.0.0
   oxfmt: ~0.48.0
   oxlint: ~1.50.0
   oxlint-tsgolint: ^0.22.1
@@ -159,7 +159,7 @@ catalog:
   type-fest: ^5.6.0
   typescript: ~5.9.3
   vite: ~8.0.0
-  '@testcontainers/postgresql': ^11.14.0 
+  '@testcontainers/postgresql': ^11.14.0
   concurrently: 9.2.1
   vite-node: ~6.0.0
   tsdown: ~0.21.10

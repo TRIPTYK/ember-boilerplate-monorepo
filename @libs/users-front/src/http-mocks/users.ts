@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpResponse } from 'msw';
-import type { paths } from '@apps/backend';
-import { createOpenApiHttp } from 'openapi-msw';
+import { http, HttpResponse } from 'msw';
 
 const mockUsers = [
   {
@@ -35,8 +33,6 @@ const mockUsers = [
   },
 ];
 
-const http = createOpenApiHttp<paths>();
-
 export default [
   http.get('/api/v1/users/profile', () => {
     return HttpResponse.json({
@@ -66,7 +62,7 @@ export default [
       );
     }
   }),
-  http.untyped.get('/api/v1/users', ({ request }) => {
+  http.get('/api/v1/users', ({ request }) => {
     const url = new URL(request.url);
     const searchQuery = url.searchParams.get('filter[search]');
     const sortParam = url.searchParams.get('sort');

@@ -2,9 +2,32 @@ import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 
-import { classicEmberSupport, ember, extensions } from '@embroider/vite';
+import { ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import { loadTranslations } from '@ember-intl/vite';
+
+const PATCHED_ID = '\0patched-embroider-util';
+
+const patchEmbroiderUtil = () => {
+  let realPath: string | null = null;
+  return {
+    name: 'patch-embroider-util',
+    enforce: 'pre' as const,
+    async resolveId(id: string, importer: string | undefined) {
+      if (id !== '@embroider/util') return null;
+      if (!realPath) {
+        const resolved = await this.resolve(id, importer, { skipSelf: true });
+        if (!resolved) return null;
+        realPath = resolved.id;
+      }
+      return PATCHED_ID;
+    },
+    load(id: string) {
+      if (id !== PATCHED_ID || !realPath) return null;
+      return `export * from ${JSON.stringify(realPath)};\nexport const ensureSafeComponent = (c) => c;\n`;
+    },
+  };
+};
 
 // Proxy configuration for e2e tests (when VITE_MOCK_API=false)
 const apiProxy =
@@ -35,8 +58,8 @@ export default defineConfig({
     proxy: apiProxy,
   },
   plugins: [
+    patchEmbroiderUtil(),
     tailwindcss(),
-    classicEmberSupport(),
     ember(),
     babel({
       babelHelpers: 'runtime',

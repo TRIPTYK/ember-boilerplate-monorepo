@@ -1,33 +1,77 @@
-import loadConfigFromMeta from '@embroider/config-meta-loader';
-import { assert } from '@ember/debug';
-
-const config = loadConfigFromMeta('@apps/front') as unknown;
-
-assert(
-  'config is not an object',
-  typeof config === 'object' && config !== null
-);
-assert(
-  'modulePrefix was not detected on your config',
-  'modulePrefix' in config && typeof config.modulePrefix === 'string'
-);
-assert(
-  'locationType was not detected on your config',
-  'locationType' in config && typeof config.locationType === 'string'
-);
-assert(
-  'rootURL was not detected on your config',
-  'rootURL' in config && typeof config.rootURL === 'string'
-);
-assert(
-  'APP was not detected on your config',
-  'APP' in config && typeof config.APP === 'object'
-);
-
-export default config as {
+export interface Config {
   modulePrefix: string;
   podModulePrefix?: string;
   locationType: string;
   rootURL: string;
-  APP: Record<string, unknown>;
-} & Record<string, unknown>;
+  APP: {
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
+
+function environmentConfig(environment: string): Config {
+  const ENV = {
+    modulePrefix: '@apps/front',
+    environment,
+    rootURL: '/',
+    locationType: 'history',
+    EmberENV: {
+      EXTEND_PROTOTYPES: false,
+      FEATURES: {
+        // Here you can enable experimental features on an ember canary build
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
+      },
+    },
+
+    APP: {
+      // Here you can pass flags/options to your application instance
+      // when it is created
+    },
+  } as Config;
+
+  if (environment === 'development') {
+    ENV['ember-simple-auth-token'] = {
+      refreshAccessTokens: true,
+      tokenExpirationInvalidateSession: true,
+      serverTokenEndpoint: 'api/v1/auth/login',
+      tokenPropertyName: 'data.accessToken',
+      refreshTokenPropertyName: 'data.refreshToken',
+      headers: {},
+    };
+  }
+
+  if (environment === 'e2e') {
+    ENV['ember-simple-auth-token'] = {
+      serverTokenEndpoint: 'api/v1/auth/login',
+      tokenPropertyName: 'data.accessToken',
+      refreshTokenPropertyName: 'data.refreshToken',
+      headers: {},
+    };
+  }
+
+  if (environment === 'test') {
+    // Testem prefers this...
+    ENV.locationType = 'none';
+
+    // keep test console output quieter
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+
+    ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
+  }
+
+  if (environment === 'production') {
+    ENV['ember-simple-auth-token'] = {
+      serverTokenEndpoint: 'api/v1/auth/login',
+      tokenPropertyName: 'data.accessToken',
+      refreshTokenPropertyName: 'data.refreshToken',
+      headers: {},
+    };
+  }
+
+  return ENV;
+};
+
+export default environmentConfig(import.meta.env.MODE);
