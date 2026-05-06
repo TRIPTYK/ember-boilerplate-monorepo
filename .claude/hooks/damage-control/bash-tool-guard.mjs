@@ -46,13 +46,31 @@ function matchesPathPattern(command, patterns) {
   return [false, null];
 }
 
+// Replace HEREDOC bodies and quoted-string contents with empty placeholders
+// so pattern matching only fires on actual command tokens, not on argument
+// payloads (commit messages, PR bodies, here-docs, etc.).
+function stripQuotedAndHeredocs(command) {
+  let result = command;
+  // HEREDOCs: <<EOF…EOF, <<'EOF'…EOF, <<-EOF…EOF
+  result = result.replace(/<<-?\s*['"]?(\w+)['"]?[\s\S]*?\n\s*\1\b/g, "<<HEREDOC");
+  // Single-quoted strings (no escapes possible inside POSIX single quotes)
+  result = result.replace(/'[^']*'/g, "''");
+  // Double-quoted strings, honouring backslash escapes
+  result = result.replace(/"(?:\\.|[^"\\])*"/g, '""');
+  return result;
+}
+
 function checkCommand(command, config) {
+  const stripped = stripQuotedAndHeredocs(command);
+
   for (const item of config.bashToolPatterns || []) {
     const pattern = item.pattern || "";
     const reason = item.reason || "Matched blocked pattern";
     const ask = item.ask || false;
+    const scope = item.scope || "command";
+    const haystack = scope === "any" ? command : stripped;
     try {
-      if (new RegExp(pattern, "i").test(command)) {
+      if (new RegExp(pattern, "i").test(haystack)) {
         return { allow: false, ask, reason };
       }
     } catch {
@@ -60,15 +78,15 @@ function checkCommand(command, config) {
     }
   }
 
-  const [zeroMatched, zeroPattern] = matchesPathPattern(command, config.zeroAccessPaths);
+  const [zeroMatched, zeroPattern] = matchesPathPattern(stripped, config.zeroAccessPaths);
   if (zeroMatched) {
     return { allow: false, ask: false, reason: `Access to protected path blocked: ${zeroPattern}` };
   }
 
   const modificationIndicators = ["rm ", "mv ", ">", ">>", "tee ", "sed -i", "chmod ", "chown "];
   for (const indicator of modificationIndicators) {
-    if (command.includes(indicator)) {
-      const [matched, pattern] = matchesPathPattern(command, config.readOnlyPaths);
+    if (stripped.includes(indicator)) {
+      const [matched, pattern] = matchesPathPattern(stripped, config.readOnlyPaths);
       if (matched) {
         return { allow: false, ask: false, reason: `Modification of read-only path blocked: ${pattern}` };
       }
@@ -77,8 +95,8 @@ function checkCommand(command, config) {
 
   const deletionIndicators = ["rm ", "rmdir ", "unlink ", "del "];
   for (const indicator of deletionIndicators) {
-    if (command.includes(indicator)) {
-      const [matched, pattern] = matchesPathPattern(command, config.noDeletePaths);
+    if (stripped.includes(indicator)) {
+      const [matched, pattern] = matchesPathPattern(stripped, config.noDeletePaths);
       if (matched) {
         return { allow: false, ask: false, reason: `Deletion of protected path blocked: ${pattern}` };
       }

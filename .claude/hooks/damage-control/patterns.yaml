@@ -67,26 +67,36 @@ bashToolPatterns:
     reason: can make commits unrecoverable
 
   # --- DATABASE DESTRUCTIVE (7 patterns) ---
+  # scope: any — these are typically passed as quoted args to a DB CLI
+  # (psql -c "DROP …", redis-cli "FLUSHALL", mongo --eval "db.dropDatabase()"),
+  # so we must scan the raw command, not the dequoted form.
   - pattern: '\bDROP\s+(DATABASE|TABLE|SCHEMA)\b'
     reason: DROP permanently deletes database objects
+    scope: any
 
   - pattern: '\bTRUNCATE\s+TABLE\b'
     reason: TRUNCATE removes all rows instantly
+    scope: any
 
   - pattern: '\bDELETE\s+FROM\s+\w+\s*;'
     reason: DELETE without WHERE clause removes all rows
+    scope: any
 
   - pattern: '\bDELETE\s+FROM\s+\w+\s+WHERE\s+1\s*=\s*1'
     reason: DELETE WHERE 1=1 removes all rows
+    scope: any
 
   - pattern: '\bFLUSHALL\b'
     reason: Redis FLUSHALL deletes all data
+    scope: any
 
   - pattern: '\bFLUSHDB\b'
     reason: Redis FLUSHDB deletes current database
+    scope: any
 
   - pattern: 'db\.dropDatabase\s*\('
     reason: MongoDB dropDatabase removes entire database
+    scope: any
 
   # --- CLOUD/INFRA DESTRUCTIVE (5 patterns) ---
   - pattern: '\baws\s+s3\s+rm\b.*--recursive\b'
