@@ -4,7 +4,8 @@ import { MikroORM } from "@mikro-orm/postgresql";
 
 const orm = await MikroORM.init({ ...mikroOrmConfig, debug: true });
 
-await orm.schema.refresh();
+await orm.schema.drop();
+await orm.migrator.up();
 await orm.seeder.seed(DatabaseSeeder);
 
 await orm.close(true);

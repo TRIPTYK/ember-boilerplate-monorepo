@@ -1,4 +1,17 @@
 {
-  "hooks": {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(pnpm *)"
+    ],
+    "deny": ["Bash(rm -rf *)", "Bash(sudo *)", "Bash(chmod 777 *)", "Read(.env)"]
   }
 }

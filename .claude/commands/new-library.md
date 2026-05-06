@@ -1,9 +1,11 @@
 ---
-description: Scaffold a new frontend or backend library following the project's boilerplate
+description: Scaffold a new frontend or backend library following the project's boilerplate (V2 — guarded, validated)
 argument-hint: <frontend|backend> <library-name>
+model: sonnet
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
-# New Library
+# New Library V2
 
 Scaffold a new library in `@libs/` for this monorepo.
 
@@ -11,16 +13,17 @@ Scaffold a new library in `@libs/` for this monorepo.
 
 `$ARGUMENTS` — `<frontend|backend> <library-name>`
 
-If missing or invalid, ask the user before doing anything.
+- `kind` must be exactly `frontend` or `backend`. If missing or any other value, stop and ask.
+- `library-name` must be kebab-case (e.g. `invoice`, `audit-log`). If missing or invalid, stop and ask.
 
-## What to do
+## Workflow
 
-- If kind is `frontend`: read `tuto/0_frontend.packed.md` and follow it step by step.
-- If kind is `backend`: read `tuto/1_backend.packed.md` and follow it step by step.
+### 1. Validate arguments
 
-The `*.packed.md` files are produced by `pnpm pack:tuto tuto/<file>.md` and inline every referenced source file at the bottom under "## Referenced files". If the packed file is missing or stale, regenerate it first.
+- If `kind` ∉ `{frontend, backend}`, stop and ask the user.
+- If `library-name` is missing or not kebab-case, stop and ask the user.
 
-Use the existing `@libs/users-front` (frontend) or `@libs/users-backend` (backend) as the structural reference — copy `package.json`, `tsconfig.json`, `tsdown.config.mts`, `vitest.config.mts` shape and dependencies from it. Replace `user` / `User` with the new library's name / entity.
+### 2. Check for collision
 
 For backend libraries, follow the code style rules in `@libs/CLAUDE.md` (read it before generating code).
 
