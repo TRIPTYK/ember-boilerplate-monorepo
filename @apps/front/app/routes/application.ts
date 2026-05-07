@@ -4,10 +4,12 @@ import type { IntlService } from 'ember-intl';
 import { setupWorker } from 'msw/browser';
 import { initialize as initializeUserLib } from '@libs/users-front';
 import { initialize as initializeTodoLib } from '@libs/todos-front';
+import { initialize as initializeInvoicesLib } from '@libs/invoices-front';
 import { getOwner } from '@ember/-internals/owner';
 import type SessionService from '@apps/front/services/session';
 import allUsersHandlers from '@libs/users-front/http-mocks/all';
 import allTodosHandlers from '@libs/todos-front/http-mocks/all';
+import allInvoicesHandlers from '@libs/invoices-front/http-mocks/all';
 import setTheme from '../utils/set-theme';
 import translationsForFrFr from 'virtual:ember-intl/translations/fr-fr';
 import translationsForEnUs from 'virtual:ember-intl/translations/en-us';
@@ -26,7 +28,7 @@ export default class ApplicationRoute extends Route {
 
     // Skip MSW when running against real backend (e2e tests)
     if (import.meta.env.VITE_MOCK_API !== 'false') {
-      const worker = setupWorker(...allUsersHandlers, ...allTodosHandlers);
+      const worker = setupWorker(...allUsersHandlers, ...allTodosHandlers, ...allInvoicesHandlers);
       this.worker = worker;
       await worker.start({
         onUnhandledRequest: 'bypass',
@@ -35,6 +37,7 @@ export default class ApplicationRoute extends Route {
 
     await initializeUserLib(getOwner(this)!);
     initializeTodoLib(getOwner(this)!);
+    initializeInvoicesLib(getOwner(this)!);
   }
 
   willDestroy() {

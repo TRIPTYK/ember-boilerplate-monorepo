@@ -1,0 +1,10 @@
+{
+  "extends": "@libs/repo-utils/configs/backend-lib/tsconfig.base.json",
+  "include": ["src", "tests"],
+  "compilerOptions": {
+    "paths": {
+      "#src/*": ["./src/*"],
+      "#tests/*": ["./tests/*"]
+    }
+  }
+}

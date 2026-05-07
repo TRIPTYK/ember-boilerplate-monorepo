@@ -21,6 +21,7 @@ import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
 import { UserModule, AuthModule } from "@libs/users-backend";
 import { Module as TodoModule } from "@libs/todos-backend";
+import { Module as InvoiceModule } from "@libs/invoices-backend";
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -150,6 +151,12 @@ export class App {
         },
       }),
       todosModule: TodoModule.init({
+        em: this.context.orm.em.fork(),
+        configuration: {
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
+      }),
+      invoicesModule: InvoiceModule.init({
         em: this.context.orm.em.fork(),
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,

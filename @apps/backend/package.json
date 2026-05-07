@@ -38,6 +38,7 @@
     "@fastify/swagger": "catalog:",
     "@fastify/swagger-ui": "catalog:",
     "@libs/backend-shared": "workspace:*",
+    "@libs/invoices-backend": "workspace:*",
     "@libs/todos-backend": "workspace:*",
     "@libs/users-backend": "workspace:*",
     "@mikro-orm/core": "catalog:",
