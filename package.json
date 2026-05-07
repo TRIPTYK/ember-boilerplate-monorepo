@@ -20,7 +20,8 @@
   "devDependencies": {
     "git-conventional-commits": "catalog:",
     "lefthook": "catalog:",
-    "turbo": "catalog:"
+    "turbo": "catalog:",
+    "concurrently": "catalog:"
   },
   "volta": {
     "node": "24.15.0",

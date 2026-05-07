@@ -57,11 +57,7 @@ export type JsonApiErrorDocument = z.infer<typeof jsonApiErrorDocumentSchema>;
 export function makeJsonApiError(
   status: number,
   title: string,
-  options?: {
-    code?: string;
-    detail?: string;
-    source?: { pointer?: string; parameter?: string; header?: string };
-  },
+  options?: Partial<JsonApiError>,
 ): JsonApiErrorDocument {
   return {
     errors: [
@@ -71,6 +67,7 @@ export function makeJsonApiError(
         code: options?.code,
         detail: options?.detail,
         source: options?.source,
+        meta: options?.meta,
       },
     ],
   };

@@ -1,6 +1,7 @@
 import { createApplicationContext } from "#src/app/application.context.js";
 import type { AppConfiguration } from "#src/configuration.js";
 
+// oxlint-disable-next-line max-lines-per-function
 export async function getTestContext() {
   const config = {
     DEBUG: true,
