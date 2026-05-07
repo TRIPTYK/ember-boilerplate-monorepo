@@ -25,6 +25,7 @@ allowBuilds:
   lefthook: true
   msw: true
   protobufjs: true
+  puppeteer: true
   ssh2: true
 
 blockExoticSubdeps: false

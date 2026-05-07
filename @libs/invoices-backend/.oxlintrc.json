@@ -1,0 +1,3 @@
+{
+    "extends": ["node_modules/@libs/repo-utils/configs/oxlintrc.json"]
+}

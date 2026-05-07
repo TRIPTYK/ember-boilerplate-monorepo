@@ -21,6 +21,7 @@ import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
 import { UserModule, AuthModule } from "@libs/users-backend";
 import { Module as TodoModule } from "@libs/todos-backend";
+import { Module as InvoiceModule } from "@libs/invoices-backend";
 
 export type FastifyInstanceType = FastifyInstance<
   RawServerDefault,
@@ -36,6 +37,7 @@ export class App {
     private context: ApplicationContext,
   ) {}
 
+  // oxlint-disable-next-line max-lines-per-function
   public static async init(context: ApplicationContext) {
     const loggerInstance = logger(context.configuration);
     const fastifyInstance = Fastify({
@@ -130,24 +132,9 @@ export class App {
     return app;
   }
 
+  // oxlint-disable-next-line max-lines-per-function
   private async setupRoutes() {
-    this.fastify.setErrorHandler((error: FastifyError, request, reply) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      reply.send({
-        message: error.message,
-        code: error.code,
-        status: error.statusCode ?? 500,
-      });
-    });
-
-    this.fastify.setNotFoundHandler((_request, reply) => {
-      reply.send({
-        message: "Not found",
-        code: "NOT_FOUND",
-        status: 404,
-      });
-    });
+    this.setupHandlers();
 
     await appRouter(this.fastify, {
       authModule: AuthModule.init({
@@ -169,6 +156,32 @@ export class App {
           jwtSecret: this.context.configuration.JWT_SECRET,
         },
       }),
+      invoicesModule: InvoiceModule.init({
+        em: this.context.orm.em.fork(),
+        configuration: {
+          jwtSecret: this.context.configuration.JWT_SECRET,
+        },
+      }),
+    });
+  }
+
+  private setupHandlers() {
+    this.fastify.setErrorHandler((error: FastifyError, request, reply) => {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      reply.send({
+        message: error.message,
+        code: error.code,
+        status: error.statusCode ?? 500,
+      });
+    });
+
+    this.fastify.setNotFoundHandler((_request, reply) => {
+      reply.send({
+        message: "Not found",
+        code: "NOT_FOUND",
+        status: 404,
+      });
     });
   }
 

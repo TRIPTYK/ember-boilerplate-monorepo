@@ -58,6 +58,7 @@
     "@glimmer/component": "catalog:",
     "@glint/ember-tsc": "catalog:",
     "@glint/template": "catalog:",
+    "@libs/invoices-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
     "@libs/users-front": "workspace:^",
     "@playwright/test": "catalog:",

@@ -2,6 +2,7 @@ import { defineConfig, MikroORM } from "@mikro-orm/postgresql";
 import type { AppConfiguration } from "../configuration.js";
 import { RefreshTokenEntity, UserEntity } from "@libs/users-backend";
 import { TodoEntity } from "@libs/todos-backend";
+import { entities as invoiceEntities } from "@libs/invoices-backend";
 
 export function databaseConfig(config: Pick<AppConfiguration, "DATABASE_URI">) {
   return defineConfig({
@@ -9,7 +10,7 @@ export function databaseConfig(config: Pick<AppConfiguration, "DATABASE_URI">) {
       pathTs: "./src/seeders",
     },
     clientUrl: config.DATABASE_URI,
-    entities: [UserEntity, RefreshTokenEntity, TodoEntity],
+    entities: [UserEntity, RefreshTokenEntity, TodoEntity, ...invoiceEntities],
   });
 }
 

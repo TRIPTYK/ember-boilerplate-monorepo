@@ -2,16 +2,18 @@ import { type AuthModule, type UserModule } from "@libs/users-backend";
 import type { FastifyInstanceType } from "./app.js";
 import { statusRoute } from "./status.route.js";
 import { Module as TodoModule } from "@libs/todos-backend";
+import { Module as InvoiceModule } from "@libs/invoices-backend";
 
 interface AppRouterOptions {
   authModule: AuthModule;
   userModule: UserModule;
   todosModule: TodoModule;
+  invoicesModule: InvoiceModule;
 }
 
 export async function appRouter(
   fastify: FastifyInstanceType,
-  { authModule, userModule, todosModule }: AppRouterOptions,
+  { authModule, userModule, todosModule, invoicesModule }: AppRouterOptions,
 ) {
   await fastify.register(
     async function (fastify) {
@@ -28,6 +30,7 @@ export async function appRouter(
 
       await userModule.setupRoutes(fastify);
       await todosModule.setupRoutes(fastify);
+      await invoicesModule.setupRoutes(fastify);
     },
     {
       prefix: "api/v1",
