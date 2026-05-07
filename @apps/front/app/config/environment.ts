@@ -33,6 +33,8 @@ function environmentConfig(environment: string): Config {
     ENV['ember-simple-auth-token'] = {
       refreshAccessTokens: true,
       tokenExpirationInvalidateSession: true,
+      tokenRefreshInvalidateSessionResponseCodes: [401, 403],
+      refreshLeeway: 30,
       serverTokenEndpoint: 'api/v1/auth/login',
       tokenPropertyName: 'data.accessToken',
       refreshTokenPropertyName: 'data.refreshToken',

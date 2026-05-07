@@ -12,7 +12,7 @@
     "dev": "pnpm build:deps && concurrently \"pnpm turbo build:watch --filter ^...\" \"vite-node --watch src/app.bootstrap.ts\"",
     "start": "pnpm build:deps && vite-node src/app.bootstrap.ts",
     "start:e2e": "pnpm build:deps && vite-node --mode=e2e src/app.bootstrap.ts",
-    "e2e:setup": "vite-node --mode=e2e node_modules/@mikro-orm/cli/esm.js schema:fresh --seed E2ESeeder --run",
+    "e2e:setup": "vite-node --mode=e2e node_modules/@mikro-orm/cli/cli.js schema:fresh --seed E2ESeeder --run",
     "test": "pnpm vitest run",
     "build": "pnpm vite build",
     "build:watch": "concurrently \"pnpm vite build --watch\"",
@@ -23,12 +23,12 @@
     "lint:format": "oxfmt check src tests",
     "lint:format:fix": "oxfmt fix src tests",
     "format": "pnpm lint:format:fix",
-    "mikro-orm": "vite-node node_modules/@mikro-orm/cli/esm.js",
+    "mikro-orm": "vite-node node_modules/@mikro-orm/cli/cli.js",
     "lint:fix": "oxlint --fix",
     "schema:update": "pnpm mikro-orm schema:update --run",
     "schema:drop": "pnpm mikro-orm schema:drop --run",
     "seed": "pnpm mikro-orm seeder:run",
-    "schema:fresh": "pnpm mikro-orm schema:fresh --seed -r"
+    "schema:fresh": "vite-node src/cli/schema-fresh.ts"
   },
   "dependencies": {
     "@fastify/cookie": "catalog:",
