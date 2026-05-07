@@ -184,7 +184,7 @@ describe('Service | HandleSave | Unit', () => {
     const dangerSpy = vi.spyOn(service.flashMessages, 'danger');
     const intlSpy = vi
       .spyOn(service.intl, 't')
-      .mockReturnValue('An error occurred' as never);
+      .mockReturnValue('An error occurred');
     const saveAction = vi.fn().mockRejectedValue(
       new AggregateError([
         {

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+      "Bash(xargs -I{} sh -c 'echo \"{}:\"; grep '\"'\"'\"version\"'\"'\" {}')",
+      "Bash(xargs -I{} ls {}/)",
+      "Bash(xargs -I{} cat {}/index.d.ts)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k,':',v\\) for k,v in d.get\\('exports',{}\\).items\\(\\)]\")",
+      "Bash(npx ember-tsc *)",
+      "Bash(./node_modules/.bin/ember-tsc --version)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "ember",
+    "chrome-devtools",
+    "context7",
+    "playwright"
+  ]
+}

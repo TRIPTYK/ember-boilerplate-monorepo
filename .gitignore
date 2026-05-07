@@ -5,3 +5,4 @@ dist
 coverage
 playwright-report
 .DS_Store
+.pnpm-store

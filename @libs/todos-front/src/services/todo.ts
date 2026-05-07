@@ -21,7 +21,7 @@ export default class TodoService extends Service {
     if (data.id) {
       return this.update(data as UpdatedTodo);
     } else {
-      return this.create(data as ValidatedTodo);
+      return this.create(data);
     }
   }
 

@@ -53,6 +53,7 @@ export default defineConfig({
   },
   server: {
     proxy: apiProxy,
+    host: '0.0.0.0',
   },
   preview: {
     proxy: apiProxy,

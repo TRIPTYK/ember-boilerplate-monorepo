@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/pack-tuto.mjs tuto/0_frontend.md)",
+      "Bash(node scripts/pack-tuto.mjs tuto/1_backend.md)",
+      "Bash(pnpm --filter @libs/todos-backend test)",
+      "Bash(pnpm --filter @libs/invoicing-backend build)",
+      "Bash(gh pr *)",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+      "mcp__gitscrum__task",
+      "mcp__gitscrum__task_detail",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "Bash(pnpm lint:js)",
+      "Bash(node -e \"const { p } = require\\('/Users/amauryd/Projects/ember-boilerplate-monorepo/node_modules/@mikro-orm/core/index.js'\\); console.log\\(Object.keys\\(p\\).join\\(','\\)\\)\")",
+      "Bash(node --input-type=module -e \"import { p } from '/Users/amauryd/Projects/ember-boilerplate-monorepo/node_modules/@mikro-orm/core/index.js'; console.log\\(Object.keys\\(p\\).join\\(','\\)\\);\")",
+      "mcp__gitscrum__project",
+      "Bash(pnpm --filter @libs/users-backend test -- --reporter=verbose)",
+      "Read(//home/node/**)",
+      "Bash(env)",
+      "Read(//vscode/vscode-server-insiders/bin/linux-arm64/79d6cea3bc9cb9b9e60039d303c2700b8042fb52-insider/bin/remote-cli/**)",
+      "Read(//vscode/vscode-server-insiders/bin/linux-arm64/79d6cea3bc9cb9b9e60039d303c2700b8042fb52-insider/bin/**)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "ember",
+    "chrome-devtools",
+    "context7",
+    "playwright",
+    "gitscrum"
+  ]
+}

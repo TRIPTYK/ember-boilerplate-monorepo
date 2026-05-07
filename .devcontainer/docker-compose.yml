@@ -1,0 +1,58 @@
+services:
+  workspace:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    networks:
+      - boilerplate-network
+    volumes:
+      - ..:/workspace:cached
+      - ${HOME}/.claude:/home/node/.claude:bind
+      - ${HOME}/.claude.json:/home/node/.claude.json:bind
+      - ${HOME}/.ssh:/home/node/.ssh:ro
+      - pnpm-store:/home/node/.local/share/pnpm/store
+      - node-modules-cache:/workspace/node_modules
+      - turbo-cache:/workspace/.turbo
+      - nm-apps-backend:/workspace/@apps/backend/node_modules
+      - nm-apps-e2e:/workspace/@apps/e2e/node_modules
+      - nm-apps-front:/workspace/@apps/front/node_modules
+      - nm-libs-backend-shared:/workspace/@libs/backend-shared/node_modules
+      - nm-libs-invoices-backend:/workspace/@libs/invoices-backend/node_modules
+      - nm-libs-invoices-front:/workspace/@libs/invoices-front/node_modules
+      - nm-libs-repo-utils:/workspace/@libs/repo-utils/node_modules
+      - nm-libs-shared-front:/workspace/@libs/shared-front/node_modules
+      - nm-libs-test-lib-backend:/workspace/@libs/test-lib-backend/node_modules
+      - nm-libs-todos-backend:/workspace/@libs/todos-backend/node_modules
+      - nm-libs-todos-front:/workspace/@libs/todos-front/node_modules
+      - nm-libs-users-backend:/workspace/@libs/users-backend/node_modules
+      - nm-libs-users-front:/workspace/@libs/users-front/node_modules
+
+    environment:
+      DATABASE_URI: postgres://backend_user:backend_user@database:5432/database_dev
+      NODE_ENV: development
+    depends_on:
+      - database
+    user: node
+    command: sleep infinity
+
+volumes:
+  pnpm-store:
+  node-modules-cache:
+  turbo-cache:
+  nm-apps-backend:
+  nm-apps-e2e:
+  nm-apps-front:
+  nm-libs-backend-shared:
+  nm-libs-invoices-backend:
+  nm-libs-invoices-front:
+  nm-libs-repo-utils:
+  nm-libs-shared-front:
+  nm-libs-test-lib-backend:
+  nm-libs-todos-backend:
+  nm-libs-todos-front:
+  nm-libs-users-backend:
+  nm-libs-users-front:
+
+networks:
+  boilerplate-network:
+    driver: bridge
