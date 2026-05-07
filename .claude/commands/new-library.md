@@ -22,4 +22,10 @@ The `*.packed.md` files are produced by `pnpm pack:tuto tuto/<file>.md` and inli
 
 Use the existing `@libs/users-front` (frontend) or `@libs/users-backend` (backend) as the structural reference — copy `package.json`, `tsconfig.json`, `tsdown.config.mts`, `vitest.config.mts` shape and dependencies from it. Replace `user` / `User` with the new library's name / entity.
 
+For backend libraries, follow the code style rules in `@libs/CLAUDE.md` (read it before generating code).
+
+## Verify
+
+After scaffolding is complete, run `pnpm -F @libs/<library-name> lint:js` **exactly once**, then refactor every reported violation in a single pass. Do not re-run lint to confirm — fix from the single output. This keeps token usage bounded.
+
 Do not commit unless asked.

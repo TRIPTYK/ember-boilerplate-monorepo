@@ -8,6 +8,13 @@
       "command": "npx",
       "args": ["chrome-devtools-mcp@latest"]
     },
+    "gitscrum": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "git@github.com:AmauryD/mcp-server.git"
+      ]
+    },
     "context7": {
       "type": "stdio",
       "command": "npx",
