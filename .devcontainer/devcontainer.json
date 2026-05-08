@@ -25,6 +25,9 @@
   },
   "customizations": {
     "vscode": {
+      "settings": {
+        "terminal.integrated.cwd": "/workspace"
+      },
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
