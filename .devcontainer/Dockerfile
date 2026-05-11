@@ -32,7 +32,6 @@ RUN npm install -g @anthropic-ai/claude-code
 
 WORKDIR /workspace
 
-COPY --chown=node:node . .
 RUN chown -R node:node /home/node
 RUN chown -R node:node /workspace
 
