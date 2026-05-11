@@ -40,6 +40,6 @@ USER node
 
 ENV PNPM_HOME=/home/node/.local/share/pnpm
 ENV PATH=$PNPM_HOME:$PATH
-ENV SHELL=/bin/bash
+ENV SHELL=/usr/bin/zsh
 
 CMD ["sleep", "infinity"]

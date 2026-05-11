@@ -1,5 +1,5 @@
 import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, type Plugin } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 
 import { ember, extensions } from '@embroider/vite';
@@ -8,12 +8,12 @@ import { loadTranslations } from '@ember-intl/vite';
 
 const PATCHED_ID = '\0patched-embroider-util';
 
-const patchEmbroiderUtil = () => {
+const patchEmbroiderUtil = (): Plugin => {
   let realPath: string | null = null;
   return {
     name: 'patch-embroider-util',
-    enforce: 'pre' as const,
-    async resolveId(id: string, importer: string | undefined) {
+    enforce: 'pre',
+    async resolveId(id, importer) {
       if (id !== '@embroider/util') return null;
       if (!realPath) {
         const resolved = await this.resolve(id, importer, { skipSelf: true });
@@ -22,7 +22,7 @@ const patchEmbroiderUtil = () => {
       }
       return PATCHED_ID;
     },
-    load(id: string) {
+    load(id) {
       if (id !== PATCHED_ID || !realPath) return null;
       return `export * from ${JSON.stringify(realPath)};\nexport const ensureSafeComponent = (c) => c;\n`;
     },

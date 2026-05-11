@@ -12,7 +12,6 @@ overrides:
   "@glimmer/component": "2.1.1"
   "@babel/core": "7.29.0"
   "fastify": "5.8.5"
-  "ember-basic-dropdown": "git+https://github.com/cibernox/ember-basic-dropdown/tree/dist"
 
 allowBuilds:
   '@swc/core': true
@@ -171,5 +170,5 @@ catalog:
   zod: ^4.0.0
 
 patchedDependencies:
-  '@embroider/vite': patches/@embroider__vite.patch
   ember-power-select-with-create: patches/ember-power-select-with-create.patch
+  ember-basic-dropdown: patches/ember-basic-dropdown.patch
