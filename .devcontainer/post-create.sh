@@ -22,4 +22,8 @@ if [ ! -f "$HOME/.p10k.zsh" ] && [ -f "$P10K_DIR/config/p10k-lean.zsh" ]; then
   cp "$P10K_DIR/config/p10k-lean.zsh" "$HOME/.p10k.zsh"
 fi
 
+if [ -f "$HOME/.p10k.zsh" ]; then
+  sed -i "s|^\(\s*typeset -g POWERLEVEL9K_MODE=\).*|\1ascii|" "$HOME/.p10k.zsh"
+fi
+
 echo "Devcontainer ready. Run: pnpm dev"
