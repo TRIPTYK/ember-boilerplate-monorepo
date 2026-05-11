@@ -8,20 +8,24 @@
   "workspaceFolder": "/workspace",
   "remoteUser": "node",
   "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/start-vnc.sh",
+  "forwardPorts": [6080, 51204],
+  "portsAttributes": {
+    "6080": { "label": "noVNC (test browser)", "onAutoForward": "notify" },
+    "51204": { "label": "Vitest UI", "onAutoForward": "notify" }
+  },
   "remoteEnv": {
     "EDITOR": "code --wait",
     "GIT_EDITOR": "code --wait",
     "VISUAL": "code --wait",
+    "DISPLAY": ":99",
     "PATH": "/home/node/.local/bin:${containerEnv:PATH}"
   },
+  "initializeCommand": "touch ${localEnv:HOME}/.claude.json",
   "features": {
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
-    "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
-    "ghcr.io/devcontainers/features/node:2": {},
     "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {}
-
   },
   "customizations": {
     "vscode": {
