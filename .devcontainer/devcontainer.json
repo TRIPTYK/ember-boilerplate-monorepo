@@ -7,7 +7,6 @@
   "service": "workspace",
   "workspaceFolder": "/workspace",
   "remoteUser": "node",
-  "onCreateCommand": "sudo chown -R node:node /workspace && if [ ! -d /workspace/.git ]; then git clone git@github.com:TRIPTYK/ember-boilerplate-monorepo.git /workspace; fi",
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "bash .devcontainer/start-vnc.sh",
   "forwardPorts": [6080, 51204],
