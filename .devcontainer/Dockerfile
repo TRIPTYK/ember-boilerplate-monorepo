@@ -1,4 +1,4 @@
-FROM node:24.15.0-bookworm
+FROM mcr.microsoft.com/playwright:v1.57.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
