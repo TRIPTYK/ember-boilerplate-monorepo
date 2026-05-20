@@ -1,0 +1,49 @@
+{
+  "name": "ember-boilerplate-monorepo",
+  "dockerComposeFile": [
+    "docker-compose.yml",
+    "../docker-compose.yaml"
+  ],
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "node",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "forwardPorts": [6080, 51204],
+  "portsAttributes": {
+    "6080": { "label": "noVNC (test browser)", "onAutoForward": "notify" },
+    "51204": { "label": "Vitest UI", "onAutoForward": "notify" }
+  },
+  "remoteEnv": {
+    "EDITOR": "code --wait",
+    "GIT_EDITOR": "code --wait",
+    "VISUAL": "code --wait",
+    "DISPLAY": ":1",
+    "PATH": "/home/node/.local/bin:${containerEnv:PATH}"
+  },
+  "initializeCommand": "touch ${localEnv:HOME}/.claude.json",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {},
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "webPort": "6080",
+      "vncPort": "5901",
+      "noVncVersion": "1.2.0",
+      "password": "vscode"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.cwd": "/workspace"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "lifeart.vscode-glimmer-syntax",
+        "ms-azuretools.vscode-docker",
+        "ms-playwright.playwright"
+      ]
+    }
+  }
+}

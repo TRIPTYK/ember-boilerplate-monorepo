@@ -6,6 +6,7 @@ import { Seeder } from "@mikro-orm/seeder";
  * E2E test seeder - creates users needed for Playwright e2e tests
  */
 export class E2ESeeder extends Seeder {
+  // oxlint-disable-next-line max-lines-per-function
   async run(em: EntityManager) {
     const hashedPassword = await hashPassword("123456789");
 

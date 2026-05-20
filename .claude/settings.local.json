@@ -1,0 +1,16 @@
+{
+  "enabledMcpjsonServers": [
+    "ember",
+    "chrome-devtools",
+    "gitscrum",
+    "context7",
+    "playwright"
+  ],
+  "permissions": {
+    "allow": [
+      "Read(//home/node/.oh-my-zsh/custom/themes/**)",
+      "Read(//home/node/.oh-my-zsh/custom/plugins/**)",
+      "Read(//home/node/**)"
+    ]
+  }
+}

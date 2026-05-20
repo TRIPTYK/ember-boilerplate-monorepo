@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpResponse } from 'msw';
-import type { paths } from '@apps/backend';
-import { createOpenApiHttp } from 'openapi-msw';
+import { http, HttpResponse } from 'msw';
 
 const mockTodos = [
   {
@@ -35,10 +33,8 @@ const mockTodos = [
   },
 ];
 
-const http = createOpenApiHttp<paths>();
-
 export default [
-  http.untyped.get('/api/v1/todos/:id', (req) => {
+  http.get('/api/v1/todos/:id', (req) => {
     const { id } = req.params;
     const todo = mockTodos.find((todo) => todo.id === id);
     if (todo) {
@@ -55,7 +51,7 @@ export default [
       );
     }
   }),
-  http.untyped.get('/api/v1/todos', ({ request }) => {
+  http.get('/api/v1/todos', ({ request }) => {
     const url = new URL(request.url);
     const searchQuery = url.searchParams.get('filter[search]');
     const sortParam = url.searchParams.get('sort');
@@ -100,7 +96,7 @@ export default [
       },
     });
   }),
-  http.untyped.post('/api/v1/todos', async (req) => {
+  http.post('/api/v1/todos', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
 
     return HttpResponse.json({
@@ -111,7 +107,7 @@ export default [
       },
     });
   }),
-  http.untyped.patch('/api/v1/todos/:id', async (req) => {
+  http.patch('/api/v1/todos/:id', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
 
     return HttpResponse.json({
@@ -122,7 +118,7 @@ export default [
       },
     });
   }),
-  http.untyped.put('/api/v1/todos/:id', async (req) => {
+  http.put('/api/v1/todos/:id', async (req) => {
     const json = (await req.request.json()) as Record<string, any>;
 
     return HttpResponse.json({
@@ -133,7 +129,7 @@ export default [
       },
     });
   }),
-  http.untyped.delete('/api/v1/todos/:id', (req) => {
+  http.delete('/api/v1/todos/:id', (req) => {
     const { id } = req.params;
     const todo = mockTodos.find((todo) => todo.id === id);
     if (todo) {

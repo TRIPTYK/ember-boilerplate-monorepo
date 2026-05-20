@@ -7,3 +7,6 @@ services:
       POSTGRES_DB: database_dev
     ports:
       - "5432:5432"
+
+    networks:
+      - boilerplate-network

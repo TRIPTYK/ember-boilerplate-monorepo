@@ -1,0 +1,19 @@
+{
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "1.1.0",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
+      "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
+    },
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {
+      "version": "2.0.0",
+      "resolved": "ghcr.io/mikaello/devcontainer-features/modern-shell-utils@sha256:60b5be4e306b6b2cc6b266201c1011a0cde28778743b19d07101c9b5fe652163",
+      "integrity": "sha256:60b5be4e306b6b2cc6b266201c1011a0cde28778743b19d07101c9b5fe652163"
+    },
+    "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
+      "version": "0.0.8",
+      "resolved": "ghcr.io/nils-geistmann/devcontainers-features/zsh@sha256:fd57a61a5187480b5e73f8041be5b67005be48f06503736df6cfdd8d0f38f3c4",
+      "integrity": "sha256:fd57a61a5187480b5e73f8041be5b67005be48f06503736df6cfdd8d0f38f3c4"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+services:
+  workspace:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    networks:
+      - boilerplate-network
+    volumes:
+      - ..:/workspace:cached
+      - ${HOME}/.claude:/home/node/.claude:bind
+      - ${HOME}/.claude.json:/home/node/.claude.json:bind
+      - ${HOME}/.ssh:/home/node/.ssh:ro
+      - pnpm-store:/home/node/.local/share/pnpm/store
+      - turbo-cache:/workspace/.turbo
+    environment:
+      DATABASE_URI: postgres://backend_user:backend_user@database:5432/database_dev
+      NODE_ENV: development
+    depends_on:
+      - database
+    user: node
+    command: sleep infinity
+
+volumes:
+  pnpm-store:
+  node-modules-cache:
+  turbo-cache:
+
+networks:
+  boilerplate-network:
+    driver: bridge

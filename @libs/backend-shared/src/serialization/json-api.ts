@@ -1,7 +1,7 @@
-import { literal, object, string, ZodObject, type ZodTypeAny } from "zod";
+import { literal, object, string, ZodObject, ZodType } from "zod";
 import { z } from "zod";
 
-export const makeJsonApiDocumentSchema = <T extends ZodObject>(
+export const makeJsonApiDocumentSchema = <T extends ZodType>(
   type: string,
   attributesSchema: T,
 ): ZodObject<
@@ -18,7 +18,7 @@ export const makeJsonApiDocumentSchema = <T extends ZodObject>(
     attributes: attributesSchema,
   });
 
-export const makeSingleJsonApiTopDocument = <T extends ZodTypeAny>(
+export const makeSingleJsonApiTopDocument = <T extends ZodType>(
   dataSchema: T,
 ): ZodObject<{
   data: T;
@@ -57,11 +57,7 @@ export type JsonApiErrorDocument = z.infer<typeof jsonApiErrorDocumentSchema>;
 export function makeJsonApiError(
   status: number,
   title: string,
-  options?: {
-    code?: string;
-    detail?: string;
-    source?: { pointer?: string; parameter?: string; header?: string };
-  },
+  options?: Partial<JsonApiError>,
 ): JsonApiErrorDocument {
   return {
     errors: [
@@ -71,6 +67,7 @@ export function makeJsonApiError(
         code: options?.code,
         detail: options?.detail,
         source: options?.source,
+        meta: options?.meta,
       },
     ],
   };

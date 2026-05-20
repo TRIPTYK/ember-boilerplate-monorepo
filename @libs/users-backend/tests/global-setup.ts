@@ -18,10 +18,9 @@ export async function setup() {
   const orm = await MikroORM.init({
     entities: [...entities],
     clientUrl: process.env.TEST_DATABASE_URL,
-    driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
   });
 
-  await orm.schema.refreshDatabase();
+  await orm.schema.refresh();
 
   const hashedPassword = await hash("testpassword");
   await orm.em.getRepository(UserEntity).insert({

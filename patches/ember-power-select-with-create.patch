@@ -17,7 +17,7 @@ index 96b803d433d4c574f8f7debe405f1191445cd29a..adc8d4ed6f3a4c7daba70860f4a4d510
    selectOrCreate(selection, select) {
      let suggestion = selection.filter(option => {
 diff --git a/dist/components/power-select-with-create.js b/dist/components/power-select-with-create.js
-index b2203ef879ed9f86556b898f8e537140ea6f20d8..436843f3fc69ef0373adba47802240f184353679 100644
+index b2203ef879ed9f86556b898f8e537140ea6f20d8..3d2ab52114a80d220952b57fb922b12449280842 100644
 --- a/dist/components/power-select-with-create.js
 +++ b/dist/components/power-select-with-create.js
 @@ -5,7 +5,6 @@ import { action, get } from '@ember/object';
@@ -33,11 +33,11 @@ index b2203ef879ed9f86556b898f8e537140ea6f20d8..436843f3fc69ef0373adba47802240f1
    }
    get powerSelectComponent() {
 -    return ensureSafeComponent(this.args.powerSelectComponent || PowerSelectComponent, this);
-+    return this.args.powerSelectComponent || PowerSelectComponent
++    return this.args.powerSelectComponent || PowerSelectComponent;
    }
    get suggestedOptionComponent() {
 -    return ensureSafeComponent(this.args.suggestedOptionComponent || SuggestedOptionComponent, this);
-+    return this.args.suggestedOptionComponent || SuggestedOptionComponent
++    return this.args.suggestedOptionComponent || SuggestedOptionComponent;
    }
    shouldShowCreateOption(term, options) {
      return this.args.showCreateWhen ? this.args.showCreateWhen(term, options) : true;

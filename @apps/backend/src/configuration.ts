@@ -13,7 +13,6 @@ const schema = object({
   JWT_SECRET: string(),
   JWT_REFRESH_SECRET: string(),
   SEED: string().default("42").optional(),
-  // Email configuration
   APP_NAME: string().default("Registr"),
   APP_URL: string().default("http://localhost:3000"),
   APP_LOGO_URL: string().optional(),
