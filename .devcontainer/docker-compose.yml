@@ -11,7 +11,6 @@ services:
       - ${HOME}/.ssh:/home/node/.ssh:ro
       - pnpm-store:/home/node/.local/share/pnpm/store
       - turbo-cache:/workspace/.turbo
-      - ../.git:/workspace/.git:cached
     environment:
       DATABASE_URI: postgres://backend_user:backend_user@database:5432/database_dev
       NODE_ENV: development
