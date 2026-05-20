@@ -31,6 +31,8 @@ First boot builds the image, brings up `database` (postgres 16 from the root `do
 
 - `4200` — Ember/Vite frontend
 - `5432` — Postgres (so you can `psql` from the host if needed)
+- `6080` — noVNC web viewer (Playwright headed runs / codegen). Open the forwarded port in a browser; password is `vscode`. Provided by the `desktop-lite` devcontainer feature.
+- `51204` — Vitest UI
 
 ## Notes
 

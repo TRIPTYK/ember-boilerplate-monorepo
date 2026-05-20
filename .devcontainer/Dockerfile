@@ -17,11 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         vim-tiny \
         openssh-client \
         sudo \
-        xvfb \
-        x11vnc \
-        fluxbox \
-        novnc \
-        websockify \
     && rm -rf /var/lib/apt/lists/* \
     && echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
