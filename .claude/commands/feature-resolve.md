@@ -213,9 +213,12 @@ Standards while implementing:
  
 Tests are expected for features unless the user explicitly waives them. Propose a test strategy:
  
-- New service/business logic → unit tests covering happy path + the edge cases identified in step 2
-- New endpoint → integration test covering auth, validation, happy path, one error path
-- New UI → at minimum, build passes and manual verification steps documented
+- New service/business logic → unit tests covering happy path + the edge cases identified in step 2 + at least one **error scenario** (thrown exception, invalid input, downstream failure)
+- New endpoint → integration test covering auth, validation, happy path, **and one or more error scenarios** (401/403, 422 validation failure, 404, downstream/dependency failure where relevant)
+- New UI → at minimum, build passes and manual verification steps documented, including how the UI behaves on error states (failed request, empty result, permission denied)
+ 
+Error scenarios are **not optional**. If you cannot identify a meaningful error path to test, say so explicitly and ask the user to confirm before skipping. The error-path tests should map directly to the failure-mode edge cases identified in step 2, axis 2.
+ 
 State your proposal and run it unless the user objects.
  
 ```bash
@@ -242,7 +245,12 @@ On approval:
  
 ```bash
 git add <relevant files>   # never git add -A — include docs/features/<slug>/domain.md if written
-git commit -m "feat: <concise English description>" --no-verify
+git commit -m "$(cat <<'EOF'
+feat: <concise English description>
+
+<1–3 short sentences explaining the WHY — the non-obvious motivation, constraint, or decision behind this change. Skip restating what the diff already shows. This is redundant with the GitScrum task and PR, but lives in `git blame` for future readers who want context without hunting down the ticket.>
+EOF
+)" --no-verify
 git push -u origin <branch-name>
  
 gh pr create \
@@ -324,7 +332,49 @@ git push
  
 The PR will pick up the new commit automatically.
  
-### 8. Resolve and close
+### 8. Self-audit (sub-agent)
+ 
+Before closing the task, spawn a **read-only** sub-agent (`subagent_type: general-purpose`) to verify the workflow was followed. This guards against mechanical omissions (missing Assumptions section, empty commit body, no error-path test, missing technical.md for Deep). It does **not** judge content quality — that's review's job.
+ 
+Pass the agent the following context:
+ 
+- Task UUID and title
+- Feature slug
+- Branch name
+- PR URL
+- Complexity classification (Light / Medium / Deep)
+- Base branch (`develop`)
+ 
+Ask the agent to check, in one report:
+ 
+1. **Domain spec** (Medium/Deep) — `docs/features/<slug>/domain.md` exists, has an `## Assumptions` section that is either explicitly "None — every decision was confirmed by the user." or contains at least one prefixed bullet (e.g. `[Auth] ...`). Empty/missing = GAP.
+2. **Technical spec** (Deep only) — `docs/features/<slug>/technical.md` exists with all sections from the template (Architecture, Data model, API contract, Key files, Notable choices, Deviations, Operational notes).
+3. **Commit messages** — every commit on the branch since `develop` has a subject line AND a non-empty body explaining the WHY (not just `feat: X` alone). Use `git log develop..HEAD --format='%H%n%s%n%b%n---'`.
+4. **Error-path tests** — diff includes at least one test exercising a failure scenario (grep the diff for patterns: `toThrow`, `.rejects`, `it('throws'`, `it('rejects'`, `it('error`, `it('fails`, status codes `401|403|404|422|5\d\d` in test files). If none found, GAP — unless the user explicitly waived tests in step 5.
+5. **PR body** — fetched via `gh pr view <url> --json body`, contains the sections `## Summary`, `## Spec`, `## Changes`, `## Test plan`. Empty sections = GAP.
+6. **Scope** — `git diff develop..HEAD --name-only` doesn't include files unrelated to the feature (e.g. random formatter sweeps, lockfile churn without dep changes, unrelated config edits). Flag suspicious entries; the main agent will decide if they're legitimate.
+7. **Hygiene** — no `console.log`, `debugger`, `TODO`/`FIXME` added by this branch, no commented-out code blocks. Use `git diff develop..HEAD`.
+ 
+The agent must return a structured report:
+ 
+```
+STATUS: PASS | GAPS
+ 
+GAPS:
+- [check N] <one-line description> — <file:line or evidence>
+- ...
+ 
+NOTES:
+- <anything worth surfacing that isn't a hard gap>
+```
+ 
+Cap the report at ~300 words. The agent should **not** modify files, push, or comment on the task — it only reports.
+ 
+On PASS: proceed to step 9.
+ 
+On GAPS: show the report to the user, fix the gaps (or get explicit waiver per gap), then re-run the audit. Do not skip to step 9 with open gaps unless the user explicitly accepts them.
+ 
+### 9. Resolve and close
  
 Post a comment on the task via `mcp__gitscrum__comment` (action: add). Write in French, no markdown, use line breaks between sections:
  

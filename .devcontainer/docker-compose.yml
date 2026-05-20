@@ -6,6 +6,7 @@ services:
     networks:
       - boilerplate-network
     volumes:
+      - ..:/workspace:cached
       - ${HOME}/.claude:/home/node/.claude:bind
       - ${HOME}/.claude.json:/home/node/.claude.json:bind
       - ${HOME}/.ssh:/home/node/.ssh:ro
