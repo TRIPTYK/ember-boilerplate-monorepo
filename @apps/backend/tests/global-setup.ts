@@ -20,7 +20,7 @@ export async function setup() {
     driver: await import("@mikro-orm/postgresql").then((m) => m.PostgreSqlDriver),
   });
 
-  await orm.schema.refreshDatabase();
+  await orm.schema.refresh();
 
   await orm.close();
 }

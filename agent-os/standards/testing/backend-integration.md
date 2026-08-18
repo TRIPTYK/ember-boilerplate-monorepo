@@ -31,7 +31,7 @@ export async function setup() {
     entities: [...todoEntities, ...userEntities],
     clientUrl: process.env.TEST_DATABASE_URL,
   });
-  await orm.schema.refreshDatabase();
+  await orm.schema.refresh();
   // Seed test user for auth
   await orm.close();
 }
