@@ -19,7 +19,8 @@ module.exports = {
     [
       'babel-plugin-ember-template-compilation',
       {
-        compilerPath: 'ember-source/dist/ember-template-compiler.js',
+        // ember-source 7 ne publie plus dist/ember-template-compiler.js ;
+        // le plugin resout lui-meme ember-source/ember-template-compiler/index.js
         enableLegacyModules: [
           'ember-cli-htmlbars',
           'ember-cli-htmlbars-inline-precompile',

@@ -119,7 +119,6 @@
     "stylelint-config-tailwindcss": "^1.0.1",
     "tailwindcss": "catalog:",
     "testem": "^3.16.0",
-    "tracked-built-ins": "catalog:",
     "typescript": "^5.9.3",
     "typescript-eslint": "~8.54.0",
     "vite": "8.0.0-beta.15",
@@ -127,7 +126,7 @@
     "zod": "~4.3.6"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.19.0"
   },
   "ember": {
     "edition": "octane"

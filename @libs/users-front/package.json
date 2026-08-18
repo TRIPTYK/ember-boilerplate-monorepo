@@ -104,6 +104,7 @@
     "ember-basic-dropdown": "catalog:",
     "ember-cli-flash": "catalog:",
     "ember-concurrency": "catalog:",
+    "ember-cookies": "^1.4.1",
     "ember-load-initializers": "catalog:",
     "ember-page-title": "catalog:",
     "ember-resolver": "catalog:",
