@@ -86,7 +86,7 @@
     "@libs/repo-utils": "workspace:^",
     "@rollup/plugin-alias": "catalog:",
     "@rollup/plugin-babel": "^6.0.4",
-    "@vitest/browser": "^4.0.18",
+    "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@warp-drive/build-config": "catalog:",
     "@warp-drive/core-types": "catalog:",

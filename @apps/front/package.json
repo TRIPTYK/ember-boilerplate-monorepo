@@ -69,7 +69,7 @@
     "@triptyk/ember-yeti-table": "^3.0.0",
     "@types/node": "^25.1.0",
     "@types/rsvp": "catalog:",
-    "@vitest/browser": "^4.0.17",
+    "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@warp-drive/build-config": "catalog:",
     "@warp-drive/core": "catalog:",
