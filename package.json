@@ -21,7 +21,8 @@
       "zod": "^4.0.0",
       "@glimmer/component": "^2.1.1",
       "ember-lifeline": "^7.1.0",
-      "ember-basic-dropdown": "git+https://github.com/cibernox/ember-basic-dropdown/tree/dist"
+      "ember-basic-dropdown": "https://codeload.github.com/cibernox/ember-basic-dropdown/tar.gz/2927c3761834e1469164196c05ea23b0e139ecbb",
+      "ember-power-select": "https://codeload.github.com/cibernox/ember-power-select/tar.gz/8cd72be13b783479641d2c64f33e014a452190c2"
     },
     "patchedDependencies": {
       "@embroider/vite": "patches/@embroider__vite.patch",

@@ -66,7 +66,7 @@ catalog:
   '@warp-drive/core': 5.8.2
   '@warp-drive/core-types': 5.8.2
   '@warp-drive/ember': 5.8.2
-  '@warp-drive/experiments': ~0.2.7
+  '@warp-drive/experiments': ~0.2.8
   '@warp-drive/json-api': 5.8.2
   '@warp-drive/legacy': 5.8.2
   '@warp-drive/utilities': 5.8.2
