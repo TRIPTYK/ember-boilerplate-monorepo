@@ -61,7 +61,7 @@
     "@libs/users-front": "workspace:^",
     "@libs/todos-front": "workspace:^",
     "@playwright/test": "catalog:",
-    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-babel": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@triptyk/ember-input": "catalog:",
     "@triptyk/ember-input-validation": "catalog:",

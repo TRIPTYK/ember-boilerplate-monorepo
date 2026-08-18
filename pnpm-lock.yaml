@@ -126,6 +126,9 @@ catalogs:
     '@rollup/plugin-alias':
       specifier: ^6.0.0
       version: 6.0.0
+    '@rollup/plugin-babel':
+      specifier: ^7.1.0
+      version: 7.1.0
     '@swc/core':
       specifier: ^1.10.8
       version: 1.15.11
@@ -730,8 +733,8 @@ importers:
         specifier: 'catalog:'
         version: 1.58.1
       '@rollup/plugin-babel':
-        specifier: ^6.1.0
-        version: 6.1.0(@babel/core@7.29.7)(rollup@4.57.1)
+        specifier: 'catalog:'
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.57.1)
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.1.18(vite@8.2.1(@types/node@25.2.0)(esbuild@0.27.2)(jiti@2.7.0)(terser@5.46.0)(yaml@2.9.0))
@@ -1064,8 +1067,8 @@ importers:
         specifier: 'catalog:'
         version: 6.0.0(rollup@4.57.1)
       '@rollup/plugin-babel':
-        specifier: ^6.0.4
-        version: 6.1.0(@babel/core@7.29.7)(rollup@4.57.1)
+        specifier: 'catalog:'
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.57.1)
       '@vitest/browser':
         specifier: 'catalog:'
         version: 4.1.10(msw@2.12.8(@types/node@25.2.0)(typescript@5.9.3))(vite@8.2.1(@types/node@25.2.0)(esbuild@0.27.2)(jiti@2.7.0)(terser@5.46.0)(yaml@2.9.0))(vitest@4.1.10)
@@ -1387,8 +1390,8 @@ importers:
         specifier: 'catalog:'
         version: 6.0.0(rollup@4.57.1)
       '@rollup/plugin-babel':
-        specifier: ^6.0.4
-        version: 6.1.0(@babel/core@7.29.7)(rollup@4.57.1)
+        specifier: 'catalog:'
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.57.1)
       '@vitest/browser':
         specifier: 'catalog:'
         version: 4.1.10(msw@2.12.8(@types/node@25.2.0)(typescript@5.9.3))(vite@8.2.1(@types/node@25.2.0)(esbuild@0.27.2)(jiti@2.7.0)(terser@5.46.0)(yaml@2.9.0))(vitest@4.1.10)
@@ -1827,8 +1830,8 @@ importers:
         specifier: 'catalog:'
         version: 6.0.0(rollup@4.57.1)
       '@rollup/plugin-babel':
-        specifier: ^6.0.4
-        version: 6.1.0(@babel/core@7.29.7)(rollup@4.57.1)
+        specifier: 'catalog:'
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.57.1)
       '@vitest/browser':
         specifier: 'catalog:'
         version: 4.1.10(msw@2.12.8(@types/node@25.2.0)(typescript@5.9.3))(vite@8.2.1(@types/node@25.2.0)(esbuild@0.27.2)(jiti@2.7.0)(terser@5.46.0)(yaml@2.9.0))(vitest@4.1.10)
@@ -4150,13 +4153,13 @@ packages:
       rollup:
         optional: true
 
-  '@rollup/plugin-babel@6.1.0':
-    resolution: {integrity: sha512-dFZNuFD2YRcoomP4oYf+DvQNSUA9ih+A3vUqopQx5EdtPGo3WBnQcI/S8pwpz91UsGfL0HsMSOlaMld8HrbubA==}
+  '@rollup/plugin-babel@7.1.0':
+    resolution: {integrity: sha512-h9Y+xYha6p4wKO+FwdiPIkE+eIYCm8MzZPpX1iARIoFBnmKP9CnpT1p9dDf/DTFm6fyN8PmuLyRI5qZgchnitw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
       '@types/babel__core': ^7.1.9
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+      rollup: ^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       '@types/babel__core':
         optional: true
@@ -11454,6 +11457,9 @@ packages:
   workerpool@6.5.1:
     resolution: {integrity: sha512-Fs4dNYcsdpYSAfVxhnl1L5zTksjvOJxtC5hzMNl+1t9B8hTJTdKDyZ5ju7ztgPy+ft9tBFXoOlDNiOT9WUXZlA==}
 
+  workerpool@9.3.4:
+    resolution: {integrity: sha512-TmPRQYYSAnnDiEB0P/Ytip7bFGvqnSU6I2BcuSw7Hx+JSg/DsUi5ebYfc8GYaSdpuvOcEs6dXxPurOYpe9QFwg==}
+
   wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}
     engines: {node: '>=8'}
@@ -14131,11 +14137,12 @@ snapshots:
     optionalDependencies:
       rollup: 4.57.1
 
-  '@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.57.1)':
+  '@rollup/plugin-babel@7.1.0(@babel/core@7.29.7)(rollup@4.57.1)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-module-imports': 7.28.6
+      '@babel/helper-module-imports': 7.29.7
       '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
+      workerpool: 9.3.4
     optionalDependencies:
       rollup: 4.57.1
     transitivePeerDependencies:
@@ -22731,6 +22738,8 @@ snapshots:
       - supports-color
 
   workerpool@6.5.1: {}
+
+  workerpool@9.3.4: {}
 
   wrap-ansi@6.2.0:
     dependencies:

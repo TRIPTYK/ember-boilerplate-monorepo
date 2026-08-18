@@ -85,7 +85,7 @@
     "@glint/tsserver-plugin": "catalog:",
     "@libs/repo-utils": "workspace:^",
     "@rollup/plugin-alias": "catalog:",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-babel": "catalog:",
     "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@warp-drive/build-config": "catalog:",

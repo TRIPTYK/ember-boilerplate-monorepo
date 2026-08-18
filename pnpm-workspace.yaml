@@ -46,6 +46,7 @@ catalog:
   '@ngneat/falso': ^8.0.2
   '@playwright/test': ^1.58.0
   '@rollup/plugin-alias': ^6.0.0
+  '@rollup/plugin-babel': ^7.1.0
   '@swc/core': ^1.10.8
   '@tailwindcss/vite': ^4.1.18
   '@testcontainers/rabbitmq': ^11.11.0
