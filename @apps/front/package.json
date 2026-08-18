@@ -35,10 +35,10 @@
   },
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@babel/eslint-parser": "~7.28.6",
+    "@babel/eslint-parser": "catalog:",
     "@babel/plugin-transform-runtime": "catalog:",
-    "@babel/plugin-transform-typescript": "~7.28.6",
-    "@babel/runtime": "~7.28.6",
+    "@babel/plugin-transform-typescript": "catalog:",
+    "@babel/runtime": "catalog:",
     "@ember-data/debug": "catalog:",
     "@ember-intl/vite": "catalog:",
     "@ember/app-tsconfig": "^2.0.0",

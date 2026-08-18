@@ -64,9 +64,9 @@
   "devDependencies": {
     "@apps/backend": "workspace:^",
     "@babel/core": "catalog:",
-    "@babel/eslint-parser": "^7.25.1",
-    "@babel/plugin-transform-typescript": "^7.25.2",
-    "@babel/runtime": "^7.25.6",
+    "@babel/eslint-parser": "catalog:",
+    "@babel/plugin-transform-typescript": "catalog:",
+    "@babel/runtime": "catalog:",
     "@ember/app-tsconfig": "~2.0.0",
     "@ember/library-tsconfig": "catalog:",
     "@ember/string": "catalog:",
