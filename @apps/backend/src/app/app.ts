@@ -175,6 +175,7 @@ export class App {
   public async start() {
     await this.fastify.listen({
       port: this.context.configuration.PORT,
+      host: this.context.configuration.HOST,
     });
   }
 
