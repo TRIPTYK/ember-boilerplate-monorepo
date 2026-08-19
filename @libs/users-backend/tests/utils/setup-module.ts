@@ -6,6 +6,7 @@ import {
   type FastifyInstanceTypeForModule,
   AuthModule,
 } from "#src/index.js";
+import { registerRequestContext } from "@libs/backend-shared";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -48,17 +49,16 @@ export class TestModule {
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
-    // Use the same forked em for both modules to share transaction context
-    const sharedEm = orm.em.fork();
+    registerRequestContext(fastifyInstance, orm.em);
 
     const module = UserModule.init({
-      em: sharedEm,
+      em: orm.em,
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
       },
     });
     const authModule = AuthModule.init({
-      em: sharedEm,
+      em: orm.em,
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
         jwtRefreshSecret: TestModule.JWT_REFRESH_SECRET,
@@ -75,7 +75,20 @@ export class TestModule {
   }
 
   get em() {
-    return this.module["context"].em;
+    return this.orm.em;
+  }
+
+  public async isolate(runTest: () => Promise<void>) {
+    class Rollback extends Error {}
+
+    await this.orm.em
+      .transactional(async () => {
+        await runTest();
+        throw new Rollback();
+      })
+      .catch((error: unknown) => {
+        if (!(error instanceof Rollback)) throw error;
+      });
   }
 
   public generateBearerToken(userId: string) {
@@ -96,13 +109,12 @@ export class TestModule {
     options?: { revoked?: boolean; expired?: boolean },
   ) {
     const tokenHash = hashToken(refreshToken);
-    const refreshTokenRepo = this.em.getRepository(RefreshTokenEntity);
 
     const expiresAt = options?.expired
       ? new Date(Date.now() - 1000).toISOString()
       : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    refreshTokenRepo.create({
+    await this.em.getRepository(RefreshTokenEntity).insert({
       id: randomUUID(),
       tokenHash,
       userId,
@@ -114,8 +126,6 @@ export class TestModule {
       revokedAt: options?.revoked ? new Date().toISOString() : null,
       familyId: generateFamilyId(),
     });
-
-    await this.em.flush();
   }
 
   public async createUser(data: {

@@ -14,11 +14,7 @@ afterAll(async () => {
   await module.close();
 });
 
-aroundEach(async (runTest) => {
-  await module.em.begin();
-  await runTest();
-  await module.em.rollback();
-});
+aroundEach((runTest) => module.isolate(runTest));
 
 test("GetRoute returns todo in JSON:API format", async () => {
   await module.createTodo({
