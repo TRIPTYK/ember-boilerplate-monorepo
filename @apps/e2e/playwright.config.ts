@@ -1,8 +1,17 @@
 import { defineConfig, devices } from "@playwright/test";
+import { API_URL } from "./fixtures/api.ts";
+import { STORAGE_STATE } from "./fixtures/storage-state.ts";
+
+const APP_URL = "http://localhost:4200";
 
 /**
- * E2E test configuration
- * Runs Playwright tests against the real backend
+ * E2E configuration — runs the real frontend against the real backend and a
+ * real PostgreSQL database. Nothing is mocked here; MSW is disabled through
+ * `VITE_MOCK_API=false`.
+ *
+ * Tests are split in two projects:
+ *  - `anonymous`     starts with an empty browser, and owns the login flow.
+ *  - `authenticated` reuses the session saved by the `setup` project.
  */
 export default defineConfig({
   testDir: "./tests",
@@ -13,15 +22,33 @@ export default defineConfig({
   reporter: [["html", { open: "never" }], ["list"]],
 
   use: {
-    baseURL: "http://localhost:4200",
+    baseURL: APP_URL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
 
   projects: [
     {
-      name: "chromium",
+      name: "setup",
+      testMatch: /auth\.setup\.ts/,
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "anonymous",
+      testDir: "./tests/anonymous",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: { cookies: [], origins: [] },
+      },
+    },
+    {
+      name: "authenticated",
+      testDir: "./tests/authenticated",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: STORAGE_STATE,
+      },
     },
   ],
 
@@ -29,7 +56,7 @@ export default defineConfig({
   webServer: [
     {
       command: "pnpm --filter @apps/backend start:e2e",
-      url: "http://localhost:8000/api/v1/status",
+      url: `${API_URL}/api/v1/status`,
       timeout: 240_000,
       reuseExistingServer: !process.env.CI,
       cwd: "../..",
@@ -37,13 +64,13 @@ export default defineConfig({
     {
       command:
         "pnpm vite build --mode e2e && pnpm vite preview --mode e2e --port 4200",
-      url: "http://localhost:4200",
+      url: APP_URL,
       timeout: 240_000,
       reuseExistingServer: !process.env.CI,
       cwd: "../front",
       env: {
         VITE_MOCK_API: "false",
-        VITE_API_URL: "http://localhost:8000",
+        VITE_API_URL: API_URL,
       },
     },
   ],

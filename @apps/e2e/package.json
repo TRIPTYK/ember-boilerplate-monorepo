@@ -10,10 +10,12 @@
     "test:headed": "pnpm run setup && playwright test --headed",
     "test:debug": "pnpm run setup && playwright test --debug",
     "setup": "tsx scripts/setup.ts && pnpm run setup:db",
-    "setup:db": "tsx scripts/setup-db.ts"
+    "setup:db": "tsx scripts/setup-db.ts",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@playwright/test": "catalog:",
-    "@types/node": "^25.2.0"
+    "@types/node": "^25.2.0",
+    "typescript": "^5.9.3"
   }
 }
