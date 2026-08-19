@@ -20,6 +20,7 @@ import { appRouter } from "./app.router.js";
 import type { ApplicationContext } from "./application.context.js";
 import { logger } from "./logger.js";
 import { UserModule, AuthModule } from "@libs/users-backend";
+import { registerRequestContext } from "@libs/backend-shared";
 import { Module as TodoModule } from "@libs/todos-backend";
 
 export type FastifyInstanceType = FastifyInstance<
@@ -58,6 +59,9 @@ export class App {
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
     const fastify: FastifyInstanceType = fastifyInstance.withTypeProvider<ZodTypeProvider>();
+
+    registerRequestContext(fastify, context.orm.em);
+
     await fastify.register(import("@fastify/cors"), {
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
@@ -155,16 +159,16 @@ export class App {
           jwtRefreshSecret: this.context.configuration.JWT_REFRESH_SECRET,
           jwtSecret: this.context.configuration.JWT_SECRET,
         },
-        em: this.context.orm.em.fork(),
+        em: this.context.orm.em,
       }),
       userModule: UserModule.init({
-        em: this.context.orm.em.fork(),
+        em: this.context.orm.em,
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
         },
       }),
       todosModule: TodoModule.init({
-        em: this.context.orm.em.fork(),
+        em: this.context.orm.em,
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
         },

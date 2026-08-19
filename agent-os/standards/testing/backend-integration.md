@@ -1,6 +1,9 @@
 # Backend Integration Testing
 
-Integration tests use a real PostgreSQL database via Testcontainers, with transaction rollback for isolation.
+Integration tests use a real PostgreSQL database via Testcontainers, with transaction rollback for
+isolation. Because `EntityManager#getContext()` prefers the `TransactionContext` over the
+`RequestContext`, the test transaction wins over the per-request fork and everything the routes do
+is rolled back.
 
 ## Vitest config
 
@@ -53,8 +56,25 @@ export class TestModule {
   public static async init() {
     const orm = await MikroORM.init({ clientUrl: process.env.TEST_DATABASE_URL, ... });
     const fastifyInstance = fastify().withTypeProvider<ZodTypeProvider>();
-    // set compilers, init module, setupRoutes
+    // set compilers
+    registerRequestContext(fastifyInstance, orm.em); // same wiring as production
+    // init module with `em: orm.em` (root EM, never a fork), setupRoutes
     return new TestModule(module, orm);
+  }
+
+  get em() { return this.orm.em; }
+
+  public async isolate(runTest: () => Promise<void>) {
+    class Rollback extends Error {}
+
+    await this.orm.em
+      .transactional(async () => {
+        await runTest();
+        throw new Rollback();
+      })
+      .catch((error: unknown) => {
+        if (!(error instanceof Rollback)) throw error;
+      });
   }
 
   generateBearerToken(userId: string) { ... }
@@ -62,6 +82,11 @@ export class TestModule {
   async close() { ... }
 }
 ```
+
+`TestModule` wires Fastify exactly like `App.init` does: the modules get the **root** `orm.em` and a
+`RequestContext` is opened per request. `isolate()` is duplicated in each library's
+`setup-module.ts` — there is no shared test package to hold it, and 8 lines do not justify creating
+one.
 
 ## Test structure
 
@@ -71,11 +96,7 @@ let module: TestModule;
 beforeAll(async () => { module = await TestModule.init(); });
 afterAll(async () => { await module.close(); });
 
-aroundEach(async (runTest) => {
-  await module.em.begin();
-  await runTest();
-  await module.em.rollback();
-});
+aroundEach((runTest) => module.isolate(runTest));
 
 test("creates a todo", async () => {
   const response = await module.fastifyInstance.inject({
@@ -88,9 +109,25 @@ test("creates a todo", async () => {
 });
 ```
 
+## Seed helpers use `insert()`
+
+Seed helpers (`createUser`, `createTodo`, `storeRefreshToken`, …) use `repo.insert()`, never
+`repo.create()` + `em.flush()`.
+
+`create` / `find` / `persist` / `flush` go through `getContext()` **with validation**, so they throw
+`ValidationError.cannotUseGlobalContext()` when called on the root EM outside a request and outside
+a transaction — which is exactly what a `beforeAll` seed does. `insert()` goes through
+`getContext(false)`: no validation, and it still resolves the `TransactionContext`, so a seed called
+from inside `isolate()` joins the test transaction and is rolled back with it.
+
+Never set `allowGlobalContext: true` to work around this. With `true`, a route accidentally using
+the global EM would pass the tests silently — the very regression this setup is meant to catch.
+
 ## Rules
 
-- Use `aroundEach` with `em.begin()` / `em.rollback()` for test isolation (default strategy)
+- Use `aroundEach((runTest) => module.isolate(runTest))` for test isolation (default strategy)
+- Seed helpers use `repo.insert()`, never `create()` + `flush()`
+- Never enable `allowGlobalContext` in tests
 - One test file per route: `tests/integration/{action}.route.test.ts`
 - Use `fastify.inject()` for HTTP testing — no real server needed
 - Test success cases, validation errors, 404s, and auth failures

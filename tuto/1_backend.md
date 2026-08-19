@@ -206,7 +206,9 @@
       import { Module as TodoModule } from "@libs/todos-backend";
 
       const todosModule = TodoModule.init({
-        em: context.orm.em.fork(),
+        // L'EntityManager racine, jamais un fork : c'est lui qui résout le
+        // RequestContext ouvert par requête dans App.init.
+        em: context.orm.em,
         configuration: {
           jwtSecret: this.context.configuration.JWT_SECRET,
         },

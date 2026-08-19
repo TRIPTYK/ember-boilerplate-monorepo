@@ -645,6 +645,9 @@ importers:
       '@types/node':
         specifier: ^25.2.0
         version: 25.2.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   '@apps/front':
     devDependencies:
@@ -934,6 +937,9 @@ importers:
       '@libs/repo-utils':
         specifier: workspace:^
         version: link:../repo-utils
+      '@mikro-orm/core':
+        specifier: 'catalog:'
+        version: 7.1.12
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20260202.1

@@ -14,11 +14,7 @@ afterAll(async () => {
   await module.close();
 });
 
-aroundEach(async (runTest) => {
-  await module.em.begin();
-  await runTest();
-  await module.em.rollback();
-});
+aroundEach((runTest) => module.isolate(runTest));
 
 test("ListRoute returns users in JSON:API format with meta", async () => {
   const response = await module.fastifyInstance.inject({

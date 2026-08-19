@@ -26,8 +26,12 @@
     "fastify-type-provider-zod": "catalog:",
     "zod": "catalog:"
   },
+  "peerDependencies": {
+    "@mikro-orm/core": "catalog:"
+  },
   "devDependencies": {
     "@libs/repo-utils": "workspace:^",
+    "@mikro-orm/core": "catalog:",
     "@typescript/native-preview": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",

@@ -5,15 +5,18 @@ on: [push, release]
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: wyvox/action-setup-pnpm@v3
       - name: Build
         run: pnpm turbo build --filter='@libs/*'
-      - name: Install Playwright Browsers
-        working-directory: ./@apps/e2e
-        run: pnpm exec playwright install --with-deps chromium
+      # The frontend vitest suites run in browser mode through
+      # @vitest/browser-playwright, so they need chromium just like the e2e job.
+      - name: Setup Playwright
+        uses: ./.github/actions/setup-playwright
+        with:
+          working-directory: ./@apps/front
       - name: Lint
         run: pnpm turbo lint
       - name: Run frontend tests

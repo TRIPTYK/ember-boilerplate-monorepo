@@ -5,6 +5,7 @@ import {
   type FastifyInstanceTypeForModule,
 } from "#src/index.js";
 import { entities as userEntities } from "@libs/users-backend";
+import { registerRequestContext } from "@libs/backend-shared";
 import { MikroORM } from "@mikro-orm/core";
 import { fastify } from "fastify";
 import {
@@ -44,8 +45,10 @@ export class TestModule {
     fastifyInstance.setValidatorCompiler(validatorCompiler);
     fastifyInstance.setSerializerCompiler(serializerCompiler);
 
+    registerRequestContext(fastifyInstance, orm.em);
+
     const module = Module.init({
-      em: orm.em.fork(),
+      em: orm.em,
       configuration: {
         jwtSecret: TestModule.JWT_SECRET,
       },
@@ -60,7 +63,20 @@ export class TestModule {
   }
 
   get em() {
-    return this.module["context"].em;
+    return this.orm.em;
+  }
+
+  public async isolate(runTest: () => Promise<void>) {
+    class Rollback extends Error {}
+
+    await this.orm.em
+      .transactional(async () => {
+        await runTest();
+        throw new Rollback();
+      })
+      .catch((error: unknown) => {
+        if (!(error instanceof Rollback)) throw error;
+      });
   }
 
   public generateBearerToken(userId: string) {
