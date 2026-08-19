@@ -6,6 +6,7 @@ export async function getTestContext() {
     DEBUG: true,
     PRODUCTION_ENV: false,
     PORT: 8001,
+    HOST: "127.0.0.1",
     DATABASE_URI: process.env.TEST_DATABASE_URL ?? "",
     SERVER_URL: "http://localhost:8001",
     SEED: "test",

@@ -3,6 +3,9 @@ import type z from "zod";
 
 const schema = object({
   PORT: string().transform(Number),
+  // An explicit host avoids fastify's `localhost` dual-bind path, whose async
+  // dns.lookup dereferences a closed server during HMR reloads.
+  HOST: string().default("127.0.0.1"),
   SERVER_URL: string(),
   PRODUCTION_ENV: string().transform((v) => v === "true"),
   DEBUG: string()
