@@ -219,6 +219,9 @@ catalogs:
     argon2:
       specifier: ^0.44.0
       version: 0.44.0
+    concurrently:
+      specifier: ^9.2.1
+      version: 9.2.1
     daisyui:
       specifier: ~5.5.14
       version: 5.5.17
@@ -425,6 +428,9 @@ importers:
 
   .:
     devDependencies:
+      concurrently:
+        specifier: 'catalog:'
+        version: 9.2.1
       git-conventional-commits:
         specifier: 'catalog:'
         version: 2.8.0
