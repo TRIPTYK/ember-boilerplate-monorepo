@@ -18,7 +18,6 @@ export class E2ESeeder extends Seeder {
       password: hashedPassword,
     });
 
-    // Mock users that match the MSW mock data
     em.create(UserEntity, {
       id: "1",
       email: "john.doe@example.com",

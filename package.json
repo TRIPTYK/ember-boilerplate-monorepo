@@ -8,7 +8,7 @@
     "lint:fix": "pnpm turbo run lint:fix",
     "format": "pnpm turbo run format",
     "lint:format": "pnpm turbo run lint:format",
-    "dev:front": "pnpm --filter=@apps/front run start:with-back",
+    "dev:front": "pnpm --filter=@apps/front run start",
     "dev:back": "pnpm --filter=@apps/backend run dev",
     "dev": "concurrently \"pnpm:dev:*\" --names \"dev:\" --prefixColors auto"
   },
@@ -38,7 +38,6 @@
       "esbuild",
       "geckodriver",
       "lefthook",
-      "msw",
       "protobufjs",
       "sqlite3",
       "ssh2"

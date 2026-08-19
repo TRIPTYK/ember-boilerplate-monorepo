@@ -41,8 +41,6 @@ frontend:
     description: Zod + ImmerChangeset + TpkForm component pattern
   helpers:
     description: Pure function helpers with typed signatures for templates
-  http-mocks:
-    description: MSW mock handlers with openapi-msw
   index-entry-point:
     description: Required exports from src/index.ts (moduleRegistry, initialize, forRouter)
   lib-structure:
@@ -77,8 +75,8 @@ testing:
     description: Testcontainers PostgreSQL, TestModule pattern, transaction rollback isolation
   e2e-playwright:
     description: Playwright E2E tests with role-based selectors
-  msw-mocking:
-    description: Type-safe API mocking with openapi-msw
+  api-mocking:
+    description: Mocking API calls in tests via vi.mock or the store request chain
   page-objects:
     description: Page object exports from component files for testing
   rendering-tests:

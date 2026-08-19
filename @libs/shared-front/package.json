@@ -62,7 +62,6 @@
     "ember-strict-application-resolver": "catalog:"
   },
   "devDependencies": {
-    "@apps/backend": "workspace:^",
     "@babel/core": "catalog:",
     "@babel/eslint-parser": "catalog:",
     "@babel/plugin-transform-typescript": "catalog:",

@@ -14,6 +14,7 @@ import AdaptiveStore from 'ember-simple-auth/session-stores/adaptive';
 import SessionService from 'ember-simple-auth/services/session';
 import setupSession from 'ember-simple-auth/initializers/setup-session';
 import type Owner from '@ember/owner';
+import type { Handler } from '@warp-drive/core/request';
 import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
 import UserSchema from '#src/schemas/users.ts';
@@ -52,17 +53,24 @@ export class TestApp extends Application {
   };
 }
 
-export default class TestStore extends useLegacyStore({
-  linksMode: false,
-  legacyRequests: true,
-  modelFragments: true,
-  cache: JSONAPICache,
-  schemas: [UserSchema],
-}) {}
+export function createTestStore(handlers: Handler[] = []) {
+  return class TestStore extends useLegacyStore({
+    linksMode: false,
+    legacyRequests: true,
+    modelFragments: true,
+    cache: JSONAPICache,
+    schemas: [UserSchema],
+    handlers,
+  }) {};
+}
 
-export async function initializeTestApp(owner: Owner, locale: string) {
+export async function initializeTestApp(
+  owner: Owner,
+  locale: string,
+  handlers: Handler[] = []
+) {
   owner.register('session-stores:application', AdaptiveStore);
-  owner.register('service:store', TestStore);
+  owner.register('service:store', createTestStore(handlers));
   owner.register('service:flash-messages', FlashMessageService);
   owner.register('config:environment', { flashMessageDefaults: {} });
   // eslint-disable-next-line ember/no-private-routing-service

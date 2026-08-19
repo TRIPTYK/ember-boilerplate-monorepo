@@ -6,8 +6,8 @@ const APP_URL = "http://localhost:4200";
 
 /**
  * E2E configuration — runs the real frontend against the real backend and a
- * real PostgreSQL database. Nothing is mocked here; MSW is disabled through
- * `VITE_MOCK_API=false`.
+ * real PostgreSQL database. Nothing is mocked here: the frontend has no mock
+ * layer at all, it always talks to the API through the vite proxy.
  *
  * Tests are split in two projects:
  *  - `anonymous`     starts with an empty browser, and owns the login flow.
@@ -69,7 +69,6 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       cwd: "../front",
       env: {
-        VITE_MOCK_API: "false",
         VITE_API_URL: API_URL,
       },
     },

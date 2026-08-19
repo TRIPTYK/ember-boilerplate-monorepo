@@ -24,17 +24,7 @@ await initialize{Name}Lib(getOwner(this)!);
 // or without await if initialize is sync
 ```
 
-## 3. Register mock handlers
-
-Same file, `routes/application.ts`:
-```typescript
-import all{Name}Handlers from '@libs/{name}-front/http-mocks/all';
-
-// In beforeModel(), add to setupWorker:
-const worker = setupWorker(...allUsersHandlers, ...all{Name}Handlers);
-```
-
-## 4. Register routes
+## 3. Register routes
 
 `@apps/front/app/router.ts`:
 ```typescript
@@ -47,7 +37,7 @@ Router.map(function () {
 });
 ```
 
-## 5. Register schema in store
+## 4. Register schema in store
 
 `@apps/front/app/services/store.ts`:
 ```typescript
@@ -57,14 +47,14 @@ import {Entity}Schema from '@libs/{name}-front/schemas/{entities}';
 schemas: [UserSchema, {Entity}Schema],
 ```
 
-## 6. Add CSS source
+## 5. Add CSS source
 
 `@apps/front/app/styles/app.css`:
 ```css
 @source "../../node_modules/@libs/{name}-front";
 ```
 
-## 7. Add translations
+## 6. Add translations
 
 Create translation files in:
 ```

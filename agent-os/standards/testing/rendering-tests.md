@@ -26,9 +26,13 @@ describe('MyComponent', function() {
 ## What initializeTestApp Does
 
 ```typescript
-export async function initializeTestApp(owner: Owner, locale: string) {
+export async function initializeTestApp(
+  owner: Owner,
+  locale: string,
+  handlers: Handler[] = []
+) {
   owner.register('session-stores:application', AdaptiveStore);
-  owner.register('service:store', TestStore);
+  owner.register('service:store', createTestStore(handlers));
   const intl = owner.lookup('service:intl');
   intl.setLocale(locale);
   setupSession(owner);
@@ -53,6 +57,7 @@ renderingTest('test case', async function({ context }) {
 - Always use `renderingTest.scoped` with TestApp
 - Call `initializeTestApp` before any rendering
 - Pass locale (usually 'en-us')
+- Rendering tests mock the service with `vi.mock`, so they pass no handlers
 - Access services via `context.owner.lookup()`
 
 **Why:** Normal app doesn't work in tests. TestApp provides isolated test environment with proper DI container.
