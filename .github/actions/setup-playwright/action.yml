@@ -28,18 +28,32 @@ runs:
         key: ${{ runner.os }}-playwright-${{ steps.version.outputs.value }}-chromium
 
     # Kept as its own bounded step: this is the apt-get call, and it is the part
-    # that hangs. 23s on a good day, >9min when a mirror stalls. Six minutes is
-    # generous for the good case and fails loudly instead of silently
-    # cancelling the job at the 20-minute mark.
+    # that hangs. 23s on a good day, >9min when a mirror stalls. Bounding is done
+    # with coreutils `timeout`, because `timeout-minutes` is not a valid key on a
+    # composite action step.
     - name: Install Playwright system dependencies
-      timeout-minutes: 6
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: pnpm exec playwright install-deps chromium
+      run: |
+        set +e
+        timeout --kill-after=30s 6m pnpm exec playwright install-deps chromium
+        code=$?
+        set -e
+        if [ "$code" -eq 124 ]; then
+          echo "::error::playwright install-deps exceeded 6 minutes; the apt mirror most likely stalled. Re-run the job."
+        fi
+        exit "$code"
 
     - name: Install Playwright chromium
       if: steps.cache.outputs.cache-hit != 'true'
-      timeout-minutes: 6
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: pnpm exec playwright install chromium
+      run: |
+        set +e
+        timeout --kill-after=30s 6m pnpm exec playwright install chromium
+        code=$?
+        set -e
+        if [ "$code" -eq 124 ]; then
+          echo "::error::playwright install chromium exceeded 6 minutes; the browser CDN most likely stalled. Re-run the job."
+        fi
+        exit "$code"
