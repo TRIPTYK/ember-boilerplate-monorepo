@@ -6,7 +6,7 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    timeout-minutes: 10
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -30,9 +30,13 @@ jobs:
     - name: Setup database
       working-directory: ./@apps/backend
       run: pnpm e2e:setup
-    - name: Install Playwright Browsers
+    - name: Typecheck e2e tests
       working-directory: ./@apps/e2e
-      run: pnpm exec playwright install --with-deps
+      run: pnpm typecheck
+    - name: Setup Playwright
+      uses: ./.github/actions/setup-playwright
+      with:
+        working-directory: ./@apps/e2e
     - name: Run Playwright tests
       working-directory: ./@apps/e2e
       run: pnpm test

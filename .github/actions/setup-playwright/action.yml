@@ -1,0 +1,45 @@
+name: Setup Playwright
+description: >-
+  Install the Playwright chromium browser and its system dependencies, with the
+  browser download cached and the apt step bounded so a hung mirror fails fast
+  instead of eating the whole job timeout.
+
+inputs:
+  working-directory:
+    description: >-
+      Directory whose node_modules resolves the Playwright CLI. Use the package
+      that actually needs the browser, so the cache key follows its version.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve Playwright version
+      id: version
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: echo "value=$(pnpm exec playwright --version | sed 's/^Version //')" >> "$GITHUB_OUTPUT"
+
+    - name: Cache Playwright browsers
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ steps.version.outputs.value }}-chromium
+
+    # Kept as its own bounded step: this is the apt-get call, and it is the part
+    # that hangs. 23s on a good day, >9min when a mirror stalls. Six minutes is
+    # generous for the good case and fails loudly instead of silently
+    # cancelling the job at the 20-minute mark.
+    - name: Install Playwright system dependencies
+      timeout-minutes: 6
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: pnpm exec playwright install-deps chromium
+
+    - name: Install Playwright chromium
+      if: steps.cache.outputs.cache-hit != 'true'
+      timeout-minutes: 6
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: pnpm exec playwright install chromium
