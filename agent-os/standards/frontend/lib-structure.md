@@ -12,7 +12,6 @@ New frontend libs live in `@libs/{name}-front/`.
 │   ├── changesets/            # ImmerChangeset type wrappers
 │   ├── components/
 │   │   └── forms/             # Form components + validation schemas
-│   ├── http-mocks/            # MSW mock handlers + all.ts aggregator
 │   ├── routes/dashboard/{entity}/  # Route handlers + templates
 │   ├── schemas/               # WarpDrive schema definitions
 │   ├── services/              # Ember services (CRUD, etc.)
@@ -20,7 +19,8 @@ New frontend libs live in `@libs/{name}-front/`.
 ├── tests/
 │   ├── integration/           # Integration tests
 │   ├── unit/                  # Unit tests
-│   ├── app.ts                 # TestApp + TestStore classes
+│   ├── app.ts                 # TestApp + createTestStore + initializeTestApp
+│   ├── mock-api.ts            # Request-chain mock handler for unit tests
 │   ├── test-helper.ts         # Global test hooks
 │   └── utils.ts               # Test utilities
 ├── addon-main.cjs

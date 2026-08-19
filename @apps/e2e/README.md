@@ -1,14 +1,15 @@
 # E2E Tests
 
 Playwright tests that drive the real frontend against the real backend and a real
-PostgreSQL database. Nothing is mocked: MSW is switched off with
-`VITE_MOCK_API=false`, so a failure here means the stack is genuinely broken.
+PostgreSQL database. Nothing is mocked — the frontend has no mock layer, it
+always talks to the API — so a failure here means the stack is genuinely broken.
 
 ## Why these tests exist
 
 The vitest suites in `@libs/*-front` and `@libs/*-backend` are faster and cover
 far more cases — write new tests there first. This suite exists for the seams
-those tests cannot reach, because they stop at a mock:
+those tests cannot reach, because they stop at a mock (`vi.mock` on a service,
+or a handler in the store's request chain):
 
 - the login handshake (form → `POST /auth/login` → token in `localStorage` →
   `GET /users/profile` → redirect). `@libs/users-front` mocks the session

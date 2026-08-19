@@ -7,7 +7,6 @@ Standard folders for library organization.
 changesets/       # ImmerChangeset classes for forms
 components/       # .gts components
 handlers/         # WarpDrive request handlers (middleware)
-http-mocks/       # MSW mock definitions
 routes/           # Route files and templates
 schemas/          # WarpDrive resource schemas
 services/         # Ember services

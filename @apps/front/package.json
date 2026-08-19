@@ -24,7 +24,6 @@
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc",
     "start": "concurrently \"pnpm turbo build:watch --filter=^...\" \"vite dev\"",
-    "start:with-back": "VITE_MOCK_API=false concurrently \"pnpm turbo build:watch --filter=^...\" \"vite dev\"",
     "test": "pnpm vitest run",
     "test:watch": "pnpm vitest"
   },
@@ -109,8 +108,6 @@
     "eslint-plugin-n": "^17.23.1",
     "flatpickr": "catalog:",
     "globals": "catalog:",
-    "msw": "catalog:",
-    "openapi-msw": "catalog:",
     "prettier": "^3.7.3",
     "prettier-plugin-ember-template-tag": "^2.1.1",
     "stylelint": "catalog:",
@@ -132,10 +129,5 @@
   },
   "volta": {
     "extends": "../../package.json"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
   }
 }

@@ -69,8 +69,11 @@ pnpm dev             # Start the dev server
 
 From `@apps/front`:
 
-- **With mocked API (default):** `pnpm start`
-- **With the real backend:** `pnpm start:with-back` (proxies `/api` to `http://localhost:8000`)
+```bash
+pnpm start   # proxies /api to http://localhost:8000 (override with VITE_API_URL)
+```
+
+The frontend always talks to the real backend, so start it first (step 3).
 
 ### 5. Or run everything from the root
 

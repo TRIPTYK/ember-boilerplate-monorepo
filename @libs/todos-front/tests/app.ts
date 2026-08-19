@@ -7,6 +7,7 @@ import PageTitleService from 'ember-page-title/services/page-title';
 import EmberRouter from '@ember/routing/router';
 import setupSession from 'ember-simple-auth/initializers/setup-session';
 import type Owner from '@ember/owner';
+import type { Handler } from '@warp-drive/core/request';
 import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
 import '@warp-drive/ember/install';
@@ -37,16 +38,23 @@ export class TestApp extends Application {
   };
 }
 
-export default class TestStore extends useLegacyStore({
-  linksMode: false,
-  legacyRequests: true,
-  modelFragments: true,
-  cache: JSONAPICache,
-  schemas: [TodoSchema],
-}) {}
+export function createTestStore(handlers: Handler[] = []) {
+  return class TestStore extends useLegacyStore({
+    linksMode: false,
+    legacyRequests: true,
+    modelFragments: true,
+    cache: JSONAPICache,
+    schemas: [TodoSchema],
+    handlers,
+  }) {};
+}
 
-export function initializeTestApp(owner: Owner, locale: string) {
-  owner.register('service:store', TestStore);
+export function initializeTestApp(
+  owner: Owner,
+  locale: string,
+  handlers: Handler[] = []
+) {
+  owner.register('service:store', createTestStore(handlers));
   owner.register('service:flash-messages', FlashMessageService);
   owner.register('config:environment', { flashMessageDefaults: {} });
   // eslint-disable-next-line ember/no-private-routing-service

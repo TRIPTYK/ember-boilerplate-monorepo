@@ -6,7 +6,8 @@ Libs use Vitest + ember-vitest. No acceptance tests in libs — only integration
 
 ```
 tests/
-├── app.ts              # TestApp, TestStore, initializeTestApp
+├── app.ts              # TestApp, createTestStore, initializeTestApp
+├── mock-api.ts         # Request-chain mock handler for unit tests
 ├── test-helper.ts      # Global hooks (beforeEach/afterEach)
 ├── utils.ts            # Test utilities (stubRouter, etc.)
 ├── integration/        # Rendering/component tests
@@ -25,6 +26,7 @@ import PageTitleService from 'ember-page-title/services/page-title';
 import EmberRouter from '@ember/routing/router';
 import setupSession from 'ember-simple-auth/initializers/setup-session';
 import type Owner from '@ember/owner';
+import type { Handler } from '@warp-drive/core/request';
 import { useLegacyStore } from '@warp-drive/legacy';
 import { JSONAPICache } from '@warp-drive/json-api';
 import '@warp-drive/ember/install';
@@ -55,16 +57,23 @@ export class TestApp extends Application {
   };
 }
 
-export default class TestStore extends useLegacyStore({
-  linksMode: false,
-  legacyRequests: true,
-  modelFragments: true,
-  cache: JSONAPICache,
-  schemas: [{Entity}Schema],
-}) {}
+export function createTestStore(handlers: Handler[] = []) {
+  return class TestStore extends useLegacyStore({
+    linksMode: false,
+    legacyRequests: true,
+    modelFragments: true,
+    cache: JSONAPICache,
+    schemas: [{Entity}Schema],
+    handlers,
+  }) {};
+}
 
-export async function initializeTestApp(owner: Owner, locale: string) {
-  owner.register('service:store', TestStore);
+export async function initializeTestApp(
+  owner: Owner,
+  locale: string,
+  handlers: Handler[] = []
+) {
+  owner.register('service:store', createTestStore(handlers));
   owner.register('service:flash-messages', FlashMessageService);
   owner.register('config:environment', { flashMessageDefaults: {} });
   const router = owner.lookup('router:main') as Router;
@@ -138,27 +147,34 @@ describe('{entity}-form', function () {
 ## Unit test pattern
 
 ```typescript
-import { beforeAll, describe } from 'vitest';
+import { describe } from 'vitest';
 import { test } from 'ember-vitest';
-import { setupWorker } from 'msw/browser';
+import { mockApi } from '../mock-api.ts';
+
+const {entities}Api = mockApi({
+  'POST /{entities}': () => ({
+    data: { type: '{entities}', id: 'new-{entity}-id', attributes: {} },
+  }),
+  'PATCH /{entities}/:id': ({ params }) => ({
+    data: { type: '{entities}', id: params['id'], attributes: {} },
+  }),
+});
 
 describe('Service | {Entity} | Unit', () => {
   test.scoped({ app: ({}, use) => use(TestApp) });
 
-  beforeAll(async () => {
-    const worker = setupWorker(...handlers);
-    await worker.start();
-    return () => { worker.stop(); };
-  });
-
   test('creates entity', async ({ context }) => {
-    await initializeTestApp(context.owner, 'en-us');
+    await initializeTestApp(context.owner, 'en-us', [{entities}Api]);
     const service = context.owner.lookup('service:{entity}');
     const changeset = new {Entity}Changeset({ title: 'Test' });
     await service.save(changeset);
   });
 });
 ```
+
+`mock-api.ts` answers requests from the store's request chain (inserted just
+before `Fetch`); anything unmatched falls through to the network and fails the
+test. See `testing/api-mocking.md`.
 
 ## Page objects
 
@@ -176,8 +192,9 @@ export const pageObject = create({
 
 ## Key rules
 
-- All API calls in tests are mocked (MSW or vitest mocks)
+- All API calls in tests are mocked (`vi.mock` on the service, or `mockApi` on the request chain)
 - Use `renderingTest` for component tests, `test` for unit tests
 - Always call `initializeTestApp(context.owner, locale)` first
 - Mock services with `vi.mock()` for integration tests
-- Use MSW `setupWorker` for unit tests that test real service behavior
+- Use `mockApi` handlers for unit tests that exercise real service behavior
+- Stack handlers (`[overrideApi, baseApi]`) to change one route in a single test — see `testing/api-mocking.md`

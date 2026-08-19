@@ -6,16 +6,13 @@ import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import { loadTranslations } from '@ember-intl/vite';
 
-// Proxy configuration for e2e tests (when VITE_MOCK_API=false)
-const apiProxy =
-  process.env.VITE_MOCK_API === 'false'
-    ? {
-        '/api': {
-          target: process.env.VITE_API_URL || 'http://localhost:8000',
-          changeOrigin: true,
-        },
-      }
-    : undefined;
+// The app always talks to a real backend, proxied to avoid CORS in dev and e2e.
+const apiProxy = {
+  '/api': {
+    target: process.env.VITE_API_URL || 'http://localhost:8000',
+    changeOrigin: true,
+  },
+};
 
 export default defineConfig({
   test: {
