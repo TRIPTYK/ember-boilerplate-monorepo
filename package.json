@@ -31,7 +31,6 @@
     "onlyBuiltDependencies": [
       "@swc/core",
       "argon2",
-      "better-sqlite3",
       "core-js",
       "core-js-pure",
       "cpu-features",
