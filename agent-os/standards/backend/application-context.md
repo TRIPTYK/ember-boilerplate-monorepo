@@ -23,7 +23,7 @@ export async function createApplicationContext(config: AppConfiguration) {
 const context = await createApplicationContext(config);
 
 const UserModule = Module.init({
-  em: context.orm.em.fork(),
+  em: context.orm.em, // root EM, never a fork — it resolves the per-request context
   configuration: context.configuration,
 });
 ```
@@ -32,6 +32,7 @@ const UserModule = Module.init({
 
 **Rules:**
 - Create once at app startup
+- Modules receive `orm.em` (the root EntityManager), never `orm.em.fork()` — see [library-context.md](./library-context.md)
 - Pass relevant parts to feature modules via Module.init()
 - Don't import ApplicationContext in feature libraries — they receive dependencies explicitly
 

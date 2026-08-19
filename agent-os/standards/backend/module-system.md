@@ -7,7 +7,7 @@ Backend features are encapsulated as class-based modules for clear dependency bo
 Each module:
 - Implements `ModuleInterface` from `@libs/backend-shared`
 - Has a **private constructor** and a **static `init(context)`** factory
-- Receives a `context` with a **forked EntityManager** and configuration
+- Receives a `context` with the **root EntityManager** (`orm.em`) and configuration
 - Exposes `setupRoutes(fastify)` to register all routes
 
 ```ts
@@ -26,14 +26,19 @@ export class TodoModule implements ModuleInterface<FastifyInstanceType> {
 
 ## Registration
 
-Modules are initialized in `@apps/backend` with a forked EntityManager:
+Modules are initialized in `@apps/backend` with the root EntityManager:
 
 ```ts
 todosModule: TodoModule.init({
-  em: this.context.orm.em.fork(),
+  em: this.context.orm.em, // root EM, never a fork
   configuration: { jwtSecret: ... },
 }),
 ```
+
+The root EM resolves the MikroORM `RequestContext` opened per HTTP request by
+`registerRequestContext`, so every module shares one fork — one identity map, one unit of work —
+per request. A fork has `useContext: false` and would never resolve it; see
+[library-context.md](./library-context.md).
 
 ## When to use
 

@@ -20,12 +20,18 @@ export function databaseConfig(config) {
 import { Module as TodoModule } from "@libs/todos-backend";
 
 todosModule: TodoModule.init({
-  em: this.context.orm.em.fork(),
+  em: this.context.orm.em, // root EM, never a fork
   configuration: {
     jwtSecret: this.context.configuration.JWT_SECRET,
   },
 }),
 ```
+
+The module receives the **root** EntityManager. `App.init` calls
+`registerRequestContext(fastify, context.orm.em)` once, which opens a MikroORM `RequestContext` per
+HTTP request; the root EM resolves that context on every call, so each request gets its own fork.
+Passing `orm.em.fork()` here would freeze one identity map and one unit of work for the whole
+process — see [library-context.md](./library-context.md).
 
 ## 3. Pass module to `app.router.ts` and call setupRoutes()
 
@@ -43,4 +49,5 @@ Add seed data for the new module in `@apps/backend/src/seeders/development.seede
 
 ## Order matters
 
-Entities must be registered before ORM init. Module init requires a forked EntityManager from the running ORM.
+Entities must be registered before ORM init. Module init requires the root EntityManager of the
+running ORM.
