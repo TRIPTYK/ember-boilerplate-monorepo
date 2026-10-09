@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import TpkButton from '@triptyk/ember-input/components/tpk-button';
 import { service } from '@ember/service';
 import type TodoService from '#src/services/todo.ts';
 import type { TodoChangeset } from '#src/changesets/todo.ts';
@@ -70,9 +71,13 @@ export default class TodosForm extends Component<TodosFormArgs> {
           class="col-span-12 md:col-span-3"
         />
         <div class="col-span-12 flex items-center justify-between gap-2">
-          <button type="submit" class="btn btn-primary">
+          <TpkButton
+            @label={{t "todos.forms.todo.actions.submit"}}
+            type="submit"
+            class="btn btn-primary"
+          >
             {{t "todos.forms.todo.actions.submit"}}
-          </button>
+          </TpkButton>
           <LinkTo
             @route="dashboard.todos"
             class="text-sm text-primary underline text-center mt-2"

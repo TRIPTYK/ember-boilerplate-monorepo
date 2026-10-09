@@ -5,13 +5,14 @@ Export page objects directly from component files.
 ```typescript
 import Component from '@glimmer/component';
 import { create, fillable, clickable } from 'ember-cli-page-object';
+import TpkButton from '@triptyk/ember-input/components/tpk-button';
 
 export default class LoginForm extends Component {
   // component code...
   <template>
     <div data-test-login-form>
       <input data-test-email />
-      <button type="submit">Login</button>
+      <TpkButton @label="Login" type="submit">Login</TpkButton>
     </div>
   </template>
 }
