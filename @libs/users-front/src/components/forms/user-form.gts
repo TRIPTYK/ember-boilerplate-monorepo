@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import TpkForm from '@triptyk/ember-input-validation/components/tpk-form';
+import TpkButton from '@triptyk/ember-input/components/tpk-button';
 import { service } from '@ember/service';
 import type UserService from '#src/services/user.ts';
 import type { UserChangeset } from '#src/changesets/user.ts';
@@ -86,9 +87,13 @@ export default class UsersForm extends Component<UserFormSignature> {
           class="col-span-12 md:col-span-3"
         />
         <div class="col-span-12 flex items-center justify-between gap-2">
-          <button type="submit" class="btn btn-primary">
+          <TpkButton
+            @label={{t "users.forms.user.actions.submit"}}
+            type="submit"
+            class="btn btn-primary"
+          >
             {{t "users.forms.user.actions.submit"}}
-          </button>
+          </TpkButton>
           <LinkTo
             @route="dashboard.users"
             class="text-sm text-primary underline text-center mt-2"

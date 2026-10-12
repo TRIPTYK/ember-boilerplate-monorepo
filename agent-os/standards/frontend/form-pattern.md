@@ -65,6 +65,7 @@ export type Updated{Entity} = z.infer<ReturnType<typeof edit{Entity}ValidationSc
 - Uses `HandleSaveService` for save + transition + flash + error handling
 - Calls `this.{entity}.save(data)` with raw data, NOT the changeset
 - Exports a `pageObject` for testing
+- Submit button is a `TpkButton` (`@triptyk/ember-input/components/tpk-button`) with `type="submit"` — never a raw `<button>`. Not the prefab: its signature lacks `type` and requires `@onClick`
 
 ```typescript
 // components/forms/{entity}-form.gts
@@ -106,7 +107,12 @@ export default class {Entities}Form extends Component<{Entity}FormArgs> {
         @label={{t "{entities}.forms.{entity}.labels.title"}}
         @validationField="title"
       />
-      <button type="submit">{{t "{entities}.forms.{entity}.actions.submit"}}</button>
+      <TpkButton
+        @label={{t "{entities}.forms.{entity}.actions.submit"}}
+        type="submit"
+      >
+        {{t "{entities}.forms.{entity}.actions.submit"}}
+      </TpkButton>
     </TpkForm>
   </template>
 }
